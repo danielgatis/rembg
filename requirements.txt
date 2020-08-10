@@ -1,0 +1,8 @@
+flask==1.1.2
+numpy==1.19.1
+pillow==7.2.0
+scikit-image==0.17.2
+torch==1.6.0
+torchvision==0.7.0
+waitress==1.4.4
+tqdm==4.48.2
