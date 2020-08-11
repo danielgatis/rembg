@@ -1,6 +1,11 @@
 
 # Rembg
 
+[![Downloads](https://pepy.tech/badge/rembg)](https://pepy.tech/project/rembg)
+[![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg/month)
+[![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg/week)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
+   
 Rembg is a tool to remove images background. That is it.
 
 <p style="display: flex;align-items: center;justify-content: center;">
