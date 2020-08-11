@@ -40,17 +40,17 @@ Install it from pypi
 
 ### Usage as a cli
 
-Remove the backaground from a remote image
+Remove the background from a remote image
 ```bash
     curl -s http://input.png | rembg > output.png
 ```
 
-Remove the backaground from a local file
+Remove the background from a local file
 ```bash
     rembg -o path/to/output.png paht/to/input.png
 ```
 
-Remove the backaground from all images in a folder
+Remove the background from all images in a folder
 ```bash
     rembg -p path/to/inputs
 ```
