@@ -47,7 +47,7 @@ Remove the background from a remote image
 
 Remove the background from a local file
 ```bash
-    rembg -o path/to/output.png paht/to/input.png
+    rembg -o path/to/output.png path/to/input.png
 ```
 
 Remove the background from all images in a folder
