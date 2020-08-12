@@ -3,8 +3,6 @@ import glob
 import imghdr
 import os
 
-import numpy as np
-from PIL import Image
 
 from ..bg import remove
 
