@@ -1,6 +1,5 @@
 import errno
 import os
-import time
 import urllib.request
 import sys
 

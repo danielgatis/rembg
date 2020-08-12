@@ -1,7 +1,6 @@
 import argparse
 import glob
 import imghdr
-import io
 import os
 
 import numpy as np
