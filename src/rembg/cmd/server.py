@@ -9,6 +9,9 @@ from waitress import serve
 from ..bg import remove
 
 
+app = Flask(__name__)
+
+
 def index():
     model = request.args.get("model", type=str, default="u2net")
     if model not in ("u2net", "u2netp"):
@@ -24,7 +27,7 @@ def index():
             mimetype="image/png",
         )
     except Exception as e:
-        app.logger.exception(e.message, exc_info=True)
+        app.logger.exception(e, exc_info=True)
         return {"error": "oops, something went wrong!"}, 500
 
 
@@ -40,10 +43,7 @@ def main():
     )
 
     args = ap.parse_args()
-
-    app = Flask(__name__)
     app.add_url_rule("/", "index", index)
-
     serve(app, host=args.addr, port=args.port)
 
 
