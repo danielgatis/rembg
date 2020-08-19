@@ -6,3 +6,4 @@ torch==1.6.0
 torchvision==0.7.0
 waitress==1.4.4
 tqdm==4.48.2
+requests==2.24.0

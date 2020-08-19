@@ -3,7 +3,6 @@ import glob
 import imghdr
 import os
 
-
 from ..bg import remove
 
 

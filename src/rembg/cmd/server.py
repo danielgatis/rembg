@@ -8,7 +8,6 @@ from waitress import serve
 
 from ..bg import remove
 
-
 app = Flask(__name__)
 
 
