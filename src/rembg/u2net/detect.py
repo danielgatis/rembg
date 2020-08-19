@@ -28,6 +28,8 @@ def download_url(url, model_name, output_path):
     if os.path.exists(output_path):
         return
 
+    os.makedirs(os.path.expanduser("~/.u2net"), exist_ok=True)
+
     print(
         f"Downloading model to {output_path}".format(output_path=output_path),
         file=sys.stderr,
