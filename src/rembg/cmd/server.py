@@ -5,12 +5,11 @@ from urllib.request import urlopen
 
 from flask import Flask, request, send_file
 from waitress import serve
-import os
 
 from ..bg import remove
 
-
 app = Flask(__name__)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
