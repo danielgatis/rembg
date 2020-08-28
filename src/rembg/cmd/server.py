@@ -13,7 +13,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     model = request.args.get("model", type=str, default="u2net")
     if model not in ("u2net", "u2netp"):
         return {"error": "invalid query param 'model'"}, 400
