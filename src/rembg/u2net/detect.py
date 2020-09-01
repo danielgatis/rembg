@@ -107,7 +107,7 @@ def predict(net, item):
     with torch.no_grad():
 
         if torch.cuda.is_available():
-            inputs_test = torch.cuda.FloatTensor(sample["image"].unsqueeze(0).float())
+            inputs_test = torch.cuda.FloatTensor(sample["image"].unsqueeze(0).cuda().float())
         else:
             inputs_test = torch.FloatTensor(sample["image"].unsqueeze(0).float())
 
