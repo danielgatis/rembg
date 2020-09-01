@@ -74,9 +74,9 @@ Open your browser to
 
 Also you can send the file as a FormData (multipart/form-data):
 ```
-    <form action='http://localhost:5000' method='post' enctype='multipart/form-data'>
-      <input type=file name=file>
-      <input type=submit value=Upload>
+    <form action="http://localhost:5000" method="post" enctype="multipart/form-data">
+       <input type="file" name="file"/>
+       <input type="submi"t value="upload"/>
     </form>
 ```
 
@@ -85,11 +85,10 @@ Also you can send the file as a FormData (multipart/form-data):
 In `app.py`
 
 ```python
-import sys
-from rembg.bg import remove
+    import sys
+    from rembg.bg import remove
 
-sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
-
+    sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
 ```
 
 Then run
