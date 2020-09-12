@@ -13,11 +13,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    model = request.args.get("model", type=str, default="u2net")
-    if model not in ("u2net", "u2netp"):
-        return {"error": "invalid query param 'model'"}, 400
-
     file_content = ''
+
     if request.method == 'POST':
         if 'file' not in request.files:
             return {"error": "missing post form param 'file'"}, 400
@@ -33,6 +30,10 @@ def index():
 
     if file_content == '':
         return {"error": "File content is empty"}, 400
+
+    model = request.args.get("model", type=str, default="u2net")
+    if model not in ("u2net", "u2netp"):
+        return {"error": "invalid query param 'model'"}, 400
 
     try:
         return send_file(
