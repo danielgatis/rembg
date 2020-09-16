@@ -19,14 +19,14 @@ def index():
         if 'file' not in request.files:
             return {"error": "missing post form param 'file'"}, 400
 
-        file_content = request.files['file'].read();
+        file_content = request.files['file'].read()
 
     if request.method == 'GET':
         url = request.args.get("url", type=str)
         if url is None:
             return {"error": "missing query param 'url'"}, 400
 
-        file_content = urlopen(unquote_plus(url)).read();
+        file_content = urlopen(unquote_plus(url)).read()
 
     if file_content == '':
         return {"error": "File content is empty"}, 400
