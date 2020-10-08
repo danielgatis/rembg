@@ -5,7 +5,7 @@
 [![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg/month)
 [![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg/week)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
-   
+
 Rembg is a tool to remove images background. That is it.
 
 <p style="display: flex;align-items: center;justify-content: center;">
@@ -76,7 +76,7 @@ Also you can send the file as a FormData (multipart/form-data):
 ```
     <form action="http://localhost:5000" method="post" enctype="multipart/form-data">
        <input type="file" name="file"/>
-       <input type="submi"t value="upload"/>
+       <input type="submit" value="upload"/>
     </form>
 ```
 
