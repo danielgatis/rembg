@@ -100,7 +100,7 @@ Then run
 
 Sometimes it is possible to achieve better results by turning on alpha matting. Example:
 ```bash
-    curl -s http://input.png -a -ae 15 | rembg > output.png
+    curl -s http://input.png | rembg -a -ae 15 > output.png
 ```
 
 <table>
