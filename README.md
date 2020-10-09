@@ -115,9 +115,9 @@ Example:
     </thead>
     <tbody>
         <tr>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.jpg" width="100" /></td>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.jpg" width="100" /></td>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.alpha.jpg" width="100" /></td>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.jpg"/></td>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.jpg"/></td>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.alpha.jpg"/></td>
         </tr>
     </tbody>
 </table>
