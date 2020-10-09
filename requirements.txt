@@ -7,3 +7,5 @@ torchvision==0.7.0
 waitress==1.4.4
 tqdm==4.48.2
 requests==2.24.0
+scipy==1.5.2
+pymatting==1.0.6

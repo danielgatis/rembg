@@ -2,6 +2,7 @@ import argparse
 import glob
 import imghdr
 import os
+from distutils.util import strtobool
 
 from ..bg import remove
 
@@ -16,6 +17,40 @@ def main():
         type=str,
         choices=("u2net", "u2netp"),
         help="The model name.",
+    )
+
+    ap.add_argument(
+        "-a",
+        "--alpha-matting",
+        nargs="?",
+        const=True,
+        default=False,
+        type=lambda x: bool(strtobool(x)),
+        help="When true use alpha matting cutout.",
+    )
+
+    ap.add_argument(
+        "-af",
+        "--alpha-matting-foreground-threshold",
+        default=235,
+        type=int,
+        help="The trimap foreground threshold.",
+    )
+
+    ap.add_argument(
+        "-ab",
+        "--alpha-matting-background-threshold",
+        default=15,
+        type=int,
+        help="The trimap background threshold.",
+    )
+
+    ap.add_argument(
+        "-ae",
+        "--alpha-matting-erode-size",
+        default=15,
+        type=int,
+        help="Size of element used for the erosion.",
     )
 
     ap.add_argument(
@@ -60,10 +95,30 @@ def main():
 
             with open(fi, "rb") as input:
                 with open(os.path.splitext(fi)[0] + ".out.png", "wb") as output:
-                    w(output, remove(r(input), args.model))
+                    w(
+                        output,
+                        remove(
+                            r(input),
+                            model_name=args.model,
+                            alpha_matting=args.alpha_matting,
+                            alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
+                            alpha_matting_background_threshold=args.alpha_matting_background_threshold,
+                            alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                        ),
+                    )
 
     else:
-        w(args.output, remove(r(args.input), args.model))
+        w(
+            args.output,
+            remove(
+                r(args.input),
+                model_name=args.model,
+                alpha_matting=args.alpha_matting,
+                alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
+                alpha_matting_background_threshold=args.alpha_matting_background_threshold,
+                alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+            ),
+        )
 
 
 if __name__ == "__main__":

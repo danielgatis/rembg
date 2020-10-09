@@ -96,10 +96,37 @@ Then run
     cat input.png | python app.py > out.png
 ```
 
+### Advance usage
+
+Sometimes it is possible to achieve better results by turning on alpha matting
+```bash
+    curl -s http://input.png -a -ae 15 | rembg > output.png
+```
+
+Example:
+
+<table>
+    <thead>
+        <tr>
+            <td>Original</td>
+            <td>Without alpha matting</td>
+            <td>With alpha matting (-a -ae 15)</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.jpg" width="100" /></td>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.jpg" width="100" /></td>
+            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.alpha.jpg" width="100" /></td>
+        </tr>
+    </tbody>
+</table>
+
 ### References
 
 - https://arxiv.org/pdf/2005.09007.pdf
 - https://github.com/NathanUA/U-2-Net
+- https://github.com/pymatting/pymatting
 
 ### License
 
