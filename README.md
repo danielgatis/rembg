@@ -98,12 +98,10 @@ Then run
 
 ### Advance usage
 
-Sometimes it is possible to achieve better results by turning on alpha matting
+Sometimes it is possible to achieve better results by turning on alpha matting. Example:
 ```bash
     curl -s http://input.png -a -ae 15 | rembg > output.png
 ```
-
-Example:
 
 <table>
     <thead>
