@@ -32,7 +32,7 @@ def main():
     ap.add_argument(
         "-af",
         "--alpha-matting-foreground-threshold",
-        default=235,
+        default=240,
         type=int,
         help="The trimap foreground threshold.",
     )
@@ -40,7 +40,7 @@ def main():
     ap.add_argument(
         "-ab",
         "--alpha-matting-background-threshold",
-        default=15,
+        default=10,
         type=int,
         help="The trimap background threshold.",
     )
@@ -48,7 +48,7 @@ def main():
     ap.add_argument(
         "-ae",
         "--alpha-matting-erode-size",
-        default=15,
+        default=10,
         type=int,
         help="Size of element used for the erosion.",
     )
