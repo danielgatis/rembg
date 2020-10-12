@@ -7,7 +7,7 @@ dist/
 __pycache__/
 *.so
 *~
-
+.idea
 # due to using tox and pytest
 .tox
 .cache
