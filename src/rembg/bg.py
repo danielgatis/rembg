@@ -1,5 +1,6 @@
 import io
 
+import functools
 import numpy as np
 from PIL import Image
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
@@ -8,9 +9,6 @@ from pymatting.util.util import stack_images
 from scipy.ndimage.morphology import binary_erosion
 
 from .u2net import detect
-
-model_u2net = detect.load_model(model_name="u2net")
-model_u2netp = detect.load_model(model_name="u2netp")
 
 
 def alpha_matting_cutout(
@@ -66,6 +64,14 @@ def naive_cutout(img, mask):
     return cutout
 
 
+@functools.lru_cache
+def get_model(model_name):
+    if model_name == "u2netp":
+        return detect.load_model(model_name="u2netp")
+    else:
+        return detect.load_model(model_name="u2net")
+
+
 def remove(
     data,
     model_name="u2net",
@@ -74,11 +80,7 @@ def remove(
     alpha_matting_background_threshold=10,
     alpha_matting_erode_structure_size=10,
 ):
-    model = model_u2net
-
-    if model == "u2netp":
-        model = model_u2netp
-
+    model = get_model(model_name)
     img = Image.open(io.BytesIO(data)).convert("RGB")
     mask = detect.predict(model, np.array(img)).convert("L")
 
