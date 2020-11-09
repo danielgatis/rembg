@@ -11,7 +11,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="rembg",
-    version="1.0.14",
+    version="1.0.15",
     description="Remove image background",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,7 +25,7 @@ setup(
     keywords="remove, background, u2net",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    python_requires=">=3.5, <4",
+    python_requires=">=3.8, <4",
     install_requires=requireds,
     entry_points={
         "console_scripts": [

@@ -64,7 +64,7 @@ def naive_cutout(img, mask):
     return cutout
 
 
-@functools.lru_cache
+@functools.lru_cache(maxsize=None)
 def get_model(model_name):
     if model_name == "u2netp":
         return detect.load_model(model_name="u2netp")
