@@ -34,6 +34,10 @@ Rembg is a tool to remove images background. That is it.
   <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
 </p>
 
+### Requirements
+
+* python >= 3.8
+
 ### Installation
 
 Install it from pypi
