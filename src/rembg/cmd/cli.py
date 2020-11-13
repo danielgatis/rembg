@@ -3,6 +3,7 @@ import glob
 import os
 import filetype
 from distutils.util import strtobool
+from tqdm import tqdm
 
 from ..bg import remove
 
@@ -89,11 +90,12 @@ def main():
             else:
                 full_paths += glob.glob(path + "/*")
 
-        for fi in files:
+        for fi in tqdm(files):
             fi_type = filetype.guess(fi)
+
             if fi_type is None:
                 continue
-            elif if_type.mime.find('image') < 0:
+            elif fi_type.mime.find('image') < 0:
                 continue
 
             with open(fi, "rb") as input:
