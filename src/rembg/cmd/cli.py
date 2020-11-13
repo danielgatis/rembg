@@ -1,6 +1,5 @@
 import argparse
 import glob
-import imghdr
 import os
 import filetype
 from distutils.util import strtobool
