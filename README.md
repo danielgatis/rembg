@@ -99,6 +99,14 @@ Then run
     cat input.png | python app.py > out.png
 ```
 
+### Usage as a docker
+
+Just run
+
+```
+  curl -s http://input.png | docker run -i -v ~/.u2net:/root/.u2net danielgatis/rembg:latest > output.png
+```
+
 ### Advance usage
 
 Sometimes it is possible to achieve better results by turning on alpha matting. Example:
