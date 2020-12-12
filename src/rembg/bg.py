@@ -1,6 +1,6 @@
+import functools
 import io
 
-import functools
 import numpy as np
 from PIL import Image
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
@@ -12,7 +12,11 @@ from .u2net import detect
 
 
 def alpha_matting_cutout(
-    img, mask, foreground_threshold, background_threshold, erode_structure_size,
+    img,
+    mask,
+    foreground_threshold,
+    background_threshold,
+    erode_structure_size,
 ):
     base_size = (1000, 1000)
     size = img.size

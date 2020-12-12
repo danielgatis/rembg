@@ -1,8 +1,9 @@
 import argparse
 import glob
 import os
-import filetype
 from distutils.util import strtobool
+
+import filetype
 from tqdm import tqdm
 
 from ..bg import remove
@@ -55,7 +56,10 @@ def main():
     )
 
     ap.add_argument(
-        "-p", "--path", nargs="+", help="Path of a file or a folder of files.",
+        "-p",
+        "--path",
+        nargs="+",
+        help="Path of a file or a folder of files.",
     )
 
     ap.add_argument(
@@ -95,7 +99,7 @@ def main():
 
             if fi_type is None:
                 continue
-            elif fi_type.mime.find('image') < 0:
+            elif fi_type.mime.find("image") < 0:
                 continue
 
             with open(fi, "rb") as input:
