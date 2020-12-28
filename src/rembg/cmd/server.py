@@ -31,13 +31,27 @@ def index():
     if file_content == "":
         return {"error": "File content is empty"}, 400
 
+    alpha_matting = "a" in request.values
+    af = request.values.get("af", type=int, default=240)
+    ab = request.values.get("ab", type=int, default=10)
+    ae = request.values.get("ae", type=int, default=10)
+    
     model = request.args.get("model", type=str, default="u2net")
     if model not in ("u2net", "u2netp"):
         return {"error": "invalid query param 'model'"}, 400
 
     try:
         return send_file(
-            BytesIO(remove(file_content, model)),
+            BytesIO(
+                remove(
+                    file_content, 
+                    model_name=model,
+                    alpha_matting=alpha_matting,
+                    alpha_matting_foreground_threshold=af,
+                    alpha_matting_background_threshold=ab,
+                    alpha_matting_erode_structure_size=ae
+                )
+            ),
             mimetype="image/png",
         )
     except Exception as e:
