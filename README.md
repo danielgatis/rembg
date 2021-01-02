@@ -43,44 +43,44 @@ Rembg is a tool to remove images background. That is it.
 Install it from pypi
 
 ```bash
-    pip install rembg
+pip install rembg
 ```
 
 ### Usage as a cli
 
 Remove the background from a remote image
 ```bash
-    curl -s http://input.png | rembg > output.png
+curl -s http://input.png | rembg > output.png
 ```
 
 Remove the background from a local file
 ```bash
-    rembg -o path/to/output.png path/to/input.png
+rembg -o path/to/output.png path/to/input.png
 ```
 
 Remove the background from all images in a folder
 ```bash
-    rembg -p path/to/inputs
+rembg -p path/to/inputs
 ```
 
 ### Usage as a server
 
 Start the server
 ```bash
-    rembg-server
+rembg-server
 ```
 
 Open your browser to
 ```
-    http://localhost:5000?url=http://image.png
+http://localhost:5000?url=http://image.png
 ```
 
 Also you can send the file as a FormData (multipart/form-data):
 ```
-    <form action="http://localhost:5000" method="post" enctype="multipart/form-data">
-       <input type="file" name="file"/>
-       <input type="submit" value="upload"/>
-    </form>
+<form action="http://localhost:5000" method="post" enctype="multipart/form-data">
+   <input type="file" name="file"/>
+   <input type="submit" value="upload"/>
+</form>
 ```
 
 ### Usage as a library
@@ -88,15 +88,15 @@ Also you can send the file as a FormData (multipart/form-data):
 In `app.py`
 
 ```python
-    import sys
-    from rembg.bg import remove
+import sys
+from rembg.bg import remove
 
-    sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
+sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
 ```
 
 Then run
 ```
-    cat input.png | python app.py > out.png
+cat input.png | python app.py > out.png
 ```
 
 ### Usage as a docker
@@ -104,14 +104,14 @@ Then run
 Just run
 
 ```
-  curl -s http://input.png | docker run -i -v ~/.u2net:/root/.u2net danielgatis/rembg:latest > output.png
+curl -s http://input.png | docker run -i -v ~/.u2net:/root/.u2net danielgatis/rembg:latest > output.png
 ```
 
 ### Advance usage
 
 Sometimes it is possible to achieve better results by turning on alpha matting. Example:
 ```bash
-    curl -s http://input.png | rembg -a -ae 15 > output.png
+curl -s http://input.png | rembg -a -ae 15 > output.png
 ```
 
 <table>
