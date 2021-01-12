@@ -2,7 +2,7 @@ import functools
 import io
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageChops
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
@@ -68,6 +68,15 @@ def naive_cutout(img, mask):
     return cutout
 
 
+def autocrop(img):
+    bg = Image.new(img.mode, img.size, img.getpixel((0,0)))
+    diff = ImageChops.difference(img, bg)
+    diff = ImageChops.add(diff, diff, 0.2, -100)
+    bbox = diff.getbbox()
+    if bbox:
+        return img.crop(bbox)
+
+
 @functools.lru_cache(maxsize=None)
 def get_model(model_name):
     if model_name == "u2netp":
@@ -83,6 +92,7 @@ def remove(
     alpha_matting_foreground_threshold=240,
     alpha_matting_background_threshold=10,
     alpha_matting_erode_structure_size=10,
+    crop=False,
 ):
     model = get_model(model_name)
     img = Image.open(io.BytesIO(data)).convert("RGB")
@@ -98,6 +108,9 @@ def remove(
         )
     else:
         cutout = naive_cutout(img, mask)
+
+    if crop:
+        cutout = autocrop(cutout)
 
     bio = io.BytesIO()
     cutout.save(bio, "PNG")

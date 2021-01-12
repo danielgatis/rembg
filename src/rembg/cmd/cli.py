@@ -79,6 +79,16 @@ def main():
         help="Path to the input image.",
     )
 
+    ap.add_argument(
+        "-c",
+        "--crop",
+        nargs="?",
+        const=True,
+        default=False,
+        type=lambda x: bool(strtobool(x)),
+        help="Crop off all empty regions."
+    )
+
     args = ap.parse_args()
 
     r = lambda i: i.buffer.read() if hasattr(i, "buffer") else i.read()
@@ -113,6 +123,7 @@ def main():
                             alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                             alpha_matting_background_threshold=args.alpha_matting_background_threshold,
                             alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                            crop=args.crop,
                         ),
                     )
 
@@ -126,6 +137,7 @@ def main():
                 alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold=args.alpha_matting_background_threshold,
                 alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                crop=args.crop,
             ),
         )
 
