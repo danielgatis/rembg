@@ -84,20 +84,35 @@ Also you can send the file as a FormData (multipart/form-data):
 ```
 
 ### Usage as a library
+Examples:
+1.    In `app.py`
 
-In `app.py`
+        ```python
+        import sys
+        from rembg.bg import remove
 
-```python
-import sys
-from rembg.bg import remove
+        sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
+        ```
 
-sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
-```
+        Then run
+        ```
+        cat input.png | python app.py > out.png
+        ```
+    
+2.  ```python
+    from rembg.bg import remove
+    import numpy as np
+    import io
+    from PIL import Image
 
-Then run
-```
-cat input.png | python app.py > out.png
-```
+    input_path = 'input.png'
+    output_path = 'out.png'
+
+    f = np.fromfile(input_path)
+    result = remove(f)
+    img = Image.open(io.BytesIO(result)).convert("RGBA")
+    img.save(output_path)
+    ```
 
 ### Usage as a docker
 
