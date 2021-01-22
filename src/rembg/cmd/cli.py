@@ -56,6 +56,14 @@ def main():
     )
 
     ap.add_argument(
+        "-az",
+        "--alpha-matting-base-size",
+        default=1000,
+        type=int,
+        help="The image base size.",
+    )
+
+    ap.add_argument(
         "-p",
         "--path",
         nargs="+",
@@ -113,6 +121,7 @@ def main():
                             alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                             alpha_matting_background_threshold=args.alpha_matting_background_threshold,
                             alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                            alpha_matting_base_size=args.alpha_matting_base_size,
                         ),
                     )
 
@@ -126,6 +135,7 @@ def main():
                 alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold=args.alpha_matting_background_threshold,
                 alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                alpha_matting_base_size=args.alpha_matting_base_size,
             ),
         )
 

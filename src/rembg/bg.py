@@ -17,11 +17,11 @@ def alpha_matting_cutout(
     foreground_threshold,
     background_threshold,
     erode_structure_size,
+    base_size,
 ):
-    base_size = (1000, 1000)
     size = img.size
 
-    img.thumbnail(base_size, Image.LANCZOS)
+    img.thumbnail((base_size, base_size), Image.LANCZOS)
     mask = mask.resize(img.size, Image.LANCZOS)
 
     img = np.asarray(img)
@@ -83,6 +83,7 @@ def remove(
     alpha_matting_foreground_threshold=240,
     alpha_matting_background_threshold=10,
     alpha_matting_erode_structure_size=10,
+    alpha_matting_base_size=1000,
 ):
     model = get_model(model_name)
     img = Image.open(io.BytesIO(data)).convert("RGB")
@@ -95,6 +96,7 @@ def remove(
             alpha_matting_foreground_threshold,
             alpha_matting_background_threshold,
             alpha_matting_erode_structure_size,
+            alpha_matting_base_size,
         )
     else:
         cutout = naive_cutout(img, mask)

@@ -35,7 +35,8 @@ def index():
     af = request.values.get("af", type=int, default=240)
     ab = request.values.get("ab", type=int, default=10)
     ae = request.values.get("ae", type=int, default=10)
-    
+    az = request.values.get("az", type=int, default=1000)
+
     model = request.args.get("model", type=str, default="u2net")
     if model not in ("u2net", "u2netp"):
         return {"error": "invalid query param 'model'"}, 400
@@ -44,12 +45,13 @@ def index():
         return send_file(
             BytesIO(
                 remove(
-                    file_content, 
+                    file_content,
                     model_name=model,
                     alpha_matting=alpha_matting,
                     alpha_matting_foreground_threshold=af,
                     alpha_matting_background_threshold=ab,
-                    alpha_matting_erode_structure_size=ae
+                    alpha_matting_erode_structure_size=ae,
+                    alpha_matting_base_size=az,
                 )
             ),
             mimetype="image/png",
