@@ -42,7 +42,7 @@ Rembg is a tool to remove images background. That is it.
 
 * torch and torchvision stable version (https://pytorch.org)
 
-====> How to install torch/torchvision <====
+#### How to install torch/torchvision
 
 Go to https://pytorch.org and scrool down to `INSTALL PYTORCH` section and follow the instructions.
 
