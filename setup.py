@@ -11,7 +11,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="rembg",
-    version="1.0.20",
+    version="1.0.21",
     description="Remove image background",
     long_description=long_description,
     long_description_content_type="text/markdown",
