@@ -1,5 +1,5 @@
 flask==1.1.2
-numpy==1.19.4
+numpy==1.19.5
 pillow==8.0.1
 scikit-image==0.17.2
 torch~=1.7.0
