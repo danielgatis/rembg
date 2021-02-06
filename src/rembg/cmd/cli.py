@@ -100,7 +100,9 @@ def main():
             if os.path.isfile(path):
                 files.add(path)
             else:
-                full_paths += glob.glob(path + "/*")
+                full_paths += set(glob.glob(path + "/*")) - set(
+                    glob.glob(path + "/*.out.png")
+                )
 
         for fi in tqdm(files):
             fi_type = filetype.guess(fi)
