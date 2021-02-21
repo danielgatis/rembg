@@ -72,6 +72,8 @@ def naive_cutout(img, mask):
 def get_model(model_name):
     if model_name == "u2netp":
         return detect.load_model(model_name="u2netp")
+    if model_name == "u2net_human_seg":
+        return detect.load_model(model_name="u2net_human_seg")
     else:
         return detect.load_model(model_name="u2net")
 

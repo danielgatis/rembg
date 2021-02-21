@@ -17,7 +17,7 @@ def main():
         "--model",
         default="u2net",
         type=str,
-        choices=("u2net", "u2netp"),
+        choices=("u2net", "u2net_human_seg", "u2netp"),
         help="The model name.",
     )
 

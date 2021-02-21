@@ -38,7 +38,7 @@ def index():
     az = request.values.get("az", type=int, default=1000)
 
     model = request.args.get("model", type=str, default="u2net")
-    if model not in ("u2net", "u2netp"):
+    if model not in ("u2net", "u2net_human_seg", "u2netp"):
         return {"error": "invalid query param 'model'"}, 400
 
     try:
