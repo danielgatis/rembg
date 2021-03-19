@@ -1,5 +1,3 @@
-
-
 # Rembg
 
 [![Downloads](https://pepy.tech/badge/rembg)](https://pepy.tech/project/rembg)
@@ -183,8 +181,7 @@ curl -s http://input.png | rembg -a -ae 15 > output.png
 - https://github.com/NathanUA/U-2-Net
 - https://github.com/pymatting/pymatting
 
-
-## Backers
+### Backers
 
 Love rembg? Help me keep it alive by donating funds to cover project expenses!<br />
 [[Become a backer](https://opencollective.com/rembg#backer)]
@@ -220,7 +217,7 @@ Love rembg? Help me keep it alive by donating funds to cover project expenses!<b
 <a href="https://opencollective.com/rembg/backer/28/website" target="_blank"><img src="https://opencollective.com/rembg/backer/28/avatar.svg"></a>
 <a href="https://opencollective.com/rembg/backer/29/website" target="_blank"><img src="https://opencollective.com/rembg/backer/29/avatar.svg"></a>
 
-## Sponsors
+### Sponsors
 
 Become a sponsor and get your logo here on our Github page.<br /> 
 [[Become a sponsor](https://opencollective.com/rembg#sponsor)]
