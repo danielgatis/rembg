@@ -222,7 +222,8 @@ Love rembg? Help me keep it alive by donating funds to cover project expenses!<b
 
 ## Sponsors
 
-Become a sponsor and get your logo here on our Github page. [[Become a sponsor](https://opencollective.com/rembg#sponsor)]
+Become a sponsor and get your logo here on our Github page.<br /> 
+[[Become a sponsor](https://opencollective.com/rembg#sponsor)]
 
 <a href="https://opencollective.com/rembg/sponsor/0/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/rembg/sponsor/1/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/1/avatar.svg"></a>
