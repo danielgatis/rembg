@@ -1,3 +1,5 @@
+import os
+import glob
 import argparse
 from io import BytesIO
 from urllib.parse import unquote_plus
@@ -38,8 +40,14 @@ def index():
     az = request.values.get("az", type=int, default=1000)
 
     model = request.args.get("model", type=str, default="u2net")
-    if model not in ("u2net", "u2net_human_seg", "u2netp"):
-        return {"error": "invalid query param 'model'"}, 400
+    model_path = os.environ.get(
+        "U2NETP_PATH",
+        os.path.expanduser(os.path.join("~", ".u2net")),
+    )
+    model_choices = [os.path.splitext(os.path.basename(x))[0] for x in set(glob.glob(model_path + "/*"))]
+
+    if model not in model_choices:
+        return {"error": f"invalid query param 'model'. Available options are {model_choices}"}, 400
 
     try:
         return send_file(

@@ -80,7 +80,15 @@ rembg -o path/to/output.png path/to/input.png
 
 Remove the background from all images in a folder
 ```bash
-rembg -p path/to/inputs
+rembg -p path/to/inputs path/to/output
+```
+
+### Add a custom model
+
+Copy the `custom-model.pth` file to `~/.u2net` and run:
+
+```bash
+curl -s http://input.png | rembg -m custom-model > output.png
 ```
 
 ### Usage as a server
