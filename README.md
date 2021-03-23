@@ -80,7 +80,7 @@ rembg -o path/to/output.png path/to/input.png
 
 Remove the background from all images in a folder
 ```bash
-rembg -p path/to/inputs path/to/output
+rembg -p path/to/input path/to/output
 ```
 
 ### Add a custom model
