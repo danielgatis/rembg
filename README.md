@@ -34,6 +34,8 @@ Rembg is a tool to remove images background. That is it.
   <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
 </p>
 
+#### *** If you want to remove background from videos try this this fork: https://github.com/ecsplendid/rembg-greenscreen ***
+
 ### Requirements
 
 * python 3.8 or newer
@@ -80,7 +82,7 @@ rembg -o path/to/output.png path/to/input.png
 
 Remove the background from all images in a folder
 ```bash
-rembg -p path/to/inputs path/to/output
+rembg -p path/to/input path/to/output
 ```
 
 ### Add a custom model
