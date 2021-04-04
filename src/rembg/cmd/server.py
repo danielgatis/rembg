@@ -45,6 +45,8 @@ def index():
         os.path.expanduser(os.path.join("~", ".u2net")),
     )
     model_choices = [os.path.splitext(os.path.basename(x))[0] for x in set(glob.glob(model_path + "/*"))]
+    if len(model_choices) == 0:
+        model_choices = ["u2net", "u2netp", "u2net_human_seg"]
 
     if model not in model_choices:
         return {"error": f"invalid query param 'model'. Available options are {model_choices}"}, 400
