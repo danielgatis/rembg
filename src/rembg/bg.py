@@ -79,7 +79,7 @@ def get_model(model_name):
 
 
 def remove(
-    data,
+    img,
     model_name="u2net",
     alpha_matting=False,
     alpha_matting_foreground_threshold=240,
@@ -88,22 +88,22 @@ def remove(
     alpha_matting_base_size=1000,
 ):
     model = get_model(model_name)
-    img = Image.open(io.BytesIO(data)).convert("RGB")
-    mask = detect.predict(model, np.array(img)).convert("L")
+    # img = Image.open(io.BytesIO(data)).convert("RGB")
+    mask = detect.predict(model, img).convert("L")
 
-    if alpha_matting:
-        cutout = alpha_matting_cutout(
-            img,
-            mask,
-            alpha_matting_foreground_threshold,
-            alpha_matting_background_threshold,
-            alpha_matting_erode_structure_size,
-            alpha_matting_base_size,
-        )
-    else:
-        cutout = naive_cutout(img, mask)
+    # if alpha_matting:
+    #     cutout = alpha_matting_cutout(
+    #         img,
+    #         mask,
+    #         alpha_matting_foreground_threshold,
+    #         alpha_matting_background_threshold,
+    #         alpha_matting_erode_structure_size,
+    #         alpha_matting_base_size,
+    #     )
+    # else:
+    #     cutout = naive_cutout(img, mask)
+    #
+    # bio = io.BytesIO()
+    # cutout.save(bio, "PNG")
 
-    bio = io.BytesIO()
-    cutout.save(bio, "PNG")
-
-    return bio.getbuffer()
+    return mask
