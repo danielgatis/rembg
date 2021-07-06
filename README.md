@@ -191,77 +191,10 @@ curl -s http://input.png | rembg -a -ae 15 > output.png
 - https://github.com/NathanUA/U-2-Net
 - https://github.com/pymatting/pymatting
 
-### Backers
+### Buy me a coffee
+Liked some of my work? Buy me a coffee (or more likely a beer)
 
-Love rembg? Help me keep it alive by donating funds to cover project expenses!<br />
-[[Become a backer](https://opencollective.com/rembg#backer)]
-
-<a href="https://opencollective.com/rembg/backer/0/website" target="_blank"><img src="https://opencollective.com/rembg/backer/0/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/1/website" target="_blank"><img src="https://opencollective.com/rembg/backer/1/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/2/website" target="_blank"><img src="https://opencollective.com/rembg/backer/2/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/3/website" target="_blank"><img src="https://opencollective.com/rembg/backer/3/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/4/website" target="_blank"><img src="https://opencollective.com/rembg/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/5/website" target="_blank"><img src="https://opencollective.com/rembg/backer/5/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/6/website" target="_blank"><img src="https://opencollective.com/rembg/backer/6/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/7/website" target="_blank"><img src="https://opencollective.com/rembg/backer/7/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/8/website" target="_blank"><img src="https://opencollective.com/rembg/backer/8/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/9/website" target="_blank"><img src="https://opencollective.com/rembg/backer/9/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/10/website" target="_blank"><img src="https://opencollective.com/rembg/backer/10/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/11/website" target="_blank"><img src="https://opencollective.com/rembg/backer/11/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/12/website" target="_blank"><img src="https://opencollective.com/rembg/backer/12/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/13/website" target="_blank"><img src="https://opencollective.com/rembg/backer/13/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/14/website" target="_blank"><img src="https://opencollective.com/rembg/backer/14/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/15/website" target="_blank"><img src="https://opencollective.com/rembg/backer/15/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/16/website" target="_blank"><img src="https://opencollective.com/rembg/backer/16/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/17/website" target="_blank"><img src="https://opencollective.com/rembg/backer/17/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/18/website" target="_blank"><img src="https://opencollective.com/rembg/backer/18/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/19/website" target="_blank"><img src="https://opencollective.com/rembg/backer/19/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/20/website" target="_blank"><img src="https://opencollective.com/rembg/backer/20/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/21/website" target="_blank"><img src="https://opencollective.com/rembg/backer/21/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/22/website" target="_blank"><img src="https://opencollective.com/rembg/backer/22/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/23/website" target="_blank"><img src="https://opencollective.com/rembg/backer/23/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/24/website" target="_blank"><img src="https://opencollective.com/rembg/backer/24/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/25/website" target="_blank"><img src="https://opencollective.com/rembg/backer/25/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/26/website" target="_blank"><img src="https://opencollective.com/rembg/backer/26/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/27/website" target="_blank"><img src="https://opencollective.com/rembg/backer/27/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/28/website" target="_blank"><img src="https://opencollective.com/rembg/backer/28/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/backer/29/website" target="_blank"><img src="https://opencollective.com/rembg/backer/29/avatar.svg"></a>
-
-### Sponsors
-
-Become a sponsor and get your logo here on our Github page.<br /> 
-[[Become a sponsor](https://opencollective.com/rembg#sponsor)]
-
-<a href="https://opencollective.com/rembg/sponsor/0/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/1/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/2/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/3/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/4/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/5/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/6/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/7/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/8/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/9/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/9/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/10/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/10/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/11/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/11/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/12/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/12/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/13/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/13/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/14/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/14/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/15/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/15/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/16/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/16/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/17/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/17/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/18/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/18/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/19/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/19/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/20/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/20/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/21/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/21/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/22/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/22/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/23/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/23/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/24/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/24/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/25/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/25/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/26/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/26/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/27/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/27/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/28/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/28/avatar.svg"></a>
-<a href="https://opencollective.com/rembg/sponsor/29/website" target="_blank"><img src="https://opencollective.com/rembg/sponsor/29/avatar.svg"></a>
+<a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a>
 
 ### License
 
