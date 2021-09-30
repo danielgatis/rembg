@@ -14,7 +14,10 @@ def main():
         "U2NETP_PATH",
         os.path.expanduser(os.path.join("~", ".u2net")),
     )
-    model_choices = [os.path.splitext(os.path.basename(x))[0] for x in set(glob.glob(model_path + "/*"))]
+    model_choices = [
+        os.path.splitext(os.path.basename(x))[0]
+        for x in set(glob.glob(model_path + "/*"))
+    ]
     if len(model_choices) == 0:
         model_choices = ["u2net", "u2netp", "u2net_human_seg"]
 
@@ -126,7 +129,12 @@ def main():
                 continue
 
             with open(fi, "rb") as input:
-                with open(os.path.join(output_path, os.path.splitext(os.path.basename(fi))[0] + ".png"), "wb") as output:
+                with open(
+                    os.path.join(
+                        output_path, os.path.splitext(os.path.basename(fi))[0] + ".png"
+                    ),
+                    "wb",
+                ) as output:
                     w(
                         output,
                         remove(

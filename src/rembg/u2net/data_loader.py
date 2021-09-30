@@ -1,5 +1,4 @@
 # data loader
-from __future__ import division, print_function
 
 import random
 
@@ -13,7 +12,7 @@ from torchvision import transforms, utils
 
 
 # ==========================dataset load==========================
-class RescaleT(object):
+class RescaleT:
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
@@ -51,7 +50,7 @@ class RescaleT(object):
         return {"imidx": imidx, "image": img, "label": lbl}
 
 
-class Rescale(object):
+class Rescale:
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         self.output_size = output_size
@@ -84,7 +83,7 @@ class Rescale(object):
         return {"imidx": imidx, "image": img, "label": lbl}
 
 
-class RandomCrop(object):
+class RandomCrop:
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         if isinstance(output_size, int):
@@ -112,7 +111,7 @@ class RandomCrop(object):
         return {"imidx": imidx, "image": image, "label": label}
 
 
-class ToTensor(object):
+class ToTensor:
     """Convert ndarrays in sample to Tensors."""
 
     def __call__(self, sample):
@@ -151,7 +150,7 @@ class ToTensor(object):
         }
 
 
-class ToTensorLab(object):
+class ToTensorLab:
     """Convert ndarrays in sample to Tensors."""
 
     def __init__(self, flag=0):
