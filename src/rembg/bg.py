@@ -101,7 +101,7 @@ def remove(
                 alpha_matting_erode_structure_size,
                 alpha_matting_base_size,
             )
-        except:
+        except Exception:
             cutout = naive_cutout(img, mask)
     else:
         cutout = naive_cutout(img, mask)
