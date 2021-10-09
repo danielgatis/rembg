@@ -27,8 +27,12 @@ def index():
         url = request.args.get("url", type=str)
         if url is None:
             return {"error": "missing query param 'url'"}, 400
+        
+        url = unquote_plus(url)
+        if " " in url:
+            url = quote(url, safe="/:")
 
-        file_content = urlopen(unquote_plus(url)).read()
+        file_content = urlopen(url).read()
 
     if file_content == "":
         return {"error": "File content is empty"}, 400
