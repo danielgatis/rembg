@@ -2,6 +2,7 @@ import errno
 import os
 import sys
 import urllib.request
+from hashlib import md5
 
 import numpy as np
 import requests
@@ -9,7 +10,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
-from hashlib import md5
 from PIL import Image
 from skimage import transform
 from torchvision import transforms
@@ -52,7 +52,7 @@ def download_file_from_google_drive(id, fname, destination):
 
 
 def load_model(model_name: str = "u2net"):
-    hashfile = lambda f: md5(open(f,"rb").read()).hexdigest()
+    hashfile = lambda f: md5(open(f, "rb").read()).hexdigest()
 
     if model_name == "u2netp":
         net = u2net.U2NETP(3, 1)

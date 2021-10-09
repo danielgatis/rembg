@@ -7,17 +7,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: pip install --upgrade pip wheel
-      - run: pip install bandit black codespell flake8 flake8-bugbear
-                         flake8-comprehensions isort mypy pytest pyupgrade safety
-      - run: bandit --recursive --skip B101,B104,B310,B311 .
-      - run: black --check --diff .
-      - run: codespell
-      - run: flake8 . --count --ignore=E203,E266,E731,F401,F811,F841,W503
-                      --max-complexity=10 --max-line-length=103 --show-source --statistics
-      - run: isort --check-only --profile black .
-      - run: pip install -r requirements.txt
-      - run: mkdir --parents --verbose .mypy_cache
-      - run: mypy --ignore-missing-imports --install-types --non-interactive . || true
-      - run: pytest . || pytest --doctest-modules . || true
-      - run: shopt -s globstar && pyupgrade --py36-plus **/*.py
+      - run: pip install bandit black flake8 flake8-bugbear flake8-comprehensions isort safety
+      - run: bandit --recursive --skip B101,B104,B310,B311,B303 ./src
+      - run: black --check --diff ./src
+      - run: flake8 ./src --count --ignore=E203,E266,E731,F401,F811,F841,W503 --max-complexity=15 --max-line-length=120 --show-source --statistics
+      - run: isort --check-only --profile black ./src
       - run: safety check

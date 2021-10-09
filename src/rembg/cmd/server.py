@@ -2,7 +2,7 @@ import argparse
 import glob
 import os
 from io import BytesIO
-from urllib.parse import unquote_plus
+from urllib.parse import quote, unquote_plus
 from urllib.request import urlopen
 
 from flask import Flask, request, send_file
@@ -27,7 +27,7 @@ def index():
         url = request.args.get("url", type=str)
         if url is None:
             return {"error": "missing query param 'url'"}, 400
-        
+
         url = unquote_plus(url)
         if " " in url:
             url = quote(url, safe="/:")
