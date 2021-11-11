@@ -43,7 +43,7 @@ def index():
     ae = request.values.get("ae", type=int, default=10)
     az = request.values.get("az", type=int, default=1000)
 
-    model = request.args.get("model", type=str, default="u2net")
+    model = request.values.get("model", type=str, default="u2net")
     model_path = os.environ.get(
         "U2NETP_PATH",
         os.path.expanduser(os.path.join("~", ".u2net")),
