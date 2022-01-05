@@ -45,7 +45,7 @@ def index():
     width = request.args.get("width", type=int)
     height = request.args.get("height", type=int)
 
-    model = request.args.get("model", type=str, default="u2net")
+    model = request.values.get("model", type=str, default="u2net")
     model_path = os.environ.get(
         "U2NETP_PATH",
         os.path.expanduser(os.path.join("~", ".u2net")),
