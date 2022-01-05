@@ -42,6 +42,8 @@ def index():
     ab = request.values.get("ab", type=int, default=10)
     ae = request.values.get("ae", type=int, default=10)
     az = request.values.get("az", type=int, default=1000)
+    width = request.args.get("width", type=int)
+    height = request.args.get("height", type=int)
 
     model = request.args.get("model", type=str, default="u2net")
     model_path = os.environ.get(
@@ -65,6 +67,8 @@ def index():
             BytesIO(
                 remove(
                     file_content,
+                    width,
+                    height,
                     model_name=model,
                     alpha_matting=alpha_matting,
                     alpha_matting_foreground_threshold=af,

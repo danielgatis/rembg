@@ -78,8 +78,17 @@ def get_model(model_name):
         return detect.load_model(model_name="u2net")
 
 
+def resize_image(img, width, height):
+    original_width, original_height = img.size
+    width = original_width if width is None else width
+    height = original_height if height is None else height
+    return img.resize((width, height)) if original_width != width or original_height != height else img
+
+
 def remove(
     data,
+    width,
+    height,
     model_name="u2net",
     alpha_matting=False,
     alpha_matting_foreground_threshold=240,
@@ -89,6 +98,8 @@ def remove(
 ):
     model = get_model(model_name)
     img = Image.open(io.BytesIO(data)).convert("RGB")
+    if width is not None or height is not None:
+        img = resize_image(img, width, height)
     mask = detect.predict(model, np.array(img)).convert("L")
 
     if alpha_matting:
