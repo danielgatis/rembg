@@ -1,0 +1,28 @@
+name: Publish to Pypi
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  push_to_pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: "Installs dependencies"
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install setuptools wheel twine
+
+      - name: "Builds and uploads to PyPI"
+        run: |
+          python3 setup.py sdist bdist_wheel
+          python3 -m twine upload dist/*
+        env:
+          TWINE_USERNAME: ${{ secrets.PIPY_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PIPY_PASSWORD }}
