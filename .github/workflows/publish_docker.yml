@@ -3,7 +3,7 @@ name: Publish Docker image
 on:
   push:
     tags:
-      - "\d+.\d+.\d+"
+      - "v*.*.*"
 
 jobs:
   push_to_registry:
