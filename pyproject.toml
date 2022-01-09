@@ -5,8 +5,8 @@ requires = ["setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [versioneer]
-VCS = git
-style = default
-versionfile_source = src/_version.py
-versionfile_build = _version.py
-tag_prefix =
+VCS = "git"
+style = "default"
+versionfile_source = "src/_version.py"
+versionfile_build = "_version.py"
+tag_prefix = ""
