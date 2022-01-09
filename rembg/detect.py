@@ -18,6 +18,7 @@ from tqdm import tqdm
 from .data_loader import RescaleT, ToTensorLab
 from .u2net import U2NETP, U2NET
 
+
 def download_file_from_google_drive(id, fname, destination):
     head, tail = os.path.split(destination)
     os.makedirs(head, exist_ok=True)
@@ -148,9 +149,7 @@ def preprocess(image):
         image = image[:, :, np.newaxis]
         label = label[:, :, np.newaxis]
 
-    transform = transforms.Compose(
-        [RescaleT(320), ToTensorLab(flag=0)]
-    )
+    transform = transforms.Compose([RescaleT(320), ToTensorLab(flag=0)])
     sample = transform({"imidx": np.array([0]), "image": image, "label": label})
 
     return sample
