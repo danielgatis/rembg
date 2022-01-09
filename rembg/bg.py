@@ -8,7 +8,7 @@ from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
 from scipy.ndimage.morphology import binary_erosion
 
-from .u2net import detect
+from .detect import load_model, predict
 
 
 def alpha_matting_cutout(
@@ -71,11 +71,11 @@ def naive_cutout(img, mask):
 @functools.lru_cache(maxsize=None)
 def get_model(model_name):
     if model_name == "u2netp":
-        return detect.load_model(model_name="u2netp")
+        return load_model(model_name="u2netp")
     if model_name == "u2net_human_seg":
-        return detect.load_model(model_name="u2net_human_seg")
+        return load_model(model_name="u2net_human_seg")
     else:
-        return detect.load_model(model_name="u2net")
+        return load_model(model_name="u2net")
 
 
 def resize_image(img, width, height):
@@ -105,7 +105,7 @@ def remove(
         img = resize_image(img, width, height)
 
     model = get_model(model_name)
-    mask = detect.predict(model, np.array(img)).convert("L")
+    mask = predict(model, np.array(img)).convert("L")
 
     if alpha_matting:
         try:
