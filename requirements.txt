@@ -10,3 +10,4 @@ requests==2.24.0
 scipy==1.5.4
 pymatting==1.1.1
 filetype==1.0.7
+matplotlib==3.5.1
