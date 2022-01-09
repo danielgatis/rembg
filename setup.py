@@ -1,4 +1,8 @@
 import pathlib
+import sys
+import os
+
+sys.path.append(os.path.dirname(__file__))
 import versioneer
 
 from setuptools import find_packages, setup
@@ -23,8 +27,7 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="remove, background, u2net",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    packages=find_packages(include=["rembg"]),
     python_requires=">=3.8, <4",
     install_requires=requireds,
     entry_points={

@@ -41,10 +41,10 @@ def get_config():
     # _version.py
     cfg = VersioneerConfig()
     cfg.VCS = "git"
-    cfg.style = "default"
-    cfg.tag_prefix = ""
-    cfg.parentdir_prefix = "None"
-    cfg.versionfile_source = "src/rembg/_version.py"
+    cfg.style = "pep440"
+    cfg.tag_prefix = "v"
+    cfg.parentdir_prefix = "rembg-"
+    cfg.versionfile_source = "rembg/_version.py"
     cfg.verbose = False
     return cfg
 

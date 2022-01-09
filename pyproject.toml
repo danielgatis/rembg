@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [versioneer]
 VCS = "git"
-style = "default"
-versionfile_source = "src/rembg/_version.py"
-versionfile_build = "_version.py"
-tag_prefix = ""
+style = "pep440"
+versionfile_source = "rembg/_version.py"
+versionfile_build = "rembg/_version.py"
+tag_prefix = "v"
+parentdir_prefix = "rembg-"

@@ -1,7 +1,7 @@
 flask==1.1.2
-numpy==1.19.5
-pillow==8.0.1
-scikit-image==0.17.2
+numpy==1.22.0
+pillow==8.1.2
+scikit-image==0.19.1
 torch==1.9.1
 torchvision==0.10.1
 waitress==1.4.4

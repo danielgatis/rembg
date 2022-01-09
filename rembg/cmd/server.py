@@ -67,8 +67,8 @@ def index():
             BytesIO(
                 remove(
                     file_content,
-                    width,
-                    height,
+                    width=width,
+                    height=height,
                     model_name=model,
                     alpha_matting=alpha_matting,
                     alpha_matting_foreground_threshold=af,

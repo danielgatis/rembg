@@ -1,15 +1,8 @@
+include MANIFEST.in
+include LICENSE.txt
+include README.md
+include setup.py
 include pyproject.toml
 
-# Include the README
-include *.md
-
-# Include the license file
-include LICENSE.txt
-
-# Include the data files
-recursive-include data *
-
-include requirements.txt
 include versioneer.py
-include src/_version.py
-include src/rembg/_version.py
+include rembg/_version.py

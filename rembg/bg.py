@@ -91,19 +91,20 @@ def resize_image(img, width, height):
 
 def remove(
     data,
-    width,
-    height,
     model_name="u2net",
     alpha_matting=False,
     alpha_matting_foreground_threshold=240,
     alpha_matting_background_threshold=10,
     alpha_matting_erode_structure_size=10,
     alpha_matting_base_size=1000,
+    width=None,
+    height=None,
 ):
-    model = get_model(model_name)
     img = Image.open(io.BytesIO(data)).convert("RGB")
     if width is not None or height is not None:
         img = resize_image(img, width, height)
+
+    model = get_model(model_name)
     mask = detect.predict(model, np.array(img)).convert("L")
 
     if alpha_matting:
