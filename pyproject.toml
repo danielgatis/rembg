@@ -7,6 +7,6 @@ build-backend = "setuptools.build_meta"
 [versioneer]
 VCS = "git"
 style = "default"
-versionfile_source = "src/_version.py"
+versionfile_source = "src/rembg/_version.py"
 versionfile_build = "_version.py"
 tag_prefix = ""
