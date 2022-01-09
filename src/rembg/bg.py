@@ -82,7 +82,11 @@ def resize_image(img, width, height):
     original_width, original_height = img.size
     width = original_width if width is None else width
     height = original_height if height is None else height
-    return img.resize((width, height)) if original_width != width or original_height != height else img
+    return (
+        img.resize((width, height))
+        if original_width != width or original_height != height
+        else img
+    )
 
 
 def remove(
