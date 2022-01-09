@@ -27,13 +27,13 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="remove, background, u2net",
-    packages=find_packages(include=["rembg"]),
+    packages=["rembg"],
     python_requires=">=3.8, <4",
     install_requires=requireds,
     entry_points={
         "console_scripts": [
-            "rembg=rembg.cmd.cli:main",
-            "rembg-server=rembg.cmd.server:main",
+            "rembg=rembg.cli:main",
+            "rembg-server=rembg.server:main",
         ],
     },
     version=versioneer.get_version(),

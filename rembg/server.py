@@ -8,7 +8,7 @@ from urllib.request import urlopen
 from flask import Flask, request, send_file
 from waitress import serve
 
-from ..bg import remove
+from .bg import remove
 
 app = Flask(__name__)
 

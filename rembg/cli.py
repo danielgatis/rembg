@@ -6,7 +6,7 @@ from distutils.util import strtobool
 import filetype
 from tqdm import tqdm
 
-from ..bg import remove
+from .bg import remove
 
 
 def main():
