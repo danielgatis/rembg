@@ -3,3 +3,10 @@
 # https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
 requires = ["setuptools>=40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[versioneer]
+VCS = git
+style = default
+versionfile_source = src/_version.py
+versionfile_build = _version.py
+tag_prefix =

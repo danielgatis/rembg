@@ -10,3 +10,5 @@ include LICENSE.txt
 recursive-include data *
 
 include requirements.txt
+include versioneer.py
+include src/_version.py

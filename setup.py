@@ -1,4 +1,5 @@
 import pathlib
+import versioneer
 
 from setuptools import find_packages, setup
 
@@ -11,7 +12,6 @@ with open("requirements.txt") as f:
 
 setup(
     name="rembg",
-    version="1.0.28",
     description="Remove image background",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,4 +33,6 @@ setup(
             "rembg-server=rembg.cmd.server:main",
         ],
     },
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
 )
