@@ -1,11 +1,11 @@
+import os
 import pathlib
 import sys
-import os
 
 sys.path.append(os.path.dirname(__file__))
-import versioneer
-
 from setuptools import find_packages, setup
+
+import versioneer
 
 here = pathlib.Path(__file__).parent.resolve()
 

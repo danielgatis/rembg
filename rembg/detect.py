@@ -16,7 +16,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from .data_loader import RescaleT, ToTensorLab
-from .u2net import U2NETP, U2NET
+from .u2net import U2NET, U2NETP
 
 
 def download_file_from_google_drive(id, fname, destination):
