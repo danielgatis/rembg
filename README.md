@@ -158,10 +158,16 @@ python app.py
 
 ### Usage as a docker
 
-Just run
+First compile with:
 
 ```
-curl -s http://input.png | docker run -i -v ~/.u2net:/root/.u2net danielgatis/rembg:latest > output.png
+docker build . -t rembg
+```
+
+Then run with:
+
+```
+docker run --rm -i rembg <in.png >out.png
 ```
 
 ### Advance usage
