@@ -1,6 +1,4 @@
 import argparse
-import glob
-import os
 from io import BytesIO
 from urllib.parse import quote, unquote_plus
 from urllib.request import urlopen
