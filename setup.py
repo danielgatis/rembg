@@ -14,6 +14,13 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 with open("requirements.txt") as f:
     requireds = f.read().splitlines()
 
+if os.getenv("GPU") is None:
+    with open("requirements-cpu.txt") as f:
+        requireds += f.read().splitlines()
+else:
+    with open("requirements-gpu.txt") as f:
+        requireds += f.read().splitlines()
+
 setup(
     name="rembg",
     description="Remove image background",

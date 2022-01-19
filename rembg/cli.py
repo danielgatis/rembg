@@ -10,17 +10,6 @@ from .bg import remove
 
 
 def main():
-    model_path = os.environ.get(
-        "U2NETP_PATH",
-        os.path.expanduser(os.path.join("~", ".u2net")),
-    )
-    model_choices = [
-        os.path.splitext(os.path.basename(x))[0]
-        for x in set(glob.glob(model_path + "/*"))
-    ]
-
-    model_choices = list(set(model_choices + ["u2net", "u2netp", "u2net_human_seg"]))
-
     ap = argparse.ArgumentParser()
 
     ap.add_argument(
@@ -28,7 +17,7 @@ def main():
         "--model",
         default="u2net",
         type=str,
-        choices=model_choices,
+        choices=["u2net", "u2netp", "u2net_human_seg"],
         help="The model name.",
     )
 

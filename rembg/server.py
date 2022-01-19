@@ -46,16 +46,7 @@ def index():
     height = request.args.get("height", type=int)
 
     model = request.values.get("model", type=str, default="u2net")
-    model_path = os.environ.get(
-        "U2NETP_PATH",
-        os.path.expanduser(os.path.join("~", ".u2net")),
-    )
-    model_choices = [
-        os.path.splitext(os.path.basename(x))[0]
-        for x in set(glob.glob(model_path + "/*"))
-    ]
-
-    model_choices = list(set(model_choices + ["u2net", "u2netp", "u2net_human_seg"]))
+    model_choices = ["u2net", "u2netp", "u2net_human_seg"]
 
     if model not in model_choices:
         return {

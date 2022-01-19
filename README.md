@@ -36,36 +36,17 @@ Rembg is a tool to remove images background. That is it.
 
 #### *** If you want to remove background from videos try this this fork: https://github.com/ecsplendid/rembg-greenscreen ***
 
-### Requirements
-
-* python 3.8 or newer
-
-* torch and torchvision stable version (https://pytorch.org)
-
-#### How to install torch/torchvision
-
-Go to https://pytorch.org and scrool down to `INSTALL PYTORCH` section and follow the instructions.
-
-For example:
-```
-PyTorch Build: Stable (1.7.1)
-Your OS: Windows
-Package: Pip
-Language: Python
-CUDA: None
-```
-
-The install cmd is:
-```
-pip install torch==1.7.1+cpu torchvision==0.8.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
-```
 
 ### Installation
 
-Install it from pypi
-
+CPU support:
 ```bash
 pip install rembg
+```
+
+GPU support:
+```bash
+GPU=1 pip install rembg
 ```
 
 ### Usage as a cli
@@ -83,14 +64,6 @@ rembg -o path/to/output.png path/to/input.png
 Remove the background from all images in a folder
 ```bash
 rembg -p path/to/input path/to/output
-```
-
-### Add a custom model
-
-Copy the `custom-model.pth` file to `~/.u2net` and run:
-
-```bash
-curl -s http://input.png | rembg -m custom-model > output.png
 ```
 
 ### Usage as a server

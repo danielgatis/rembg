@@ -1,137 +1,101 @@
-import errno
 import os
 import sys
-import urllib.request
-from hashlib import md5
 
+import gdown
 import numpy as np
-import requests
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchvision
+import onnxruntime as ort
 from PIL import Image
 from skimage import transform
-from torchvision import transforms
-from tqdm import tqdm
 
-from .data_loader import RescaleT, ToTensorLab
-from .u2net import U2NET, U2NETP
-
-
-def download_file_from_google_drive(id, fname, destination):
-    head, tail = os.path.split(destination)
-    os.makedirs(head, exist_ok=True)
-
-    URL = "https://docs.google.com/uc?export=download"
-
-    session = requests.Session()
-    response = session.get(URL, params={"id": id}, stream=True)
-
-    token = None
-    for key, value in response.cookies.items():
-        if key.startswith("download_warning"):
-            token = value
-            break
-
-    if token:
-        params = {"id": id, "confirm": token}
-        response = session.get(URL, params=params, stream=True)
-
-    total = int(response.headers.get("content-length", 0))
-
-    with open(destination, "wb") as file, tqdm(
-        desc=f"Downloading {tail} to {head}",
-        total=total,
-        unit="iB",
-        unit_scale=True,
-        unit_divisor=1024,
-    ) as bar:
-        for data in response.iter_content(chunk_size=1024):
-            size = file.write(data)
-            bar.update(size)
+SESSIONS = {}
 
 
 def load_model(model_name: str = "u2net"):
-    hashfile = lambda f: md5(open(f, "rb").read()).hexdigest()
+    path = os.environ.get(
+        "U2NETP_PATH",
+        os.path.expanduser(os.path.join("~", ".u2net", model_name + ".onnx")),
+    )
 
     if model_name == "u2netp":
-        net = U2NETP(3, 1)
-        path = os.environ.get(
-            "U2NETP_PATH",
-            os.path.expanduser(os.path.join("~", ".u2net", model_name + ".pth")),
-        )
-        if (
-            not os.path.exists(path)
-            or hashfile(path) != "e4f636406ca4e2af789941e7f139ee2e"
-        ):
-            download_file_from_google_drive(
-                "1rbSTGKAE-MTxBYHd-51l2hMOQPT_7EPy",
-                "u2netp.pth",
-                path,
-            )
-
+        md5 = "8e83ca70e441ab06c318d82300c84806"
+        url = "https://drive.google.com/uc?id=1tNuFmLv0TSNDjYIkjEdeH1IWKQdUA4HR"
     elif model_name == "u2net":
-        net = U2NET(3, 1)
-        path = os.environ.get(
-            "U2NET_PATH",
-            os.path.expanduser(os.path.join("~", ".u2net", model_name + ".pth")),
-        )
-        if (
-            not os.path.exists(path)
-            or hashfile(path) != "347c3d51b01528e5c6c071e3cff1cb55"
-        ):
-            download_file_from_google_drive(
-                "1ao1ovG1Qtx4b7EoskHXmi2E9rp5CHLcZ",
-                "pth",
-                path,
-            )
-
+        md5 = "60024c5c889badc19c04ad937298a77b"
+        url = "https://drive.google.com/uc?id=1tCU5MM1LhRgGou5OpmpjBQbSrYIUoYab"
     elif model_name == "u2net_human_seg":
-        net = U2NET(3, 1)
-        path = os.environ.get(
-            "U2NET_PATH",
-            os.path.expanduser(os.path.join("~", ".u2net", model_name + ".pth")),
-        )
-        if (
-            not os.path.exists(path)
-            or hashfile(path) != "09fb4e49b7f785c9f855baf94916840a"
-        ):
-            download_file_from_google_drive(
-                "1-Yg0cxgrNhHP-016FPdp902BR-kSsA4P",
-                "u2net_human_seg.pth",
-                path,
-            )
+        md5 = "c09ddc2e0104f800e3e1bb4652583d1f"
+        url = "https://drive.google.com/uc?id=1ZfqwVxu-1XWC1xU1GHIP-FM_Knd_AX5j"
     else:
         print("Choose between u2net, u2net_human_seg or u2netp", file=sys.stderr)
 
-    try:
-        if torch.cuda.is_available():
-            net.load_state_dict(torch.load(path))
-            net.to(torch.device("cuda"))
-        else:
-            net.load_state_dict(
-                torch.load(
-                    path,
-                    map_location="cpu",
-                )
-            )
-    except FileNotFoundError:
-        raise FileNotFoundError(
-            errno.ENOENT, os.strerror(errno.ENOENT), model_name + ".pth"
-        )
+    if SESSIONS.get(md5) is None:
+        gdown.cached_download(url, path, md5=md5, quiet=False)
+        SESSIONS[md5] = ort.InferenceSession(path)
 
-    net.eval()
-
-    return net
+    return SESSIONS[md5]
 
 
 def norm_pred(d):
-    ma = torch.max(d)
-    mi = torch.min(d)
+    ma = np.max(d)
+    mi = np.min(d)
     dn = (d - mi) / (ma - mi)
 
     return dn
+
+
+def rescale(sample, output_size):
+    imidx, image, label = sample["imidx"], sample["image"], sample["label"]
+
+    h, w = image.shape[:2]
+
+    if isinstance(output_size, int):
+        if h > w:
+            new_h, new_w = output_size * h / w, output_size
+        else:
+            new_h, new_w = output_size, output_size * w / h
+    else:
+        new_h, new_w = output_size
+
+    new_h, new_w = int(new_h), int(new_w)
+
+    img = transform.resize(image, (output_size, output_size), mode="constant")
+    lbl = transform.resize(
+        label,
+        (output_size, output_size),
+        mode="constant",
+        order=0,
+        preserve_range=True,
+    )
+
+    return {"imidx": imidx, "image": img, "label": lbl}
+
+
+def color(sample):
+    imidx, image, label = sample["imidx"], sample["image"], sample["label"]
+
+    tmpLbl = np.zeros(label.shape)
+
+    if np.max(label) < 1e-6:
+        label = label
+    else:
+        label = label / np.max(label)
+
+    tmpImg = np.zeros((image.shape[0], image.shape[1], 3))
+    image = image / np.max(image)
+    if image.shape[2] == 1:
+        tmpImg[:, :, 0] = (image[:, :, 0] - 0.485) / 0.229
+        tmpImg[:, :, 1] = (image[:, :, 0] - 0.485) / 0.229
+        tmpImg[:, :, 2] = (image[:, :, 0] - 0.485) / 0.229
+    else:
+        tmpImg[:, :, 0] = (image[:, :, 0] - 0.485) / 0.229
+        tmpImg[:, :, 1] = (image[:, :, 1] - 0.456) / 0.224
+        tmpImg[:, :, 2] = (image[:, :, 2] - 0.406) / 0.225
+
+    tmpLbl[:, :, 0] = label[:, :, 0]
+    tmpImg = tmpImg.transpose((2, 0, 1))
+    tmpLbl = label.transpose((2, 0, 1))
+
+    return {"imidx": imidx, "image": tmpImg, "label": tmpLbl}
 
 
 def preprocess(image):
@@ -149,34 +113,23 @@ def preprocess(image):
         image = image[:, :, np.newaxis]
         label = label[:, :, np.newaxis]
 
-    transform = transforms.Compose([RescaleT(320), ToTensorLab(flag=0)])
-    sample = transform({"imidx": np.array([0]), "image": image, "label": label})
+    sample = {"imidx": np.array([0]), "image": image, "label": label}
+    sample = rescale(sample, 320)
+    sample = color(sample)
 
     return sample
 
 
-def predict(net, item):
-
+def predict(ort_session, item):
     sample = preprocess(item)
+    inputs_test = np.expand_dims(sample["image"], 0).astype(np.float32)
 
-    with torch.no_grad():
+    ort_inputs = {ort_session.get_inputs()[0].name: inputs_test}
+    ort_outs = ort_session.run(None, ort_inputs)
 
-        if torch.cuda.is_available():
-            inputs_test = torch.cuda.FloatTensor(
-                sample["image"].unsqueeze(0).cuda().float()
-            )
-        else:
-            inputs_test = torch.FloatTensor(sample["image"].unsqueeze(0).float())
+    d1 = ort_outs[0]
+    pred = d1[:, 0, :, :]
+    predict = np.squeeze(norm_pred(pred))
+    img = Image.fromarray(predict * 255).convert("RGB")
 
-        d1, d2, d3, d4, d5, d6, d7 = net(inputs_test)
-
-        pred = d1[:, 0, :, :]
-        predict = norm_pred(pred)
-
-        predict = predict.squeeze()
-        predict_np = predict.cpu().detach().numpy()
-        img = Image.fromarray(predict_np * 255).convert("RGB")
-
-        del d1, d2, d3, d4, d5, d6, d7, pred, predict, predict_np, inputs_test, sample
-
-        return img
+    return img

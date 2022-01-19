@@ -1,4 +1,3 @@
-import functools
 import io
 
 import numpy as np
@@ -68,7 +67,6 @@ def naive_cutout(img, mask):
     return cutout
 
 
-@functools.lru_cache(maxsize=None)
 def get_model(model_name):
     if model_name == "u2netp":
         return load_model(model_name="u2netp")
