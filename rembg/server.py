@@ -5,7 +5,7 @@ from typing import Optional
 
 import requests
 import uvicorn
-from fastapi import FastAPI, Form, Query, UploadFile
+from fastapi import FastAPI, Form, Query, UploadFile, File
 from PIL import Image
 from starlette.responses import StreamingResponse
 
