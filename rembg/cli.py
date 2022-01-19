@@ -7,6 +7,9 @@ import filetype
 from tqdm import tqdm
 
 from .bg import remove
+from .detect import ort_session
+
+sessions = {}
 
 
 def main():
@@ -91,6 +94,7 @@ def main():
 
     r = lambda i: i.buffer.read() if hasattr(i, "buffer") else i.read()
     w = lambda o, data: o.buffer.write(data) if hasattr(o, "buffer") else o.write(data)
+    session = sessions.setdefault(args.model, ort_session(args.model))
 
     if args.path:
         full_paths = [os.path.abspath(path) for path in args.path]
@@ -128,7 +132,7 @@ def main():
                         output,
                         remove(
                             r(input),
-                            model_name=args.model,
+                            session=session,
                             alpha_matting=args.alpha_matting,
                             alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                             alpha_matting_background_threshold=args.alpha_matting_background_threshold,
@@ -142,7 +146,7 @@ def main():
             args.output,
             remove(
                 r(args.input),
-                model_name=args.model,
+                session=session,
                 alpha_matting=args.alpha_matting,
                 alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold=args.alpha_matting_background_threshold,

@@ -7,10 +7,8 @@ import onnxruntime as ort
 from PIL import Image
 from skimage import transform
 
-SESSIONS = {}
 
-
-def load_model(model_name: str = "u2net"):
+def ort_session(model_name):
     path = os.environ.get(
         "U2NETP_PATH",
         os.path.expanduser(os.path.join("~", ".u2net", model_name + ".onnx")),
@@ -26,13 +24,10 @@ def load_model(model_name: str = "u2net"):
         md5 = "c09ddc2e0104f800e3e1bb4652583d1f"
         url = "https://drive.google.com/uc?id=1ZfqwVxu-1XWC1xU1GHIP-FM_Knd_AX5j"
     else:
-        print("Choose between u2net, u2net_human_seg or u2netp", file=sys.stderr)
+        assert AssertionError("Choose between u2net, u2netp or u2net_human_seg")
 
-    if SESSIONS.get(md5) is None:
-        gdown.cached_download(url, path, md5=md5, quiet=False)
-        SESSIONS[md5] = ort.InferenceSession(path)
-
-    return SESSIONS[md5]
+    gdown.cached_download(url, path, md5=md5, quiet=True)
+    return ort.InferenceSession(path)
 
 
 def norm_pred(d):
