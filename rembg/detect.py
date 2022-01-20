@@ -8,7 +8,7 @@ from PIL import Image
 from skimage import transform
 
 
-def ort_session(model_name):
+def ort_session(model_name: str) -> ort.InferenceSession:
     path = os.environ.get(
         "U2NETP_PATH",
         os.path.expanduser(os.path.join("~", ".u2net", model_name + ".onnx")),
@@ -30,7 +30,7 @@ def ort_session(model_name):
     return ort.InferenceSession(path)
 
 
-def norm_pred(d):
+def norm_pred(d: np.array) -> np.array:
     ma = np.max(d)
     mi = np.min(d)
     dn = (d - mi) / (ma - mi)
@@ -38,7 +38,7 @@ def norm_pred(d):
     return dn
 
 
-def rescale(sample, output_size):
+def rescale(sample: dict, output_size: int) -> dict:
     imidx, image, label = sample["imidx"], sample["image"], sample["label"]
 
     h, w = image.shape[:2]
@@ -65,7 +65,7 @@ def rescale(sample, output_size):
     return {"imidx": imidx, "image": img, "label": lbl}
 
 
-def color(sample):
+def color(sample: dict) -> dict:
     imidx, image, label = sample["imidx"], sample["image"], sample["label"]
 
     tmpLbl = np.zeros(label.shape)
@@ -93,7 +93,7 @@ def color(sample):
     return {"imidx": imidx, "image": tmpImg, "label": tmpLbl}
 
 
-def preprocess(image):
+def preprocess(image: np.array) -> dict:
     label_3 = np.zeros(image.shape)
     label = np.zeros(label_3.shape[0:2])
 
@@ -115,7 +115,7 @@ def preprocess(image):
     return sample
 
 
-def predict(ort_session, item):
+def predict(ort_session: ort.InferenceSession, item: np.array) -> Image:
     sample = preprocess(item)
     inputs_test = np.expand_dims(sample["image"], 0).astype(np.float32)
 

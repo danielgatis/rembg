@@ -1,6 +1,8 @@
 import io
+from typing import Optional
 
 import numpy as np
+import onnxruntime as ort
 from PIL import Image
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
@@ -11,13 +13,13 @@ from .detect import ort_session, predict
 
 
 def alpha_matting_cutout(
-    img,
-    mask,
-    foreground_threshold,
-    background_threshold,
-    erode_structure_size,
-    base_size,
-):
+    img: Image,
+    mask: Image,
+    foreground_threshold: int,
+    background_threshold: int,
+    erode_structure_size: int,
+    base_size: int,
+) -> Image:
     size = img.size
 
     img.thumbnail((base_size, base_size), Image.LANCZOS)
@@ -61,13 +63,13 @@ def alpha_matting_cutout(
     return cutout
 
 
-def naive_cutout(img, mask):
+def naive_cutout(img: Image, mask: Image) -> Image:
     empty = Image.new("RGBA", (img.size), 0)
     cutout = Image.composite(img, empty, mask.resize(img.size, Image.LANCZOS))
     return cutout
 
 
-def resize_image(img, width, height):
+def resize_image(img: Image, width: Optional[int], height: Optional[int]) -> Image:
     original_width, original_height = img.size
     width = original_width if width is None else width
     height = original_height if height is None else height
@@ -79,16 +81,16 @@ def resize_image(img, width, height):
 
 
 def remove(
-    data,
-    session=None,
-    alpha_matting=False,
-    alpha_matting_foreground_threshold=240,
-    alpha_matting_background_threshold=10,
-    alpha_matting_erode_structure_size=10,
-    alpha_matting_base_size=1000,
-    width=None,
-    height=None,
-):
+    data: bytes,
+    session: Optional[ort.InferenceSession] = None,
+    alpha_matting: bool = False,
+    alpha_matting_foreground_threshold: int = 240,
+    alpha_matting_background_threshold: int = 10,
+    alpha_matting_erode_structure_size: int = 10,
+    alpha_matting_base_size: int = 1000,
+    width: Optional[int] = None,
+    height: Optional[int] = None,
+) -> bytes:
     img = Image.open(io.BytesIO(data)).convert("RGB")
     if width is not None or height is not None:
         img = resize_image(img, width, height)
