@@ -35,7 +35,9 @@ def alpha_matting_cutout(
     # erode foreground/background
     structure = None
     if erode_structure_size > 0:
-        structure = np.ones((erode_structure_size, erode_structure_size), dtype=np.int)
+        structure = np.ones(
+            (erode_structure_size, erode_structure_size), dtype=np.uint8
+        )
 
     is_foreground = binary_erosion(is_foreground, structure=structure)
     is_background = binary_erosion(is_background, structure=structure, border_value=1)
@@ -82,12 +84,12 @@ def resize_image(img: Image, width: Optional[int], height: Optional[int]) -> Ima
 
 def remove(
     data: bytes,
-    session: Optional[ort.InferenceSession] = None,
     alpha_matting: bool = False,
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_structure_size: int = 10,
     alpha_matting_base_size: int = 1000,
+    session: Optional[ort.InferenceSession] = None,
     width: Optional[int] = None,
     height: Optional[int] = None,
 ) -> bytes:
@@ -96,7 +98,7 @@ def remove(
         img = resize_image(img, width, height)
 
     if session is None:
-        session = ort_session(session)
+        session = ort_session("u2net")
 
     mask = predict(session, np.array(img)).convert("L")
 

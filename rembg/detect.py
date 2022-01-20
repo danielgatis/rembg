@@ -1,5 +1,6 @@
 import os
 import sys
+from contextlib import redirect_stdout
 
 import gdown
 import numpy as np
@@ -26,11 +27,13 @@ def ort_session(model_name: str) -> ort.InferenceSession:
     else:
         assert AssertionError("Choose between u2net, u2netp or u2net_human_seg")
 
-    gdown.cached_download(url, path, md5=md5, quiet=True)
+    with redirect_stdout(sys.stderr):
+        gdown.cached_download(url, path, md5=md5)
+
     return ort.InferenceSession(path)
 
 
-def norm_pred(d: np.array) -> np.array:
+def norm_pred(d: np.ndarray) -> np.ndarray:
     ma = np.max(d)
     mi = np.min(d)
     dn = (d - mi) / (ma - mi)
@@ -93,8 +96,8 @@ def color(sample: dict) -> dict:
     return {"imidx": imidx, "image": tmpImg, "label": tmpLbl}
 
 
-def preprocess(image: np.array) -> dict:
-    label_3 = np.zeros(image.shape)
+def preprocess(im_array: np.ndarray) -> dict:
+    label_3 = np.zeros(im_array.shape)
     label = np.zeros(label_3.shape[0:2])
 
     if 3 == len(label_3.shape):
@@ -102,21 +105,21 @@ def preprocess(image: np.array) -> dict:
     elif 2 == len(label_3.shape):
         label = label_3
 
-    if 3 == len(image.shape) and 2 == len(label.shape):
+    if 3 == len(im_array.shape) and 2 == len(label.shape):
         label = label[:, :, np.newaxis]
-    elif 2 == len(image.shape) and 2 == len(label.shape):
-        image = image[:, :, np.newaxis]
+    elif 2 == len(im_array.shape) and 2 == len(label.shape):
+        im_array = im_array[:, :, np.newaxis]
         label = label[:, :, np.newaxis]
 
-    sample = {"imidx": np.array([0]), "image": image, "label": label}
+    sample = {"imidx": np.array([0]), "image": im_array, "label": label}
     sample = rescale(sample, 320)
     sample = color(sample)
 
     return sample
 
 
-def predict(ort_session: ort.InferenceSession, item: np.array) -> Image:
-    sample = preprocess(item)
+def predict(ort_session: ort.InferenceSession, im_array: np.ndarray) -> Image:
+    sample = preprocess(im_array)
     inputs_test = np.expand_dims(sample["image"], 0).astype(np.float32)
 
     ort_inputs = {ort_session.get_inputs()[0].name: inputs_test}

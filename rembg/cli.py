@@ -2,22 +2,18 @@ import argparse
 import glob
 import os
 from distutils.util import strtobool
+from typing import BinaryIO
+import sys
+from pathlib import Path
 
 import filetype
 from tqdm import tqdm
+import onnxruntime as ort
 
 from .bg import remove
 from .detect import ort_session
 
-sessions = {}
-
-
-def read(i):
-    i.buffer.read() if hasattr(i, "buffer") else i.read()
-
-
-def write(o, d):
-    o.buffer.write(d) if hasattr(o, "buffer") else o.write(d)
+sessions: dict[str, ort.InferenceSession] = {}
 
 
 def main():
@@ -82,20 +78,19 @@ def main():
     )
 
     ap.add_argument(
-        "-o",
-        "--output",
-        nargs="?",
-        default="-",
-        type=argparse.FileType("wb"),
-        help="Path to the output png image.",
+        "input",
+        nargs=(None if sys.stdin.isatty() else "?"),
+        default=(None if sys.stdin.isatty() else sys.stdin.buffer),
+        type=argparse.FileType("rb"),
+        help="Path to the input image.",
     )
 
     ap.add_argument(
-        "input",
-        nargs="?",
-        default="-",
-        type=argparse.FileType("rb"),
-        help="Path to the input image.",
+        "output",
+        nargs=(None if sys.stdin.isatty() else "?"),
+        default=(None if sys.stdin.isatty() else sys.stdout.buffer),
+        type=argparse.FileType("wb"),
+        help="Path to the output png image.",
     )
 
     args = ap.parse_args()
@@ -110,54 +105,50 @@ def main():
         if not os.path.exists(output_path):
             os.makedirs(output_path)
 
-        files = set()
+        input_files = set()
 
-        for path in input_paths:
+        for input_path in input_paths:
             if os.path.isfile(path):
-                files.add(path)
+                input_files.add(path)
             else:
-                input_paths += set(glob.glob(path + "/*"))
+                input_paths += set(glob.glob(input_path + "/*"))
 
-        for fi in tqdm(files):
-            fi_type = filetype.guess(fi)
+        for input_file in tqdm(input_files):
+            input_file_type = filetype.guess(input_file)
 
-            if fi_type is None:
-                continue
-            elif fi_type.mime.find("image") < 0:
+            if input_file_type is None:
                 continue
 
-            with open(fi, "rb") as input:
-                with open(
-                    os.path.join(
-                        output_path, os.path.splitext(os.path.basename(fi))[0] + ".png"
-                    ),
-                    "wb",
-                ) as output:
-                    write(
-                        output,
-                        remove(
-                            read(input),
-                            session=session,
-                            alpha_matting=args.alpha_matting,
-                            alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
-                            alpha_matting_background_threshold=args.alpha_matting_background_threshold,
-                            alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
-                            alpha_matting_base_size=args.alpha_matting_base_size,
-                        ),
-                    )
+            if input_file_type.mime.find("image") < 0:
+                continue
+
+            out_file = os.path.join(
+                output_path, os.path.splitext(os.path.basename(input_file))[0] + ".png"
+            )
+
+            Path(out_file).write_bytes(
+                remove(
+                    Path(input_file).read_bytes(),
+                    session=session,
+                    alpha_matting=args.alpha_matting,
+                    alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
+                    alpha_matting_background_threshold=args.alpha_matting_background_threshold,
+                    alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
+                    alpha_matting_base_size=args.alpha_matting_base_size,
+                )
+            )
 
     else:
-        write(
-            args.output,
+        args.output.write(
             remove(
-                read(args.input),
+                args.input.read(),
                 session=session,
                 alpha_matting=args.alpha_matting,
                 alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold=args.alpha_matting_background_threshold,
                 alpha_matting_erode_structure_size=args.alpha_matting_erode_size,
                 alpha_matting_base_size=args.alpha_matting_base_size,
-            ),
+            )
         )
 
 

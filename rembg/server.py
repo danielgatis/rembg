@@ -7,11 +7,12 @@ import uvicorn
 from fastapi import Depends, FastAPI, File, Form, Query, UploadFile
 from PIL import Image
 from starlette.responses import Response
+import onnxruntime as ort
 
 from .bg import remove
 from .detect import ort_session
 
-sessions = {}
+sessions: dict[str, ort.InferenceSession] = {}
 app = FastAPI()
 
 
@@ -24,14 +25,14 @@ class ModelType(str, Enum):
 class CommonQueryParams:
     def __init__(
         self,
-        model: Optional[ModelType] = ModelType.u2net,
+        model: ModelType = Query(ModelType.u2net),
+        a: bool = Query(False),
+        af: int = Query(240, ge=0),
+        ab: int = Query(10, ge=0),
+        ae: int = Query(10, ge=0),
+        az: int = Query(1000, ge=0),
         width: Optional[int] = Query(None, gt=0),
         height: Optional[int] = Query(None, gt=0),
-        a: Optional[bool] = Query(False),
-        af: Optional[int] = Query(240, ge=0),
-        ab: Optional[int] = Query(10, ge=0),
-        ae: Optional[int] = Query(10, ge=0),
-        az: Optional[int] = Query(1000, ge=0),
     ):
         self.model = model
         self.width = width
@@ -47,7 +48,9 @@ def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
     return Response(
         remove(
             content,
-            session=sessions.setdefault(commons.model, ort_session(commons.model)),
+            session=sessions.setdefault(
+                commons.model.value, ort_session(commons.model.value)
+            ),
             width=commons.width,
             height=commons.height,
             alpha_matting=commons.a,
@@ -66,8 +69,8 @@ def get_index(url: str, commons: CommonQueryParams = Depends()):
 
 
 @app.post("/")
-def post_index(file: UploadFile = File(...), commons: CommonQueryParams = Depends()):
-    return im_without_bg(file.read(), commons)
+def post_index(file: bytes = File(...), commons: CommonQueryParams = Depends()):
+    return im_without_bg(file, commons)
 
 
 def main():
