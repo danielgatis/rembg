@@ -94,7 +94,7 @@ def remove(
         img = resize_image(img, width, height)
 
     if session is None:
-        session = ort_session(model_name)
+        session = ort_session(session)
 
     mask = predict(session, np.array(img)).convert("L")
 
@@ -115,5 +115,6 @@ def remove(
 
     bio = io.BytesIO()
     cutout.save(bio, "PNG")
+    bio.seek(0)
 
-    return bio.getbuffer()
+    return bio.read()

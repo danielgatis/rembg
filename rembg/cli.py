@@ -12,6 +12,14 @@ from .detect import ort_session
 sessions = {}
 
 
+def read(i):
+    i.buffer.read() if hasattr(i, "buffer") else i.read()
+
+
+def write(o, d):
+    o.buffer.write(d) if hasattr(o, "buffer") else o.write(d)
+
+
 def main():
     ap = argparse.ArgumentParser()
 
@@ -91,9 +99,6 @@ def main():
     )
 
     args = ap.parse_args()
-
-    r = lambda i: i.buffer.read() if hasattr(i, "buffer") else i.read()
-    w = lambda o, data: o.buffer.write(data) if hasattr(o, "buffer") else o.write(data)
     session = sessions.setdefault(args.model, ort_session(args.model))
 
     if args.path:
@@ -128,10 +133,10 @@ def main():
                     ),
                     "wb",
                 ) as output:
-                    w(
+                    write(
                         output,
                         remove(
-                            r(input),
+                            read(input),
                             session=session,
                             alpha_matting=args.alpha_matting,
                             alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
@@ -142,10 +147,10 @@ def main():
                     )
 
     else:
-        w(
+        write(
             args.output,
             remove(
-                r(args.input),
+                read(args.input),
                 session=session,
                 alpha_matting=args.alpha_matting,
                 alpha_matting_foreground_threshold=args.alpha_matting_foreground_threshold,
