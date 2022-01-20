@@ -1,3 +1,6 @@
+aiohttp==3.8.1
+asyncer==0.0.1
+click==8.0.3
 fastapi==0.72.0
 filetype==1.0.9
 gdown==4.2.0
@@ -5,9 +8,7 @@ numpy==1.22.1
 pillow==9.0.0
 pymatting==1.1.5
 python-multipart==0.0.5
-requests==2.27.1
 scikit-image==0.19.1
 scipy==1.7.3
 tqdm==4.62.3
 uvicorn==0.17.0
-click==8.0.3

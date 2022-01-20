@@ -3,11 +3,13 @@ import sys
 from enum import Enum
 from typing import IO, Optional
 
+import aiohttp
 import click
 import filetype
 import onnxruntime as ort
 import requests
 import uvicorn
+from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Query
 from starlette.responses import Response
 from tqdm import tqdm
@@ -270,12 +272,17 @@ def s(port: int, log_level: str):
         )
 
     @app.get("/")
-    def get_index(url: str, commons: CommonQueryParams = Depends()):
-        return im_without_bg(requests.get(url).content, commons)
+    async def get_index(url: str, commons: CommonQueryParams = Depends()):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                file = await response.read()
+                return await asyncify(im_without_bg)(file, commons)
 
     @app.post("/")
-    def post_index(file: bytes = File(...), commons: CommonQueryParams = Depends()):
-        return im_without_bg(file, commons)
+    async def post_index(
+        file: bytes = File(...), commons: CommonQueryParams = Depends()
+    ):
+        return await asyncify(im_without_bg)(file, commons)
 
     uvicorn.run(app, host="0.0.0.0", port=port, log_level=log_level)
 

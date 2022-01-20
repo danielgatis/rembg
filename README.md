@@ -34,8 +34,7 @@ Rembg is a tool to remove images background. That is it.
   <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
 </p>
 
-#### *** If you want to remove background from videos try this this fork: https://github.com/ecsplendid/rembg-greenscreen ***
-
+**If this project has helped you in any way, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
 ### Installation
 
@@ -166,6 +165,10 @@ curl -s http://input.png | rembg i -a -ae 15 > output.png
         </tr>
     </tbody>
 </table>
+
+### In the cloud
+
+Please contact me at danielgatis@gmail.com if you need help to put it on the cloud.
 
 ### References
 
