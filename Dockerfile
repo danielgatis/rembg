@@ -12,9 +12,7 @@ WORKDIR /rembg
 COPY . .
 
 RUN GPU=1 pip3 install .
-
-# First run to compile AOT & download model
-RUN rembg pixel.png >/dev/null
+RUN rembg i pixel.png > /dev/null
 
 ENTRYPOINT ["rembg"]
 CMD []

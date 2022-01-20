@@ -30,7 +30,7 @@ def ort_session(model_name: str) -> ort.InferenceSession:
     with redirect_stdout(sys.stderr):
         gdown.cached_download(url, path, md5=md5)
 
-    return ort.InferenceSession(path)
+    return ort.InferenceSession(path, providers=ort.get_available_providers())
 
 
 def norm_pred(d: np.ndarray) -> np.ndarray:
