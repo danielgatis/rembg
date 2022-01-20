@@ -95,7 +95,7 @@ def main():
     default=(None if sys.stdin.isatty() else "-"),
     type=click.File("wb", lazy=True),
 )
-def i(model: str, input: IO, output: IO, **kwargs: dict):
+def i(model: str, input: IO, output: IO, **kwargs):
     output.write(remove(input.read(), session=ort_session(model), **kwargs))
 
 
@@ -184,7 +184,7 @@ def i(model: str, input: IO, output: IO, **kwargs: dict):
         writable=True,
     ),
 )
-def p(model: str, input: pathlib.Path, output: pathlib.Path, **kwargs: dict):
+def p(model: str, input: pathlib.Path, output: pathlib.Path, **kwargs):
     session = ort_session(model)
     for each_input in tqdm(list(input.glob("**/*"))):
         if each_input.is_dir():
