@@ -53,24 +53,24 @@ GPU=1 pip install rembg
 
 Remove the background from a remote image
 ```bash
-curl -s http://input.png | rembg > output.png
+curl -s http://input.png | rembg i > output.png
 ```
 
 Remove the background from a local file
 ```bash
-rembg -o path/to/output.png path/to/input.png
+rembg i path/to/input.png path/to/output.png
 ```
 
 Remove the background from all images in a folder
 ```bash
-rembg -p path/to/input path/to/output
+rembg p path/to/input path/to/output
 ```
 
 ### Usage as a server
 
 Start the server
 ```bash
-rembg-server
+rembg s
 ```
 
 Open your browser to
@@ -140,14 +140,14 @@ docker build . -t rembg
 Then run with:
 
 ```
-docker run --rm -i rembg <in.png >out.png
+docker run --rm -i rembg i in.png out.png
 ```
 
 ### Advance usage
 
 Sometimes it is possible to achieve better results by turning on alpha matting. Example:
 ```bash
-curl -s http://input.png | rembg -a -ae 15 > output.png
+curl -s http://input.png | rembg i -a -ae 15 > output.png
 ```
 
 <table>

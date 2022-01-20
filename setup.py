@@ -40,7 +40,6 @@ setup(
     entry_points={
         "console_scripts": [
             "rembg=rembg.cli:main",
-            "rembg-server=rembg.server:main",
         ],
     },
     version=versioneer.get_version(),

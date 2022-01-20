@@ -75,11 +75,7 @@ def resize_image(img: Image, width: Optional[int], height: Optional[int]) -> Ima
     original_width, original_height = img.size
     width = original_width if width is None else width
     height = original_height if height is None else height
-    return (
-        img.resize((width, height))
-        if original_width != width or original_height != height
-        else img
-    )
+    return img.resize((width, height))
 
 
 def remove(
@@ -87,7 +83,7 @@ def remove(
     alpha_matting: bool = False,
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
-    alpha_matting_erode_structure_size: int = 10,
+    alpha_matting_erode_size: int = 10,
     alpha_matting_base_size: int = 1000,
     session: Optional[ort.InferenceSession] = None,
     width: Optional[int] = None,
@@ -109,7 +105,7 @@ def remove(
                 mask,
                 alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold,
-                alpha_matting_erode_structure_size,
+                alpha_matting_erode_size,
                 alpha_matting_base_size,
             )
         except Exception:
