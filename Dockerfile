@@ -12,7 +12,6 @@ WORKDIR /rembg
 COPY . .
 
 RUN GPU=1 pip3 install .
-RUN rembg i pixel.png > /dev/null
 
 ENTRYPOINT ["rembg"]
 CMD []
