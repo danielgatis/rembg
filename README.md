@@ -78,7 +78,7 @@ http://localhost:5000?url=http://image.png
 ```
 
 Also you can send the file as a FormData (multipart/form-data):
-```
+```html
 <form action="http://localhost:5000" method="post" enctype="multipart/form-data">
    <input type="file" name="file"/>
    <input type="submit" value="upload"/>
