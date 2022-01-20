@@ -10,8 +10,8 @@ jobs:
       - uses: actions/setup-python@v2
       - run: pip install --upgrade pip wheel
       - run: pip install bandit black flake8 flake8-bugbear flake8-comprehensions isort safety
-      - run: bandit --recursive --skip B008,B101,B104,B310,B311,B303 --exclude ./rembg/_version.py ./rembg
+      - run: bandit --recursive --skip B101,B104,B310,B311,B303 --exclude ./rembg/_version.py ./rembg
       - run: black --force-exclude rembg/_version.py --check --diff ./rembg
-      - run: flake8 ./rembg --count --ignore=E203,E266,E731,F401,F811,F841,W503 --max-complexity=15 --max-line-length=120 --show-source --statistics --exclude ./rembg/_version.py
+      - run: flake8 ./rembg --count --ignore=B008,E203,E266,E731,F401,F811,F841,W503 --max-complexity=15 --max-line-length=120 --show-source --statistics --exclude ./rembg/_version.py
       - run: isort --check-only --profile black ./rembg
       - run: safety check
