@@ -45,7 +45,7 @@ pip install rembg
 
 GPU support:
 ```bash
-GPU=1 pip install rembg
+pip install rembg[gpu]
 ```
 
 ### Usage as a cli

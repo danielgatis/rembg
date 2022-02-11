@@ -18,13 +18,7 @@ def alpha_matting_cutout(
     foreground_threshold: int,
     background_threshold: int,
     erode_structure_size: int,
-    base_size: int,
 ) -> Image:
-    size = img.size
-
-    img.thumbnail((base_size, base_size), Image.LANCZOS)
-    mask = mask.resize(img.size, Image.LANCZOS)
-
     img = np.asarray(img)
     mask = np.asarray(mask)
 
@@ -60,22 +54,14 @@ def alpha_matting_cutout(
 
     cutout = np.clip(cutout * 255, 0, 255).astype(np.uint8)
     cutout = Image.fromarray(cutout)
-    cutout = cutout.resize(size, Image.LANCZOS)
 
     return cutout
 
 
 def naive_cutout(img: Image, mask: Image) -> Image:
     empty = Image.new("RGBA", (img.size), 0)
-    cutout = Image.composite(img, empty, mask.resize(img.size, Image.LANCZOS))
+    cutout = Image.composite(img, empty, mask)
     return cutout
-
-
-def resize_image(img: Image, width: Optional[int], height: Optional[int]) -> Image:
-    original_width, original_height = img.size
-    width = original_width if width is None else width
-    height = original_height if height is None else height
-    return img.resize((width, height))
 
 
 def remove(
@@ -84,21 +70,21 @@ def remove(
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_size: int = 10,
-    alpha_matting_base_size: int = 1000,
     session: Optional[ort.InferenceSession] = None,
-    width: Optional[int] = None,
-    height: Optional[int] = None,
+    only_mask: bool = False,
 ) -> bytes:
     img = Image.open(io.BytesIO(data)).convert("RGB")
-    if width is not None or height is not None:
-        img = resize_image(img, width, height)
 
     if session is None:
         session = ort_session("u2net")
 
     mask = predict(session, np.array(img)).convert("L")
+    mask = mask.resize(img.size, Image.LANCZOS)
 
-    if alpha_matting:
+    if only_mask:
+        cutout = mask
+
+    elif alpha_matting:
         try:
             cutout = alpha_matting_cutout(
                 img,
@@ -106,7 +92,6 @@ def remove(
                 alpha_matting_foreground_threshold,
                 alpha_matting_background_threshold,
                 alpha_matting_erode_size,
-                alpha_matting_base_size,
             )
         except Exception:
             cutout = naive_cutout(img, mask)

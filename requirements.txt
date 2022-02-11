@@ -5,6 +5,7 @@ fastapi==0.72.0
 filetype==1.0.9
 gdown==4.2.0
 numpy==1.21.5
+onnxruntime==1.10.0
 pillow==9.0.0
 pymatting==1.1.5
 python-multipart==0.0.5

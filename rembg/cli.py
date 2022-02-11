@@ -66,28 +66,11 @@ def main():
     help="erode size",
 )
 @click.option(
-    "-az",
-    "--alpha-matting-base-size",
-    default=1000,
-    type=int,
+    "-om",
+    "--only-mask",
+    is_flag=True,
     show_default=True,
-    help="image base size",
-)
-@click.option(
-    "-w",
-    "--width",
-    default=None,
-    type=int,
-    show_default=True,
-    help="output image size",
-)
-@click.option(
-    "-h",
-    "--height",
-    default=None,
-    type=int,
-    show_default=True,
-    help="output image size",
+    help="output only the mask",
 )
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
@@ -143,28 +126,11 @@ def i(model: str, input: IO, output: IO, **kwargs):
     help="erode size",
 )
 @click.option(
-    "-az",
-    "--alpha-matting-base-size",
-    default=1000,
-    type=int,
+    "-om",
+    "--only-mask",
+    is_flag=True,
     show_default=True,
-    help="image base size",
-)
-@click.option(
-    "-w",
-    "--width",
-    default=None,
-    type=int,
-    show_default=True,
-    help="output image size",
-)
-@click.option(
-    "-h",
-    "--height",
-    default=None,
-    type=int,
-    show_default=True,
-    help="output image size",
+    help="output only the mask",
 )
 @click.argument(
     "input",
@@ -240,18 +206,14 @@ def s(port: int, log_level: str):
             af: int = Query(240, ge=0),
             ab: int = Query(10, ge=0),
             ae: int = Query(10, ge=0),
-            az: int = Query(1000, ge=0),
-            width: Optional[int] = Query(None, gt=0),
-            height: Optional[int] = Query(None, gt=0),
+            om: bool = Query(False),
         ):
             self.model = model
-            self.width = width
-            self.height = height
             self.a = a
             self.af = af
             self.ab = ab
             self.ae = ae
-            self.az = az
+            self.om = om
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
@@ -260,13 +222,11 @@ def s(port: int, log_level: str):
                 session=sessions.setdefault(
                     commons.model.value, ort_session(commons.model.value)
                 ),
-                width=commons.width,
-                height=commons.height,
                 alpha_matting=commons.a,
                 alpha_matting_foreground_threshold=commons.af,
                 alpha_matting_background_threshold=commons.ab,
                 alpha_matting_erode_size=commons.ae,
-                alpha_matting_base_size=commons.az,
+                only_mask=commons.om,
             ),
             media_type="image/png",
         )

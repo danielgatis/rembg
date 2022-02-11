@@ -14,12 +14,8 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 with open("requirements.txt") as f:
     requireds = f.read().splitlines()
 
-if os.getenv("GPU") is None:
-    with open("requirements-cpu.txt") as f:
-        requireds += f.read().splitlines()
-else:
-    with open("requirements-gpu.txt") as f:
-        requireds += f.read().splitlines()
+with open("requirements-gpu.txt") as f:
+    gpu_requireds = f.read().splitlines()
 
 setup(
     name="rembg",
@@ -41,6 +37,9 @@ setup(
         "console_scripts": [
             "rembg=rembg.cli:main",
         ],
+    },
+    extras_require={
+        'gpu': gpu_requireds,
     },
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),

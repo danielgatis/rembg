@@ -11,7 +11,7 @@ WORKDIR /rembg
 
 COPY . .
 
-RUN GPU=1 pip3 install .
+RUN ["pip3", "install", ".[gpu]"]
 
 ENTRYPOINT ["rembg"]
 CMD []
