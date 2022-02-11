@@ -39,7 +39,7 @@ setup(
         ],
     },
     extras_require={
-        'gpu': gpu_requireds,
+        "gpu": gpu_requireds,
     },
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
