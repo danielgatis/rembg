@@ -3,7 +3,7 @@ asyncer==0.0.1
 click==8.0.3
 fastapi==0.72.0
 filetype==1.0.9
-gdown==4.2.0
+gdown==4.3.1
 numpy==1.21.5
 onnxruntime==1.10.0
 pillow==9.0.0
