@@ -27,8 +27,9 @@ def ort_session(model_name: str) -> ort.InferenceSession:
     home = os.getenv("U2NET_HOME", os.path.join("~", ".u2net"))
     path = Path(home).expanduser() / f"{model_name}.onnx"
     path.parents[0].mkdir(parents=True, exist_ok=True)
+    hashing = hashlib.new("md5", path.read_bytes(), usedforsecurity=False)
 
-    if not (path.exists() and hashlib.md5(path.read_bytes()).hexdigest() == md5):
+    if not (path.exists() and hashing.hexdigest() == md5):
         with redirect_stdout(sys.stderr):
             gdown.download(url, str(path), use_cookies=False)
 
