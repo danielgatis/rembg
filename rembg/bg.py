@@ -13,6 +13,11 @@ from scipy.ndimage.morphology import binary_erosion
 from .detect import ort_session, predict
 
 
+class ReturnType(Enum):
+    BYTES = 0
+    PILLOW = 1
+
+
 def alpha_matting_cutout(
     img: Image,
     mask: Image,
@@ -23,11 +28,9 @@ def alpha_matting_cutout(
     img = np.asarray(img)
     mask = np.asarray(mask)
 
-    # guess likely foreground/background
     is_foreground = mask > foreground_threshold
     is_background = mask < background_threshold
 
-    # erode foreground/background
     structure = None
     if erode_structure_size > 0:
         structure = np.ones(
@@ -37,15 +40,10 @@ def alpha_matting_cutout(
     is_foreground = binary_erosion(is_foreground, structure=structure)
     is_background = binary_erosion(is_background, structure=structure, border_value=1)
 
-    # build trimap
-    # 0   = background
-    # 128 = unknown
-    # 255 = foreground
     trimap = np.full(mask.shape, dtype=np.uint8, fill_value=128)
     trimap[is_foreground] = 255
     trimap[is_background] = 0
 
-    # build the cutout image
     img_normalized = img / 255.0
     trimap_normalized = trimap / 255.0
 
@@ -74,11 +72,11 @@ def remove(
     session: Optional[ort.InferenceSession] = None,
     only_mask: bool = False,
 ) -> Union[bytes, PILImage]:
-    return_type = "bytes"
     if isinstance(data, PILImage):
-        return_type = "pillow"
+        return_type = ReturnType.PILLOW
         img = data.convert("RGB")
     elif isinstance(data, bytes):
+        return_type = ReturnType.BYTES
         img = Image.open(io.BytesIO(data)).convert("RGB")
     else:
         raise ValueError("Input type {} is not supported.".format(type(data)))
@@ -93,20 +91,17 @@ def remove(
         cutout = mask
 
     elif alpha_matting:
-        try:
-            cutout = alpha_matting_cutout(
-                img,
-                mask,
-                alpha_matting_foreground_threshold,
-                alpha_matting_background_threshold,
-                alpha_matting_erode_size,
-            )
-        except Exception:
-            cutout = naive_cutout(img, mask)
+        cutout = alpha_matting_cutout(
+            img,
+            mask,
+            alpha_matting_foreground_threshold,
+            alpha_matting_background_threshold,
+            alpha_matting_erode_size,
+        )
     else:
         cutout = naive_cutout(img, mask)
 
-    if return_type == "pillow":
+    if ReturnType.PILLOW == return_type:
         return cutout
 
     bio = io.BytesIO()

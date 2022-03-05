@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+        with:
+            python-version: '3.9'
       - run: pip install --upgrade pip wheel
       - run: pip install bandit black flake8 flake8-bugbear flake8-comprehensions isort safety mypy
       - run: mypy --install-types --non-interactive --ignore-missing-imports ./rembg
