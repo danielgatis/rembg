@@ -87,45 +87,44 @@ Also you can send the file as a FormData (multipart/form-data):
 
 ### Usage as a library
 
-#### Example 1: Read from stdin and write to stdout
-
-In `app.py`
+Input and output as bytes
 ```python
-import sys
-from rembg.bg import remove
+from rembg import remove
 
-sys.stdout.buffer.write(remove(sys.stdin.buffer.read()))
+input_path = 'input.png'
+output_path = 'output.png'
+
+with open(input_path, 'rb') as i:
+    with open(output_path, 'wb') as o:
+        input = i.read()
+        output = remove(input)
+        o.write(output)
 ```
 
-Then run
-```
-cat input.png | python app.py > out.png
-```
-
-#### Example 2: Using PIL
-
-In `app.py`
+Input and output as a PIL image
 ```python
-from rembg.bg import remove
-import numpy as np
-import io
+from rembg import remove
 from PIL import Image
 
 input_path = 'input.png'
-output_path = 'out.png'
+output_path = 'output.png'
 
-# Uncomment the following line if working with trucated image formats (ex. JPEG / JPG)
-# ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-f = np.fromfile(input_path)
-result = remove(f)
-img = Image.open(io.BytesIO(result)).convert("RGBA")
-img.save(output_path)
+input = Image.open(input_path)
+output = remove(input)
+output.save(output_path)
 ```
 
-Then run
-```
-python app.py
+Input and output as a numpy array
+```python
+from rembg import remove
+import cv2
+
+input_path = 'input.png'
+output_path = 'output.png'
+
+input = cv2.imread(input_path)
+output = remove(input)
+cv2.imwrite(output_path, output)
 ```
 
 ### Usage as a docker
