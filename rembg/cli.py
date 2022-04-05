@@ -231,7 +231,7 @@ def s(port: int, log_level: str):
             af: int = Query(default=240, ge=0, description="Alpha Matting (Foreground Threshold)"),
             ab: int = Query(default=10, ge=0, description="Alpha Matting (Background Threshold)"),
             ae: int = Query(default=10, ge=0, description="Alpha Matting (Erode Structure Size)"),
-            om: bool = Query(default=False, description="Enable Output Mask"),
+            om: bool = Query(default=False, description="Only Mask"),
         ):
             self.model = model
             self.a = a
