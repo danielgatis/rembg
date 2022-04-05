@@ -260,9 +260,12 @@ def s(port: int, log_level: str):
         path="/",
         tags=["Background Removal"],
         summary="Remove from URL",
-        description="Removes the background from an image obtained by retrieving an URL",
+        description="Removes the background from an image obtained by retrieving an URL.",
     )
-    async def get_index(url: str, commons: CommonQueryParams = Depends()):
+    async def get_index(
+        url: str = Query(default=..., description="URL of the image that has to be processed."),
+        commons: CommonQueryParams = Depends()
+    ):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 file = await response.read()
@@ -272,10 +275,11 @@ def s(port: int, log_level: str):
         path="/",
         tags=["Background Removal"],
         summary="Remove from Stream",
-        description="Removes the background from an image sent within the request itself",
+        description="Removes the background from an image sent within the request itself.",
     )
     async def post_index(
-        file: bytes = File(...), commons: CommonQueryParams = Depends()
+        file: bytes = File(default=..., description="Image file (byte stream) that has to be processed."),
+        commons: CommonQueryParams = Depends()
     ):
         return await asyncify(im_without_bg)(file, commons)
 
