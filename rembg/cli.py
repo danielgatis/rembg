@@ -226,7 +226,7 @@ def s(port: int, log_level: str):
     class CommonQueryParams:
         def __init__(
             self,
-            model: ModelType = Query(default=ModelType.u2net, description="Model to use (u2net, u2netp, u2net_human_seg)"),
+            model: ModelType = Query(default=ModelType.u2net, description="Model to use when processing image"),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
             af: int = Query(default=240, ge=0, description="Alpha Matting (Foreground Threshold)"),
             ab: int = Query(default=10, ge=0, description="Alpha Matting (Background Threshold)"),
