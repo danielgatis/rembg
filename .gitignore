@@ -11,6 +11,7 @@ __pycache__/
 *~≈
 .envrc
 .python-version
+.idea
 
 # due to using tox and pytest
 .tox
