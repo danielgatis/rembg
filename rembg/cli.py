@@ -16,6 +16,7 @@ from tqdm import tqdm
 
 from .bg import remove
 from .detect import ort_session
+from . import _version
 
 
 @click.group()
@@ -191,7 +192,27 @@ def p(model: str, input: pathlib.Path, output: pathlib.Path, **kwargs):
 )
 def s(port: int, log_level: str):
     sessions: dict[str, ort.InferenceSession] = {}
-    app = FastAPI()
+    tags_metadata = [
+        {
+            "name": "Background Removal",
+            "description": "Endpoints that perform background removal with different image sources.",
+            "externalDocs": {
+                "description": "GitHub Source",
+                "url": "https://github.com/danielgatis/rembg"
+            }
+        },
+    ]
+    app = FastAPI(
+        title="Rembg",
+        description="Rembg is a tool to remove images background. That is it.",
+        version=_version.get_versions()["version"],
+        contact={
+            "name": "Daniel Gatis",
+            "url": "https://github.com/danielgatis",
+            "email": "danielgatis@gmail.com",
+        },
+        openapi_tags=tags_metadata,
+    )
 
     class ModelType(str, Enum):
         u2net = "u2net"
@@ -231,14 +252,24 @@ def s(port: int, log_level: str):
             media_type="image/png",
         )
 
-    @app.get("/")
+    @app.get(
+        path="/",
+        tags=["Background Removal"],
+        summary="Remove from URL",
+        description="Removes the background from an image obtained by retrieving an URL",
+    )
     async def get_index(url: str, commons: CommonQueryParams = Depends()):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 file = await response.read()
                 return await asyncify(im_without_bg)(file, commons)
 
-    @app.post("/")
+    @app.post(
+        path="/",
+        tags=["Background Removal"],
+        summary="Remove from Stream",
+        description="Removes the background from an image sent within the request itself",
+    )
     async def post_index(
         file: bytes = File(...), commons: CommonQueryParams = Depends()
     ):
