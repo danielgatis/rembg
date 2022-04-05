@@ -14,9 +14,9 @@ from fastapi import Depends, FastAPI, File, Query
 from starlette.responses import Response
 from tqdm import tqdm
 
+from . import _version
 from .bg import remove
 from .detect import ort_session
-from . import _version
 
 
 @click.group()
