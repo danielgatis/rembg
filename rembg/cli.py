@@ -198,8 +198,8 @@ def s(port: int, log_level: str):
             "description": "Endpoints that perform background removal with different image sources.",
             "externalDocs": {
                 "description": "GitHub Source",
-                "url": "https://github.com/danielgatis/rembg"
-            }
+                "url": "https://github.com/danielgatis/rembg",
+            },
         },
     ]
     app = FastAPI(
@@ -209,11 +209,11 @@ def s(port: int, log_level: str):
         contact={
             "name": "Daniel Gatis",
             "url": "https://github.com/danielgatis",
-            "email": "danielgatis@gmail.com"
+            "email": "danielgatis@gmail.com",
         },
         license_info={
             "name": "MIT License",
-            "url": "https://github.com/danielgatis/rembg/blob/main/LICENSE.txt"
+            "url": "https://github.com/danielgatis/rembg/blob/main/LICENSE.txt",
         },
         openapi_tags=tags_metadata,
     )
@@ -226,11 +226,20 @@ def s(port: int, log_level: str):
     class CommonQueryParams:
         def __init__(
             self,
-            model: ModelType = Query(default=ModelType.u2net, description="Model to use when processing image"),
+            model: ModelType = Query(
+                default=ModelType.u2net,
+                description="Model to use when processing image",
+            ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
-            af: int = Query(default=240, ge=0, description="Alpha Matting (Foreground Threshold)"),
-            ab: int = Query(default=10, ge=0, description="Alpha Matting (Background Threshold)"),
-            ae: int = Query(default=10, ge=0, description="Alpha Matting (Erode Structure Size)"),
+            af: int = Query(
+                default=240, ge=0, description="Alpha Matting (Foreground Threshold)"
+            ),
+            ab: int = Query(
+                default=10, ge=0, description="Alpha Matting (Background Threshold)"
+            ),
+            ae: int = Query(
+                default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
+            ),
             om: bool = Query(default=False, description="Only Mask"),
         ):
             self.model = model
@@ -263,8 +272,10 @@ def s(port: int, log_level: str):
         description="Removes the background from an image obtained by retrieving an URL.",
     )
     async def get_index(
-        url: str = Query(default=..., description="URL of the image that has to be processed."),
-        commons: CommonQueryParams = Depends()
+        url: str = Query(
+            default=..., description="URL of the image that has to be processed."
+        ),
+        commons: CommonQueryParams = Depends(),
     ):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
@@ -278,8 +289,11 @@ def s(port: int, log_level: str):
         description="Removes the background from an image sent within the request itself.",
     )
     async def post_index(
-        file: bytes = File(default=..., description="Image file (byte stream) that has to be processed."),
-        commons: CommonQueryParams = Depends()
+        file: bytes = File(
+            default=...,
+            description="Image file (byte stream) that has to be processed.",
+        ),
+        commons: CommonQueryParams = Depends(),
     ):
         return await asyncify(im_without_bg)(file, commons)
 
