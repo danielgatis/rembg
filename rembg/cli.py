@@ -209,7 +209,11 @@ def s(port: int, log_level: str):
         contact={
             "name": "Daniel Gatis",
             "url": "https://github.com/danielgatis",
-            "email": "danielgatis@gmail.com",
+            "email": "danielgatis@gmail.com"
+        },
+        license_info={
+            "name": "MIT License",
+            "url": "https://github.com/danielgatis/rembg/blob/main/LICENSE.txt"
         },
         openapi_tags=tags_metadata,
     )
@@ -222,12 +226,12 @@ def s(port: int, log_level: str):
     class CommonQueryParams:
         def __init__(
             self,
-            model: ModelType = Query(ModelType.u2net),
-            a: bool = Query(False),
-            af: int = Query(240, ge=0),
-            ab: int = Query(10, ge=0),
-            ae: int = Query(10, ge=0),
-            om: bool = Query(False),
+            model: ModelType = Query(default=ModelType.u2net, description="Model to use (u2net, u2netp, u2net_human_seg)"),
+            a: bool = Query(default=False, description="Enable Alpha Matting"),
+            af: int = Query(default=240, ge=0, description="Alpha Matting (Foreground Threshold)"),
+            ab: int = Query(default=10, ge=0, description="Alpha Matting (Background Threshold)"),
+            ae: int = Query(default=10, ge=0, description="Alpha Matting (Erode Structure Size)"),
+            om: bool = Query(default=False, description="Enable Output Mask"),
         ):
             self.model = model
             self.a = a
