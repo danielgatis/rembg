@@ -2,7 +2,7 @@ import pathlib
 import sys
 import time
 from enum import Enum
-from typing import IO, Optional
+from typing import IO, Optional, cast
 
 import aiohttp
 import click
@@ -182,14 +182,17 @@ def p(
 
             if not each_output.exists():
                 each_output.write_bytes(
-                    remove(each_input.read_bytes(), session=session, **kwargs)
+                    cast(
+                        bytes,
+                        remove(each_input.read_bytes(), session=session, **kwargs),
+                    )
                 )
 
                 if watch:
                     print(
                         f"processed: {each_input.absolute()} -> {each_output.absolute()}"
                     )
-        except e:
+        except Exception as e:
             print(e)
 
     inputs = list(input.glob("**/*"))
