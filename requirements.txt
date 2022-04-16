@@ -13,3 +13,4 @@ scikit-image==0.19.1
 scipy==1.7.3
 tqdm==4.62.3
 uvicorn==0.17.0
+watchdog==2.1.7
