@@ -1,8 +1,8 @@
 import sys
+import warnings
 
 if not (sys.version_info.major == 3 and sys.version_info.minor == 9):
-    print("Python 3.9.* is required", file=sys.stderr)
-    sys.exit(1)
+    warnings.warn("This library is only for Python 3.9", RuntimeWarning)
 
 from . import _version
 
