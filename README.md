@@ -36,7 +36,10 @@ Rembg is a tool to remove images background. That is it.
 
 **If this project has helped you in any way, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
+
 ### Installation
+
+**!! This library is for Python 3.9 only !!**.
 
 CPU support:
 ```bash
@@ -129,16 +132,10 @@ cv2.imwrite(output_path, output)
 
 ### Usage as a docker
 
-First compile with:
+Try this:
 
 ```
-docker build . -t rembg
-```
-
-Then run with:
-
-```
-docker run --rm -i rembg i in.png out.png
+cat in.png | docker run -i --rm danielgatis/rembg i > out.png
 ```
 
 ### Advance usage
