@@ -27,11 +27,11 @@ setup(
     author_email="danielgatis@gmail.com",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.9",
     ],
     keywords="remove, background, u2net",
     packages=["rembg"],
-    python_requires=">=3.8, <4",
+    python_requires="~=3.9.0",
     install_requires=requireds,
     entry_points={
         "console_scripts": [
