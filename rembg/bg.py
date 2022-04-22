@@ -120,7 +120,7 @@ def remove(
                     alpha_matting_background_threshold,
                     alpha_matting_erode_size,
                 )
-            except:
+            except ValueError:
                 cutout = naive_cutout(img, mask)
 
         else:

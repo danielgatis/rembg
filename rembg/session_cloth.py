@@ -6,28 +6,50 @@ from scipy.special import log_softmax
 
 from .session_base import BaseSession
 
-# fmt: off
 pallete1 = [
-      0,   0,   0, # background
-    255, 255, 255, # upper body
-      0,   0,   0, # lower body
-      0,   0,   0, # full body
+    0,
+    0,
+    0,
+    255,
+    255,
+    255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
 ]
 
 pallete2 = [
-      0,   0,   0, # background
-      0,   0,   0, # upper body
-    255, 255, 255, # lower body
-      0,   0,   0, # full body
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    255,
+    255,
+    255,
+    0,
+    0,
+    0,
 ]
 
 pallete3 = [
-      0,   0,   0, # background
-      0,   0,   0, # upper body
-      0,   0,   0, # lower body
-    255, 255, 255, # full body
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    255,
+    255,
+    255,
 ]
-# fmt: on
 
 
 class ClothSession(BaseSession):
