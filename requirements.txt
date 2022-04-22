@@ -10,7 +10,6 @@ pillow==9.0.1
 pymatting==1.1.5
 python-multipart==0.0.5
 scikit-image==0.19.1
-scipy==1.7.3
 scipy==1.8.0
 tqdm==4.62.3
 uvicorn==0.17.0
