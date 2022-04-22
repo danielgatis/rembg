@@ -4,13 +4,14 @@ click==8.0.3
 fastapi==0.72.0
 filetype==1.0.9
 gdown==4.4.0
-numpy==1.21.5
+numpy==1.22.3
 onnxruntime==1.10.0
 pillow==9.0.1
 pymatting==1.1.5
 python-multipart==0.0.5
 scikit-image==0.19.1
 scipy==1.7.3
+scipy==1.8.0
 tqdm==4.62.3
 uvicorn==0.17.0
 watchdog==2.1.7

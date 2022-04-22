@@ -1,9 +1,8 @@
 import io
 from enum import Enum
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
-import onnxruntime as ort
 from PIL import Image
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
@@ -11,7 +10,8 @@ from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
 from scipy.ndimage.morphology import binary_erosion
 
-from .detect import ort_session, predict
+from .session_base import BaseSession
+from .session_factory import new_session
 
 
 class ReturnType(Enum):
@@ -65,13 +65,27 @@ def naive_cutout(img: Image, mask: Image) -> Image:
     return cutout
 
 
+def get_concat_v_multi(imgs: List[Image]) -> Image:
+    pivot = imgs.pop(0)
+    for im in imgs:
+        pivot = get_concat_v(pivot, im)
+    return pivot
+
+
+def get_concat_v(img1: Image, img2: Image) -> Image:
+    dst = Image.new("RGBA", (img1.width, img1.height + img2.height))
+    dst.paste(img1, (0, 0))
+    dst.paste(img2, (0, img1.height))
+    return dst
+
+
 def remove(
     data: Union[bytes, PILImage, np.ndarray],
     alpha_matting: bool = False,
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_size: int = 10,
-    session: Optional[ort.InferenceSession] = None,
+    session: Optional[BaseSession] = None,
     only_mask: bool = False,
 ) -> Union[bytes, PILImage, np.ndarray]:
 
@@ -88,27 +102,35 @@ def remove(
         raise ValueError("Input type {} is not supported.".format(type(data)))
 
     if session is None:
-        session = ort_session("u2net")
+        session = new_session("u2net")
 
-    img = img.convert("RGB")
+    masks = session.predict(img)
+    cutouts = []
 
-    mask = predict(session, np.array(img))
-    mask = mask.convert("L")
-    mask = mask.resize(img.size, Image.LANCZOS)
+    for mask in masks:
+        if only_mask:
+            cutout = mask
 
-    if only_mask:
-        cutout = mask
+        elif alpha_matting:
+            try:
+                cutout = alpha_matting_cutout(
+                    img,
+                    mask,
+                    alpha_matting_foreground_threshold,
+                    alpha_matting_background_threshold,
+                    alpha_matting_erode_size,
+                )
+            except:
+                cutout = naive_cutout(img, mask)
 
-    elif alpha_matting:
-        cutout = alpha_matting_cutout(
-            img,
-            mask,
-            alpha_matting_foreground_threshold,
-            alpha_matting_background_threshold,
-            alpha_matting_erode_size,
-        )
-    else:
-        cutout = naive_cutout(img, mask)
+        else:
+            cutout = naive_cutout(img, mask)
+
+        cutouts.append(cutout)
+
+    cutout = img
+    if len(cutouts) > 0:
+        cutout = get_concat_v_multi(cutouts)
 
     if ReturnType.PILLOW == return_type:
         return cutout

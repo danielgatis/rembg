@@ -138,6 +138,16 @@ Try this:
 cat in.png | docker run -i --rm danielgatis/rembg i > out.png
 ```
 
+### Models
+
+All models are downloaded and saved in the user home folder in the `.u2net` directory.
+
+The available models are:
+
+- u2net ([download](https://drive.google.com/uc?id=1tCU5MM1LhRgGou5OpmpjBQbSrYIUoYab), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for general use cases.
+- u2netp ([download](https://drive.google.com/uc?id=1tNuFmLv0TSNDjYIkjEdeH1IWKQdUA4HR), [source](https://github.com/xuebinqin/U-2-Net)): A lightweight version of u2net model.
+- u2net_human_seg ([download](https://drive.google.com/uc?id=1ZfqwVxu-1XWC1xU1GHIP-FM_Knd_AX5j), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
+- u2net_cloth_seg ([download](https://drive.google.com/uc?id=15rKbQSXQzrKCQurUjZFg8HqzZad8bcyz), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
 ### Advance usage
 
 Sometimes it is possible to achieve better results by turning on alpha matting. Example:

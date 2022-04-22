@@ -2,13 +2,11 @@ import pathlib
 import sys
 import time
 from enum import Enum
-from typing import IO, Optional, cast
+from typing import IO, cast
 
 import aiohttp
 import click
 import filetype
-import onnxruntime as ort
-import requests
 import uvicorn
 from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Query
@@ -19,7 +17,8 @@ from watchdog.observers import Observer
 
 from . import _version
 from .bg import remove
-from .detect import ort_session
+from .session_base import BaseSession
+from .session_factory import new_session
 
 
 @click.group()
@@ -33,7 +32,7 @@ def main() -> None:
     "-m",
     "--model",
     default="u2net",
-    type=click.Choice(["u2net", "u2netp", "u2net_human_seg"]),
+    type=click.Choice(["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg"]),
     show_default=True,
     show_choices=True,
     help="model name",
@@ -85,7 +84,7 @@ def main() -> None:
     type=click.File("wb", lazy=True),
 )
 def i(model: str, input: IO, output: IO, **kwargs) -> None:
-    output.write(remove(input.read(), session=ort_session(model), **kwargs))
+    output.write(remove(input.read(), session=new_session(model), **kwargs))
 
 
 @main.command(help="for a folder as input")
@@ -93,7 +92,7 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
     "-m",
     "--model",
     default="u2net",
-    type=click.Choice(["u2net", "u2netp", "u2net_human_seg"]),
+    type=click.Choice(["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg"]),
     show_default=True,
     show_choices=True,
     help="model name",
@@ -167,7 +166,7 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
 def p(
     model: str, input: pathlib.Path, output: pathlib.Path, watch: bool, **kwargs
 ) -> None:
-    session = ort_session(model)
+    session = new_session(model)
 
     def process(each_input: pathlib.Path) -> None:
         try:
@@ -244,7 +243,7 @@ def p(
     help="log level",
 )
 def s(port: int, log_level: str) -> None:
-    sessions: dict[str, ort.InferenceSession] = {}
+    sessions: dict[str, BaseSession] = {}
     tags_metadata = [
         {
             "name": "Background Removal",
@@ -275,6 +274,7 @@ def s(port: int, log_level: str) -> None:
         u2net = "u2net"
         u2netp = "u2netp"
         u2net_human_seg = "u2net_human_seg"
+        u2net_cloth_seg = "u2net_cloth_seg"
 
     class CommonQueryParams:
         def __init__(
@@ -307,7 +307,7 @@ def s(port: int, log_level: str) -> None:
             remove(
                 content,
                 session=sessions.setdefault(
-                    commons.model.value, ort_session(commons.model.value)
+                    commons.model.value, new_session(commons.model.value)
                 ),
                 alpha_matting=commons.a,
                 alpha_matting_foreground_threshold=commons.af,
