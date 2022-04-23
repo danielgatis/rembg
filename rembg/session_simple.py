@@ -2,12 +2,13 @@ from typing import List
 
 import numpy as np
 from PIL import Image
+from PIL.Image import Image as PILImage
 
 from .session_base import BaseSession
 
 
 class SimpleSession(BaseSession):
-    def predict(self, img: Image) -> List[Image]:
+    def predict(self, img: PILImage) -> List[PILImage]:
         ort_outs = self.inner_session.run(
             None,
             self.normalize(

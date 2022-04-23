@@ -3,6 +3,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 import onnxruntime as ort
 from PIL import Image
+from PIL.Image import Image as PILImage
 
 
 class BaseSession:
@@ -12,7 +13,7 @@ class BaseSession:
 
     def normalize(
         self,
-        img: Image,
+        img: PILImage,
         mean: Tuple[float, float, float],
         std: Tuple[float, float, float],
         size: Tuple[int, int],
@@ -35,5 +36,5 @@ class BaseSession:
             .astype(np.float32)
         }
 
-    def predict(self, im: Image) -> List[Image]:
+    def predict(self, img: PILImage) -> List[PILImage]:
         raise NotImplementedError

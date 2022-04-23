@@ -21,12 +21,12 @@ class ReturnType(Enum):
 
 
 def alpha_matting_cutout(
-    img: Image,
-    mask: Image,
+    img: PILImage,
+    mask: PILImage,
     foreground_threshold: int,
     background_threshold: int,
     erode_structure_size: int,
-) -> Image:
+) -> PILImage:
     img = np.asarray(img)
     mask = np.asarray(mask)
 
@@ -59,20 +59,20 @@ def alpha_matting_cutout(
     return cutout
 
 
-def naive_cutout(img: Image, mask: Image) -> Image:
+def naive_cutout(img: PILImage, mask: PILImage) -> PILImage:
     empty = Image.new("RGBA", (img.size), 0)
     cutout = Image.composite(img, empty, mask)
     return cutout
 
 
-def get_concat_v_multi(imgs: List[Image]) -> Image:
+def get_concat_v_multi(imgs: List[PILImage]) -> PILImage:
     pivot = imgs.pop(0)
     for im in imgs:
         pivot = get_concat_v(pivot, im)
     return pivot
 
 
-def get_concat_v(img1: Image, img2: Image) -> Image:
+def get_concat_v(img1: PILImage, img2: PILImage) -> PILImage:
     dst = Image.new("RGBA", (img1.width, img1.height + img2.height))
     dst.paste(img1, (0, 0))
     dst.paste(img2, (0, img1.height))
