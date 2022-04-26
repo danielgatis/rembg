@@ -22,7 +22,7 @@ from .session_factory import new_session
 
 
 @click.group()
-@click.version_option()
+@click.version_option(version=_version.get_versions()["version"])
 def main() -> None:
     pass
 
@@ -351,7 +351,3 @@ def s(port: int, log_level: str) -> None:
         return await asyncify(im_without_bg)(file, commons)
 
     uvicorn.run(app, host="0.0.0.0", port=port, log_level=log_level)
-
-
-if __name__ == "__main__":
-    main()
