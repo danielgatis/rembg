@@ -75,9 +75,14 @@ Start the server
 rembg s
 ```
 
-Open your browser to
+Image with background:
 ```
-http://localhost:5000?url=http://image.png
+https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
+```
+
+Image without background:
+```
+http://localhost:5000/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
 ```
 
 Also you can send the file as a FormData (multipart/form-data):
@@ -135,7 +140,17 @@ cv2.imwrite(output_path, output)
 Try this:
 
 ```
-cat in.png | docker run -i --rm danielgatis/rembg i > out.png
+docker run -p 5000:5000 rembg s
+```
+
+Image with background:
+```
+https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
+```
+
+Image without background:
+```
+http://localhost:5000/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
 ```
 
 ### Models
