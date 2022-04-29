@@ -10,6 +10,7 @@ import filetype
 import uvicorn
 from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Query
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 from tqdm import tqdm
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
@@ -268,6 +269,14 @@ def s(port: int, log_level: str) -> None:
             "url": "https://github.com/danielgatis/rembg/blob/main/LICENSE.txt",
         },
         openapi_tags=tags_metadata,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_credentials=True,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     class ModelType(str, Enum):
