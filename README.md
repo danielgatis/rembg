@@ -140,7 +140,7 @@ cv2.imwrite(output_path, output)
 Try this:
 
 ```
-docker run -p 5000:5000 rembg s
+docker run -p 5000:5000 danielgatis/rembg s
 ```
 
 Image with background:
