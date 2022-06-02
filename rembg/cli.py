@@ -9,7 +9,7 @@ import click
 import filetype
 import uvicorn
 from asyncer import asyncify
-from fastapi import Depends, FastAPI, File, Query, Form
+from fastapi import Depends, FastAPI, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 from tqdm import tqdm
@@ -294,10 +294,16 @@ def s(port: int, log_level: str) -> None:
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
             af: int = Query(
-                default=240, ge=0, le=255, description="Alpha Matting (Foreground Threshold)"
+                default=240,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Foreground Threshold)",
             ),
             ab: int = Query(
-                default=10, ge=0, le=255, description="Alpha Matting (Background Threshold)"
+                default=10,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Background Threshold)",
             ),
             ae: int = Query(
                 default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
@@ -320,10 +326,16 @@ def s(port: int, log_level: str) -> None:
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
             af: int = Form(
-                default=240, ge=0, le=255, description="Alpha Matting (Foreground Threshold)"
+                default=240,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Foreground Threshold)",
             ),
             ab: int = Form(
-                default=10, ge=0, le=255, description="Alpha Matting (Background Threshold)"
+                default=10,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Background Threshold)",
             ),
             ae: int = Form(
                 default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
@@ -336,7 +348,7 @@ def s(port: int, log_level: str) -> None:
             self.ab = ab
             self.ae = ae
             self.om = om
-            
+
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
             remove(
