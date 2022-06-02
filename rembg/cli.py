@@ -9,7 +9,7 @@ import click
 import filetype
 import uvicorn
 from asyncer import asyncify
-from fastapi import Depends, FastAPI, File, Query
+from fastapi import Depends, FastAPI, File, Query, Form
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 from tqdm import tqdm
@@ -294,10 +294,10 @@ def s(port: int, log_level: str) -> None:
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
             af: int = Query(
-                default=240, ge=0, description="Alpha Matting (Foreground Threshold)"
+                default=240, ge=0, le=255, description="Alpha Matting (Foreground Threshold)"
             ),
             ab: int = Query(
-                default=10, ge=0, description="Alpha Matting (Background Threshold)"
+                default=10, ge=0, le=255, description="Alpha Matting (Background Threshold)"
             ),
             ae: int = Query(
                 default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
@@ -311,6 +311,32 @@ def s(port: int, log_level: str) -> None:
             self.ae = ae
             self.om = om
 
+    class CommonQueryPostParams:
+        def __init__(
+            self,
+            model: ModelType = Form(
+                default=ModelType.u2net,
+                description="Model to use when processing image",
+            ),
+            a: bool = Form(default=False, description="Enable Alpha Matting"),
+            af: int = Form(
+                default=240, ge=0, le=255, description="Alpha Matting (Foreground Threshold)"
+            ),
+            ab: int = Form(
+                default=10, ge=0, le=255, description="Alpha Matting (Background Threshold)"
+            ),
+            ae: int = Form(
+                default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
+            ),
+            om: bool = Form(default=False, description="Only Mask"),
+        ):
+            self.model = model
+            self.a = a
+            self.af = af
+            self.ab = ab
+            self.ae = ae
+            self.om = om
+            
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
             remove(
@@ -355,7 +381,7 @@ def s(port: int, log_level: str) -> None:
             default=...,
             description="Image file (byte stream) that has to be processed.",
         ),
-        commons: CommonQueryParams = Depends(),
+        commons: CommonQueryPostParams = Depends(),
     ):
         return await asyncify(im_without_bg)(file, commons)
 
