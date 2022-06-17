@@ -7,7 +7,7 @@ gdown==4.4.0
 numpy==1.22.3
 onnxruntime==1.10.0
 pillow==9.0.1
-pymatting==1.1.5
+pymatting==1.1.7
 python-multipart==0.0.5
 scikit-image==0.19.1
 scipy==1.8.0
