@@ -4,7 +4,6 @@
 [![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg/month)
 [![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg/week)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
-
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
 
 Rembg is a tool to remove images background. That is it.
@@ -41,7 +40,7 @@ Rembg is a tool to remove images background. That is it.
 
 ### Installation
 
-**!! This library is for Python 3.9 only !!**
+## **!! This library is for Python 3.9 only !!**
 
 CPU support:
 ```bash
