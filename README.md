@@ -1,4 +1,4 @@
-# RemBG
+# Rembg
 
 [![Downloads](https://pepy.tech/badge/rembg)](https://pepy.tech/project/rembg)
 [![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg/month)
