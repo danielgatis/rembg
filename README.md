@@ -167,7 +167,7 @@ The available models are:
 
 #### How to train your own model
 
-If You nedd more fine tunned models try this:
+If You need more fine tunned models try this:
 https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289
 
 ### Advance usage
