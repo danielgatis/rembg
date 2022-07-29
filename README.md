@@ -35,7 +35,7 @@ Rembg is a tool to remove images background. That is it.
   <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
 </p>
 
-**If this project has helped you in any way, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
+**If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
 
 ### Installation
