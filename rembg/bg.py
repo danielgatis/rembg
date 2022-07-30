@@ -3,8 +3,14 @@ from enum import Enum
 from typing import List, Optional, Union
 
 import numpy as np
-from cv2 import (BORDER_DEFAULT, MORPH_ELLIPSE, MORPH_OPEN, GaussianBlur,
-                 getStructuringElement, morphologyEx)
+from cv2 import (
+    BORDER_DEFAULT,
+    MORPH_ELLIPSE,
+    MORPH_OPEN,
+    GaussianBlur,
+    getStructuringElement,
+    morphologyEx,
+)
 from PIL import Image
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
