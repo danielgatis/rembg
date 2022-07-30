@@ -3,15 +3,9 @@ from enum import Enum
 from typing import List, Optional, Union
 
 import numpy as np
+from cv2 import (BORDER_DEFAULT, MORPH_ELLIPSE, MORPH_OPEN, GaussianBlur,
+                 getStructuringElement, morphologyEx)
 from PIL import Image
-from cv2 import (
-    getStructuringElement,
-    morphologyEx,
-    GaussianBlur,
-    MORPH_OPEN,
-    MORPH_ELLIPSE,
-    BORDER_DEFAULT,
-)
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
