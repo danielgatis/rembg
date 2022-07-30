@@ -76,6 +76,13 @@ def main() -> None:
     show_default=True,
     help="output only the mask",
 )
+@click.option(
+    "-ppm",
+    "--post-process-mask",
+    is_flag=True,
+    show_default=True,
+    help="post process the mask",
+)
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
 )
@@ -135,6 +142,13 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
     is_flag=True,
     show_default=True,
     help="output only the mask",
+)
+@click.option(
+    "-ppm",
+    "--post-process-mask",
+    is_flag=True,
+    show_default=True,
+    help="post process the mask",
 )
 @click.option(
     "-w",
@@ -309,6 +323,7 @@ def s(port: int, log_level: str) -> None:
                 default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
             ),
             om: bool = Query(default=False, description="Only Mask"),
+            ppm: bool = Query(default=False, description="Post Process Mask"),
         ):
             self.model = model
             self.a = a
@@ -316,6 +331,7 @@ def s(port: int, log_level: str) -> None:
             self.ab = ab
             self.ae = ae
             self.om = om
+            self.ppm = ppm
 
     class CommonQueryPostParams:
         def __init__(
@@ -341,6 +357,7 @@ def s(port: int, log_level: str) -> None:
                 default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
             ),
             om: bool = Form(default=False, description="Only Mask"),
+            ppm: bool = Form(default=False, description="Post Process Mask"),
         ):
             self.model = model
             self.a = a
@@ -348,6 +365,7 @@ def s(port: int, log_level: str) -> None:
             self.ab = ab
             self.ae = ae
             self.om = om
+            self.ppm = ppm
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
@@ -361,6 +379,7 @@ def s(port: int, log_level: str) -> None:
                 alpha_matting_background_threshold=commons.ab,
                 alpha_matting_erode_size=commons.ae,
                 only_mask=commons.om,
+                post_process_mask=commons.ppm,
             ),
             media_type="image/png",
         )

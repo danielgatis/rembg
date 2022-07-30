@@ -4,7 +4,14 @@ from typing import List, Optional, Union
 
 import numpy as np
 from PIL import Image
-from cv2 import getStructuringElement, morphologyEx, GaussianBlur, MORPH_OPEN, MORPH_ELLIPSE, BORDER_DEFAULT
+from cv2 import (
+    getStructuringElement,
+    morphologyEx,
+    GaussianBlur,
+    MORPH_OPEN,
+    MORPH_ELLIPSE,
+    BORDER_DEFAULT,
+)
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
@@ -14,7 +21,8 @@ from scipy.ndimage.morphology import binary_erosion
 from .session_base import BaseSession
 from .session_factory import new_session
 
-kernel = getStructuringElement(MORPH_ELLIPSE,(3,3)) # to save API calls, it has been declared global 
+kernel = getStructuringElement(MORPH_ELLIPSE, (3, 3))
+
 
 class ReturnType(Enum):
     BYTES = 0
@@ -81,16 +89,16 @@ def get_concat_v(img1: PILImage, img2: PILImage) -> PILImage:
     return dst
 
 
-def post_process_mask(mask:np.ndarray)->np.ndarray:
-    '''
+def post_process(mask: np.ndarray) -> np.ndarray:
+    """
     Post Process the mask for a smooth boundary by applying Morphological Operations
     Research based on paper: https://www.sciencedirect.com/science/article/pii/S2352914821000757
     args:
         mask: Binary Numpy Mask
-    '''
-    mask = morphologyEx(mask,MORPH_OPEN,kernel)
-    mask = GaussianBlur(mask, (5,5), sigmaX = 2, sigmaY = 2, borderType = BORDER_DEFAULT) # Blur
-    mask = np.where( mask < 127, 0, 255).astype(np.uint8) # convert again to binary
+    """
+    mask = morphologyEx(mask, MORPH_OPEN, kernel)
+    mask = GaussianBlur(mask, (5, 5), sigmaX=2, sigmaY=2, borderType=BORDER_DEFAULT)
+    mask = np.where(mask < 127, 0, 255).astype(np.uint8)  # convert again to binary
     return mask
 
 
@@ -102,7 +110,7 @@ def remove(
     alpha_matting_erode_size: int = 10,
     session: Optional[BaseSession] = None,
     only_mask: bool = False,
-    post_process:bool = True
+    post_process_mask: bool = False,
 ) -> Union[bytes, PILImage, np.ndarray]:
 
     if isinstance(data, PILImage):
@@ -124,8 +132,9 @@ def remove(
     cutouts = []
 
     for mask in masks:
-        if post_process:
-            mask = Image.fromarray(post_process_mask(np.array(mask))) # Apply post processing to mask
+        if post_process_mask:
+            mask = Image.fromarray(post_process(np.array(mask)))
+
         if only_mask:
             cutout = mask
 
