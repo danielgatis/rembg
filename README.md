@@ -98,7 +98,7 @@ Also you can send the file as a FormData (multipart/form-data):
 
 Input and output as bytes
 ```python
-from rembg import remove
+from rembg.bg import remove
 
 input_path = 'input.png'
 output_path = 'output.png'
@@ -112,7 +112,7 @@ with open(input_path, 'rb') as i:
 
 Input and output as a PIL image
 ```python
-from rembg import remove
+from rembg.bg import remove
 from PIL import Image
 
 input_path = 'input.png'
@@ -125,7 +125,7 @@ output.save(output_path)
 
 Input and output as a numpy array
 ```python
-from rembg import remove
+from rembg.bg import remove
 import cv2
 
 input_path = 'input.png'
