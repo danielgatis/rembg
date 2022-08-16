@@ -76,6 +76,12 @@ Start the server
 rembg s
 ```
 
+And go to:
+
+```
+http://localhost:5000/docs
+```
+
 Image with background:
 ```
 https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
@@ -142,12 +148,6 @@ Try this:
 
 ```
 docker run -p 5000:5000 danielgatis/rembg s
-```
-
-And go to:
-
-```
-http://localhost:5000/docs
 ```
 
 Image with background:
