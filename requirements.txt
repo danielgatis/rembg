@@ -5,7 +5,7 @@ fastapi==0.80.0
 filetype==1.1.0
 gdown==4.5.1
 imagehash==4.2.1
-numpy==1.21.6
+numpy==1.22.0
 onnxruntime==1.12.1
 opencv-python-headless==4.6.0.66
 pillow==9.2.0
