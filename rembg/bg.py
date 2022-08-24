@@ -16,7 +16,7 @@ from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
-from scipy.ndimage.morphology import binary_erosion
+from scipy.ndimage import binary_erosion
 
 from .session_base import BaseSession
 from .session_factory import new_session

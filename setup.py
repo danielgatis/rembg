@@ -11,10 +11,10 @@ here = pathlib.Path(__file__).parent.resolve()
 
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
-with open("requirements.txt") as f:
+with open(here / "requirements.txt") as f:
     requireds = f.read().splitlines()
 
-with open("requirements-gpu.txt") as f:
+with open(here / "requirements-gpu.txt") as f:
     gpu_requireds = f.read().splitlines()
 
 setup(
@@ -27,11 +27,10 @@ setup(
     author_email="danielgatis@gmail.com",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.9",
     ],
     keywords="remove, background, u2net",
     packages=["rembg"],
-    python_requires="~=3.9.0",
+    python_requires=">=3.7",
     install_requires=requireds,
     entry_points={
         "console_scripts": [
