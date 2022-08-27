@@ -257,7 +257,15 @@ def p(
     show_default=True,
     help="log level",
 )
-def s(port: int, log_level: str) -> None:
+@click.option(
+    "-t",
+    "--threads",
+    default=None,
+    type=int,
+    show_default=True,
+    help="number of worker threads",
+)
+def s(port: int, log_level: str, threads: int) -> None:
     sessions: dict[str, BaseSession] = {}
     tags_metadata = [
         {
@@ -383,6 +391,13 @@ def s(port: int, log_level: str) -> None:
             ),
             media_type="image/png",
         )
+
+    @app.on_event("startup")
+    def startup():
+        if threads is not None:
+            from anyio.lowlevel import RunVar
+            from anyio import CapacityLimiter
+            RunVar("_default_thread_limiter").set(CapacityLimiter(threads))
 
     @app.get(
         path="/",
