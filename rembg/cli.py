@@ -397,6 +397,7 @@ def s(port: int, log_level: str, threads: int) -> None:
         if threads is not None:
             from anyio.lowlevel import RunVar
             from anyio import CapacityLimiter
+
             RunVar("_default_thread_limiter").set(CapacityLimiter(threads))
 
     @app.get(
