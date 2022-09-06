@@ -395,8 +395,8 @@ def s(port: int, log_level: str, threads: int) -> None:
     @app.on_event("startup")
     def startup():
         if threads is not None:
-            from anyio.lowlevel import RunVar
             from anyio import CapacityLimiter
+            from anyio.lowlevel import RunVar
 
             RunVar("_default_thread_limiter").set(CapacityLimiter(threads))
 
