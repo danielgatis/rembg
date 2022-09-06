@@ -1,0 +1,12 @@
+apiVersion: v2
+name: rembg
+description: A Helm chart for rembg
+type: application
+version: 0.1.0
+
+maintainers:
+  - name: CodeChem
+    email: devops@codechem.com
+    url: https://codechem.com
+
+appVersion: "latest"

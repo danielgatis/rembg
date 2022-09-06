@@ -1,0 +1,37 @@
+replicaCount: 10
+
+image:
+  repository: danielgatis/rembg
+  pullPolicy: Always
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: "rembg"
+fullnameOverride: "rembg-chart"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 5000
+
+resources: {}
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+arguments: ["s"]
+
+nodeSelector:
+  {}
+
+tolerations: []
+
+affinity: {}
