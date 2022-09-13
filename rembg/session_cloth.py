@@ -55,9 +55,7 @@ pallete3 = [
 
 class ClothSession(BaseSession):
     def predict(self, img: PILImage) -> List[PILImage]:
-        ort_outs = self.inner_session.run(
-            None, self.normalize(img, (0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (768, 768))
-        )
+        ort_outs = self.inner_session.run(None, self.normalize(img))
 
         pred = ort_outs
         pred = log_softmax(pred[0], 1)

@@ -115,6 +115,7 @@ def remove(
     session: Optional[BaseSession] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
+    model_name: str = "u2net"
 ) -> Union[bytes, PILImage, np.ndarray]:
 
     if isinstance(data, PILImage):
@@ -130,7 +131,7 @@ def remove(
         raise ValueError("Input type {} is not supported.".format(type(data)))
 
     if session is None:
-        session = new_session("u2net")
+        session = new_session(model_name)
 
     masks = session.predict(img)
     cutouts = []
