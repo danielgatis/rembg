@@ -18,6 +18,7 @@ var_ab = IntVar()
 var_ae = IntVar()
 only_mask = BooleanVar()
 post_process_mask = BooleanVar()
+var_stop = False
 
 # load setting
 try:
@@ -38,7 +39,7 @@ except:
     only_mask.set(False)
     post_process_mask.set(False)
 
-# ---------- funciones --------
+# ---------- funtions --------
 
 def save_setting():
     if not messagebox.askyesno("Save", "Save Settings"):
@@ -56,11 +57,11 @@ def save_setting():
         f.write(setting)
 
         
-def funcion(input_path):
-    nombre_completo = re.sub(r".+/","",input_path)
-    n = re.match(r".+\.", nombre_completo[::-1])
-    formato = n.group()[::-1]
-    output_path = "output/"+nombre_completo[:-len(formato)]+".png"
+def funtion(input_path):
+    file_name = re.sub(r".+/","",input_path)
+    n = re.match(r".+\.", file_name[::-1])
+    extension = n.group()[::-1]
+    output_path = "output/"+file_name[:-len(extension)]+".png"
 
     with open(input_path, 'rb') as i:
         with open(output_path, 'wb') as o:
@@ -80,25 +81,29 @@ def funcion(input_path):
     
 
 
-def carpeta():
+def select_path():
+    global var_stop
+    var_stop = False
     def proceso():
         menu.pack_forget()
         progreso.pack(fill="both")
         
-        carpeta = filedialog.askdirectory()
-        w = os.walk(top=carpeta)
+        path = filedialog.askdirectory()
+        w = os.walk(top=path)
         lista = []
         for a,b,c in w:
             for file in c:
                 file = file.lower()
-                #tambien se detecta si es formato imagen antes de agregarlo a lista
+                # check if is image file
                 if ".jpg" in file[-4:] or ".jpeg" in file[-5:] or ".png" in file[-4:]:
                     lista.append(a+"/"+file)
         if lista:
             n=1
             for foto in lista:
-                progreso["text"]="Procesando\n"+str(n)+" de "+str(len(lista))
-                funcion(foto)
+                if var_stop:
+                    break
+                progreso["text"]="Processing\n"+str(n)+" Of "+str(len(lista))
+                funtion(foto)
                 n+=1
                 
         menu.pack(fill="both")
@@ -111,7 +116,9 @@ def carpeta():
 
 
     
-def imagenes():
+def select_images():
+    global var_stop
+    var_stop = False
     def proceso():
         menu.pack_forget()
         progreso.pack(fill="both")
@@ -128,8 +135,10 @@ def imagenes():
         if lista:
             n=1
             for foto in lista:
+                if var_stop:
+                    break
                 progreso["text"]="Processing\n"+str(n)+" Of "+str(len(lista))
-                funcion(foto.name)
+                funtion(foto.name)
                 n+=1
 
                 
@@ -160,6 +169,14 @@ def bind_chb(a):
         texto_ae["bg"]="#77dd00"
 
 
+# stop processing images if var_stop is True
+def stop():
+    global var_stop
+    var_stop = True
+    root.destroy()
+
+
+    
 # ---------- menu principal ------------
 progreso = Label(bg="gray",text="",fg="light blue", font="arial 20",width=13,height=4, relief="groove",borderwidth=10)
 # fondo  
@@ -169,34 +186,34 @@ menu.pack(fill="both")
 Button(
     menu,
     text="Select Images",
-    command=imagenes,
+    command=select_images,
     bg="#0077aa",
     fg="white",
     activebackground="#00ccff",
     relief="raised",
     borderwidth=3
-    ).grid(row=0,column=0)
+    ).grid(row=0,column=0, sticky="we")
 
 Button(
     menu,
     text="Select Folder",
-    command=carpeta,
+    command=select_path,
     bg="#0077aa",
     fg="white",
     activebackground="#00ccff",
     relief="raised",
     borderwidth=3
-    ).grid(row=0,column=1)
+    ).grid(row=0,column=1, sticky="we")
 
 
-# contenedor del boton chbox alpha
+# chbox alpha buttons container
 f = Frame(menu, relief="raised",borderwidth=3,bg="#669999")
 f.grid(row = 1, columnspan = 2)
 # checkbox alpha
 chb = ttk.Checkbutton(f, text="Alpha Matting", var=var_alpha)
 chb.grid(row=0,column=0)
 chb.bind("<ButtonRelease>",bind_chb)
-# contenedor de las opciones
+# alpha options button container
 cuadro = Frame(menu, relief="raised",borderwidth=3,bg="#669999",width=200,height=40)
 cuadro.grid(row = 2, columnspan = 2, sticky="NEWS")
 
@@ -215,7 +232,7 @@ texto_ae.grid(row=2,column=0, padx=6)
 cantidad_ae = Spinbox(cuadro, from_=0,to=255, font="arial 12",width=6, textvariable=var_ae)
 cantidad_ae.grid(row=2,column=1)
 #------------------------------
-# opciones extra
+# extra options
 area = Frame(menu, bg="gray")
 area.grid(row = 3, column = 0, columnspan=2)
 
@@ -239,7 +256,7 @@ Button(
 
 Button(
     area,
-    text="save",
+    text="Save",
     command=save_setting,
     bg="#669999",
     activebackground="#88bbbb"
@@ -247,25 +264,27 @@ Button(
 
 
 
-def configurar_botones():
-    if not var_alpha.get():
-        cuadro["bg"]="#669999"
-        cantidad_af["state"]="disabled"
-        cantidad_ab["state"]="disabled"
-        cantidad_ae["state"]="disabled"
-        texto_af["bg"]="#669999"
-        texto_ab["bg"]="#669999"
-        texto_ae["bg"]="#669999"
-    else:
-        cuadro["bg"]="#77dd00"
-        cantidad_af["state"]="normal"
-        cantidad_ab["state"]="normal"
-        cantidad_ae["state"]="normal"
-        texto_af["bg"]="#77dd00"
-        texto_ab["bg"]="#77dd00"
-        texto_ae["bg"]="#77dd00"
-configurar_botones()
 
+if not var_alpha.get():
+    cuadro["bg"]="#669999"
+    cantidad_af["state"]="disabled"
+    cantidad_ab["state"]="disabled"
+    cantidad_ae["state"]="disabled"
+    texto_af["bg"]="#669999"
+    texto_ab["bg"]="#669999"
+    texto_ae["bg"]="#669999"
+else:
+    cuadro["bg"]="#77dd00"
+    cantidad_af["state"]="normal"
+    cantidad_ab["state"]="normal"
+    cantidad_ae["state"]="normal"
+    texto_af["bg"]="#77dd00"
+    texto_ab["bg"]="#77dd00"
+    texto_ae["bg"]="#77dd00"
+
+
+
+root.protocol("WM_DELETE_WINDOW", stop)
 root.geometry("+500+200")
 root.title("Rembg AI")
 root.resizable(0,0)
