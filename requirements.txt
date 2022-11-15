@@ -8,7 +8,7 @@ imagehash==4.2.1
 numpy==1.21.6
 onnxruntime==1.12.1
 opencv-python-headless==4.6.0.66
-pillow==9.2.0
+pillow==9.3.0
 pymatting==1.1.8
 python-multipart==0.0.5
 scikit-image==0.19.3
