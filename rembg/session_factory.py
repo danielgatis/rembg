@@ -37,7 +37,9 @@ def new_session(model_name: str) -> BaseSession:
             "Choose between u2net, u2netp, u2net_human_seg or u2net_cloth_seg"
         )
 
-    home = os.getenv("U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net"))
+    home = os.getenv(
+        "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
+    )
     path = Path(home).expanduser() / f"{model_name}.onnx"
     path.parents[0].mkdir(parents=True, exist_ok=True)
 
