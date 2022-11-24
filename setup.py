@@ -27,10 +27,22 @@ setup(
     author_email="danielgatis@gmail.com",
     classifiers=[
         "License :: OSI Approved :: MIT License",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     keywords="remove, background, u2net",
     packages=["rembg"],
-    python_requires=">=3.7",
+    python_requires=">=3.7, <3.11",
     install_requires=requireds,
     entry_points={
         "console_scripts": [
