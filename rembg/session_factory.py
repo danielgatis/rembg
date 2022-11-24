@@ -5,8 +5,8 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from typing import Type
 
-import pooch
 import onnxruntime as ort
+import pooch
 
 from .session_base import BaseSession
 from .session_cloth import ClothSession
