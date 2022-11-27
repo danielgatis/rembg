@@ -34,6 +34,12 @@ def new_session(model_name: str) -> BaseSession:
         md5 = "2434d1f3cb744e0e49386c906e5a08bb"
         url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx"
         session_class = ClothSession
+    elif model_name == "silueta":
+        md5 = "55e59e0d8062d2f5d013f4725ee84782"
+        url = (
+            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx"
+        )
+        session_class = SimpleSession
     else:
         assert AssertionError(
             "Choose between u2net, u2netp, u2net_human_seg or u2net_cloth_seg"

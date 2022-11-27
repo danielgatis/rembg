@@ -33,7 +33,9 @@ def main() -> None:
     "-m",
     "--model",
     default="u2net",
-    type=click.Choice(["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg"]),
+    type=click.Choice(
+        ["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg", "silueta"]
+    ),
     show_default=True,
     show_choices=True,
     help="model name",
@@ -100,7 +102,9 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
     "-m",
     "--model",
     default="u2net",
-    type=click.Choice(["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg"]),
+    type=click.Choice(
+        ["u2net", "u2netp", "u2net_human_seg", "u2net_cloth_seg", "silueta"]
+    ),
     show_default=True,
     show_choices=True,
     help="model name",
@@ -306,6 +310,7 @@ def s(port: int, log_level: str, threads: int) -> None:
         u2netp = "u2netp"
         u2net_human_seg = "u2net_human_seg"
         u2net_cloth_seg = "u2net_cloth_seg"
+        silueta = "silueta"
 
     class CommonQueryParams:
         def __init__(
