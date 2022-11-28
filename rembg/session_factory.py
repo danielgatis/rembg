@@ -13,18 +13,17 @@ from .session_cloth import ClothSession
 from .session_simple import SimpleSession
 
 
-def new_session(model_name: str) -> BaseSession:
+def new_session(model_name: str = "u2net") -> BaseSession:
     session_class: Type[BaseSession]
+    md5 = "60024c5c889badc19c04ad937298a77b"
+    url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx"
+    session_class = SimpleSession
 
     if model_name == "u2netp":
         md5 = "8e83ca70e441ab06c318d82300c84806"
         url = (
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx"
         )
-        session_class = SimpleSession
-    elif model_name == "u2net":
-        md5 = "60024c5c889badc19c04ad937298a77b"
-        url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx"
         session_class = SimpleSession
     elif model_name == "u2net_human_seg":
         md5 = "c09ddc2e0104f800e3e1bb4652583d1f"
@@ -40,10 +39,6 @@ def new_session(model_name: str) -> BaseSession:
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx"
         )
         session_class = SimpleSession
-    else:
-        assert AssertionError(
-            "Choose between u2net, u2netp, u2net_human_seg or u2net_cloth_seg"
-        )
 
     u2net_home = os.getenv(
         "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")

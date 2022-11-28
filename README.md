@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
 
-Rembg is a tool to remove images background. That is it.
+Rembg is a tool to remove images background.
 
 <p style="display: flex;align-items: center;justify-content: center;">
   <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-1.jpg" width="100" />
@@ -37,13 +37,13 @@ Rembg is a tool to remove images background. That is it.
 
 **If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
-### Requirements
+## Requirements
 
 ```
 python: >3.7, <3.11
 ```
 
-### Installation
+## Installation
 
 CPU support:
 
@@ -57,66 +57,97 @@ GPU support:
 pip install rembg[gpu]
 ```
 
-### Usage as a cli
+## Usage as a cli
+
+After the installation step you can use rembg just typing `rembg` in your terminal window.
+
+The `rembg` command has 3 subcommands, one for each input type:
+- `i` for files
+- `p` for folders
+- `s` for http server
+
+You can get help about the main command using:
+
+```
+rembg --help
+```
+
+As well, about all the subcommands using:
+
+```
+rembg <COMMAND> --help
+```
+
+### rembg `i`
+
+Used when input and output are files.
 
 Remove the background from a remote image
 
-```bash
+```
 curl -s http://input.png | rembg i > output.png
 ```
 
 Remove the background from a local file
 
-```bash
+```
 rembg i path/to/input.png path/to/output.png
 ```
 
+Remove the background specifying a model
+
+```
+rembg -m u2netp i path/to/input.png path/to/output.png
+```
+
+Remove the background returning only the mask
+
+```
+rembg -om i path/to/input.png path/to/output.png
+```
+
+
+Remove the background applying an alpha matting
+
+```
+rembg -a i path/to/input.png path/to/output.png
+```
+
+### rembg `p`
+
+Used when input and output are folders.
+
 Remove the background from all images in a folder
 
-```bash
+```
 rembg p path/to/input path/to/output
 ```
 
-### Usage as a server
-
-Start the server
-
-```bash
-rembg s
-```
-
-And go to:
+Same as before, but watching for new/changed files to process
 
 ```
-http://localhost:5000/docs
+rembg p -w path/to/input path/to/output
 ```
 
-Image with background:
+### rembg `s`
+
+Used to start http server.
+
+To see the complete endpoints documentation, go to: `http://localhost:5000/docs`.
+
+Remove the background from an image url
 
 ```
-https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
+curl -s "http://localhost:5000/?url=http://input.png" -o output.png
 ```
 
-Image without background:
+Remove the background from an uploaded image
 
 ```
-http://localhost:5000/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
+curl -s -F file=@/path/to/input.jpg "http://localhost:5000"  -o output.png
 ```
 
-Also you can send the file as a FormData (multipart/form-data):
-
-```html
-<form
-    action="http://localhost:5000"
-    method="post"
-    enctype="multipart/form-data"
->
-    <input type="file" name="file" />
-    <input type="submit" value="upload" />
-</form>
-```
-
-### Usage as a library
+## Usage as a library
 
 Input and output as bytes
 
@@ -161,27 +192,36 @@ output = remove(input)
 cv2.imwrite(output_path, output)
 ```
 
-### Usage as a docker
+How to iterate over files in a performatic way
+
+```python
+from pathlib import Path
+from rembg import remove, new_session
+
+session = new_session()
+
+for file in Path('path/to/folder').glob('*.png'):
+    input_path = str(file)
+    output_path = str(file.parent / (file.stem + ".out.png"))
+
+    with open(input_path, 'rb') as i:
+        with open(output_path, 'wb') as o:
+            input = i.read()
+            output = remove(input, session=session)
+            o.write(output)
+```
+
+## Usage as a docker
+
+Just replace the `rembg` command for `docker run danielgatis/rembg`.
 
 Try this:
 
 ```
-docker run -p 5000:5000 danielgatis/rembg s
+docker run danielgatis/rembg i path/to/input.png path/to/output.png
 ```
 
-Image with background:
-
-```
-https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
-```
-
-Image without background:
-
-```
-http://localhost:5000/?url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Gull_portrait_ca_usa.jpg/1280px-Gull_portrait_ca_usa.jpg
-```
-
-### Models
+## Models
 
 All models are downloaded and saved in the user home folder in the `.u2net` directory.
 
@@ -191,55 +231,35 @@ The available models are:
 -   u2netp ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A lightweight version of u2net model.
 -   u2net_human_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
 -   u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
--   silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
+-   silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
 
-#### How to train your own model
+### How to train your own model
 
 If You need more fine tunned models try this:
 https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289
 
-### Advance usage
 
-Sometimes it is possible to achieve better results by turning on alpha matting. Example:
+## Some video tutorials
 
-```bash
-curl -s http://input.png | rembg i -a -ae 15 > output.png
-```
+- https://www.youtube.com/watch?v=3xqwpXjxyMQ
+- https://www.youtube.com/watch?v=dFKRGXdkGJU
+- https://www.youtube.com/watch?v=Ai-BS_T7yjE
+- https://www.youtube.com/watch?v=dFKRGXdkGJU
+- https://www.youtube.com/watch?v=D7W-C0urVcQ
 
-<table>
-    <thead>
-        <tr>
-            <td>Original</td>
-            <td>Without alpha matting</td>
-            <td>With alpha matting (-a -ae 15)</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.jpg"/></td>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.jpg"/></td>
-            <td><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/food-1.out.alpha.jpg"/></td>
-        </tr>
-    </tbody>
-</table>
+## References
 
-### In the cloud
+- https://arxiv.org/pdf/2005.09007.pdf
+- https://github.com/NathanUA/U-2-Net
+- https://github.com/pymatting/pymatting
 
-Please contact me at danielgatis@gmail.com if you need help to put it on the cloud.
-
-### References
-
--   https://arxiv.org/pdf/2005.09007.pdf
--   https://github.com/NathanUA/U-2-Net
--   https://github.com/pymatting/pymatting
-
-### Buy me a coffee
+## Buy me a coffee
 
 Liked some of my work? Buy me a coffee (or more likely a beer)
 
 <a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a>
 
-### License
+## License
 
 Copyright (c) 2020-present [Daniel Gatis](https://github.com/danielgatis)
 
