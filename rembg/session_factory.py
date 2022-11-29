@@ -41,7 +41,7 @@ def new_session(model_name: str = "u2net") -> BaseSession:
         session_class = SimpleSession
 
     u2net_home = os.getenv(
-        "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
+        "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "/tmp/"), ".u2net")
     )
 
     fname = f"{model_name}.onnx"
