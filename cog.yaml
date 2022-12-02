@@ -1,0 +1,13 @@
+build:
+  gpu: true
+  cuda: "11.3"
+  python_version: "3.10"
+  python_packages:
+    - "onnxruntime-gpu==1.12.1"
+    - "gdown==4.5.4"
+
+  run:
+   - pip install rembg[gpu]
+   - mkdir -p /root/.u2net/ && cd /root/.u2net/ && gdown https://drive.google.com/uc?id=1tCU5MM1LhRgGou5OpmpjBQbSrYIUoYab
+
+predict: "predictor.py:Predictor"

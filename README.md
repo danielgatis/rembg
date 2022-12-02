@@ -5,6 +5,7 @@
 [![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg/week)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
+[![Replicate](https://replicate.com/cjwbw/rembg/badge)](https://replicate.com/cjwbw/rembg)
 
 Rembg is a tool to remove images background.
 
