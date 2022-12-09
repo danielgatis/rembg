@@ -1,4 +1,4 @@
-name: Run tests
+name: Test installation
 
 on: [push]
 
@@ -15,11 +15,11 @@ jobs:
               uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python-version }}
-            - name: Install dependencies
+            - name: Install package
               run: |
                   python -m pip install --upgrade pip
+                  pip install .
                   pip install pytest
-                  pip install -r requirements.txt
-            - name: Test with pytest
+            - name: Test installation with pytest
               run: |
-                  PYTHONPATH=$PYTHONPATH:. pytest .
+                  pytest

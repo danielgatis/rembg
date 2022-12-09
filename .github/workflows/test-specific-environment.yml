@@ -1,0 +1,25 @@
+name: Test in specific environment
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.8", "3.9", "3.10"]
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
+            - name: Set up environment
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install pytest
+                  pip install -r requirements.txt
+            - name: Test with pytest
+              run: |
+                  PYTHONPATH=$PYTHONPATH:. pytest .
