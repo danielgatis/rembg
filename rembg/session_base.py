@@ -18,7 +18,7 @@ class BaseSession:
         std: Tuple[float, float, float],
         size: Tuple[int, int],
     ) -> Dict[str, np.ndarray]:
-        im = img.convert("RGB").resize(size, Image.Resampling.LANCZOS)
+        im = img.convert("RGB").resize(size, Image.LANCZOS)
 
         im_ary = np.array(im)
         im_ary = im_ary / np.max(im_ary)
