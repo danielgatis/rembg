@@ -97,20 +97,20 @@ rembg i path/to/input.png path/to/output.png
 Remove the background specifying a model
 
 ```
-rembg -m u2netp i path/to/input.png path/to/output.png
+rembg i -m u2netp path/to/input.png path/to/output.png
 ```
 
 Remove the background returning only the mask
 
 ```
-rembg -om i path/to/input.png path/to/output.png
+rembg i -om path/to/input.png path/to/output.png
 ```
 
 
 Remove the background applying an alpha matting
 
 ```
-rembg -a i path/to/input.png path/to/output.png
+rembg i -a path/to/input.png path/to/output.png
 ```
 
 ### rembg `p`
