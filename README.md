@@ -1,8 +1,8 @@
 # Rembg
 
 [![Downloads](https://pepy.tech/badge/rembg)](https://pepy.tech/project/rembg)
-[![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg/month)
-[![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg/week)
+[![Downloads](https://pepy.tech/badge/rembg/month)](https://pepy.tech/project/rembg)
+[![Downloads](https://pepy.tech/badge/rembg/week)](https://pepy.tech/project/rembg)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
 [![Streamlit App](https://img.shields.io/badge/🎈%20Streamlit%20Community-Cloud-blue)](https://bgremoval.streamlit.app/)
