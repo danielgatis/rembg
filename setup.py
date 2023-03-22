@@ -40,7 +40,7 @@ setup(
         "aiohttp~=3.8.1",
         "asyncer~=0.0.2",
         "click~=8.1.3",
-        "fastapi~=0.87.0",
+        "fastapi>=0.92.0",
         "filetype~=1.2.0",
         "pooch~=1.6.0",
         "imagehash~=4.3.1",
