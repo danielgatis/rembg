@@ -435,6 +435,6 @@ def s(port: int, log_level: str, threads: int) -> None:
         ),
         commons: CommonQueryPostParams = Depends(),
     ):
-        return await asyncify(im_without_bg)(file, commons)
+        return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     uvicorn.run(app, host="0.0.0.0", port=port, log_level=log_level)

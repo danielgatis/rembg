@@ -37,7 +37,6 @@ def alpha_matting_cutout(
     background_threshold: int,
     erode_structure_size: int,
 ) -> PILImage:
-
     if img.mode == "RGBA" or img.mode == "CMYK":
         img = img.convert("RGB")
 
@@ -116,7 +115,6 @@ def remove(
     only_mask: bool = False,
     post_process_mask: bool = False,
 ) -> Union[bytes, PILImage, np.ndarray]:
-
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
         img = data
