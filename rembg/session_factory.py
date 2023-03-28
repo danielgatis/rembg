@@ -42,6 +42,10 @@ def new_session(model_name: str = "u2net", output_size=None) -> BaseSession:
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx"
         )
         session_class = SimpleSession
+    elif model_name == "isnet-general-use":
+        md5 = "fc16ebd8b0c10d971d3513d564d01e29"
+        url = "https://github.com/Flippchen/rembg/releases/download/test/isnet-general-use.onnx"
+        session_class = SimpleSession
 
     u2net_home = os.getenv(
         "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
