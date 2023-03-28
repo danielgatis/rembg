@@ -13,7 +13,10 @@ from .session_cloth import ClothSession
 from .session_simple import SimpleSession
 
 
-def new_session(model_name: str = "u2net") -> BaseSession:
+def new_session(model_name: str = "u2net", output_size=None) -> BaseSession:
+    # Set output size if not set ( because isnet hat a different size )
+    output_size = output_size or (320, 320)
+
     session_class: Type[BaseSession]
     md5 = "60024c5c889badc19c04ad937298a77b"
     url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx"
@@ -68,4 +71,5 @@ def new_session(model_name: str = "u2net") -> BaseSession:
             providers=ort.get_available_providers(),
             sess_options=sess_opts,
         ),
+        output_size=output_size
     )
