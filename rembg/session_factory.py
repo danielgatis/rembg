@@ -72,5 +72,5 @@ def new_session(model_name: str = "u2net") -> BaseSession:
             str(full_path),
             providers=ort.get_available_providers(),
             sess_options=sess_opts,
-        )
+        ),
     )
