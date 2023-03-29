@@ -7,18 +7,18 @@ from PIL.Image import Image as PILImage
 
 
 class BaseSession:
-    def __init__(self, model_name: str, inner_session: ort.InferenceSession, output_size: Tuple[int, int] = (320, 320)):
+    def __init__(self, model_name: str, inner_session: ort.InferenceSession):
         self.model_name = model_name
         self.inner_session = inner_session
-        self.output_size = output_size
 
     def normalize(
         self,
         img: PILImage,
         mean: Tuple[float, float, float],
         std: Tuple[float, float, float],
+        size: Tuple[int, int],
     ) -> Dict[str, np.ndarray]:
-        im = img.convert("RGB").resize(self.output_size, Image.LANCZOS)
+        im = img.convert("RGB").resize(size, Image.LANCZOS)
 
         im_ary = np.array(im)
         im_ary = im_ary / np.max(im_ary)

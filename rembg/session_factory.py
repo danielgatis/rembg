@@ -11,12 +11,10 @@ import pooch
 from .session_base import BaseSession
 from .session_cloth import ClothSession
 from .session_simple import SimpleSession
+from .session_dis import DisSession
 
 
-def new_session(model_name: str = "u2net", output_size=None) -> BaseSession:
-    # Set output size if not set ( because isnet hat a different size )
-    output_size = output_size or (320, 320)
-
+def new_session(model_name: str = "u2net") -> BaseSession:
     session_class: Type[BaseSession]
     md5 = "60024c5c889badc19c04ad937298a77b"
     url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx"
@@ -44,8 +42,8 @@ def new_session(model_name: str = "u2net", output_size=None) -> BaseSession:
         session_class = SimpleSession
     elif model_name == "isnet-general-use":
         md5 = "fc16ebd8b0c10d971d3513d564d01e29"
-        url = "https://github.com/Flippchen/rembg/releases/download/test/isnet-general-use.onnx"
-        session_class = SimpleSession
+        url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx"
+        session_class = DisSession
 
     u2net_home = os.getenv(
         "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
@@ -74,6 +72,5 @@ def new_session(model_name: str = "u2net", output_size=None) -> BaseSession:
             str(full_path),
             providers=ort.get_available_providers(),
             sess_options=sess_opts,
-        ),
-        output_size=output_size
+        )
     )

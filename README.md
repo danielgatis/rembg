@@ -265,6 +265,39 @@ The available models are:
 -   u2net_human_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
 -   u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
 -   silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
+-   isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): https://github.com/xuebinqin/DIS.
+
+### Some differences between the models result
+
+<table>
+    <tr>
+        <th>original</th>
+        <th>unet</th>
+        <th>unetp</th>
+        <th>u2net_human_seg</th>
+        <th>u2net_cloth_seg</th>
+        <th>silueta</th>
+        <th>isnet-general-use</th>
+    </tr>
+    <tr>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/fixtures/car-1.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.unet.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.unetp.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.u2net_human_seg.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.u2net_cloth_seg.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.silueta.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.isnet-general-use.jpg" width="100" /></th>
+    </tr>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/fixtures/cloth-1.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.unet.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.unetp.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.u2net_human_seg.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.u2net_cloth_seg.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.silueta.jpg" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.isnet-general-use.jpg" width="100" /></th>
+    </tr>
+</table>
+
 
 ### How to train your own model
 
