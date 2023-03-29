@@ -93,11 +93,12 @@ def main() -> None:
     help="post process the mask",
 )
 @click.option(
-    "-c", "--color",
+    "-c",
+    "--color",
     default=None,
     nargs=3,
     type=int,
-    help="Background color (R G B) to replace the removed background with"
+    help="Background color (R G B) to replace the removed background with",
 )
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
