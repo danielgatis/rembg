@@ -107,7 +107,7 @@ def post_process(mask: np.ndarray) -> np.ndarray:
 
 def apply_background_color(img: PILImage, color: List[int]) -> PILImage:
     r, g, b = color
-    colored_image = Image.new('RGBA', img.size, (r, g, b, 255))
+    colored_image = Image.new("RGBA", img.size, (r, g, b, 255))
     colored_image.paste(img, mask=img)
 
     return colored_image
