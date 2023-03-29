@@ -10,8 +10,8 @@ import pooch
 
 from .session_base import BaseSession
 from .session_cloth import ClothSession
-from .session_simple import SimpleSession
 from .session_dis import DisSession
+from .session_simple import SimpleSession
 
 
 def new_session(model_name: str = "u2net") -> BaseSession:
