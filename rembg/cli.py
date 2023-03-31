@@ -92,6 +92,14 @@ def main() -> None:
     show_default=True,
     help="post process the mask",
 )
+@click.option(
+    "-c",
+    "--color",
+    default=None,
+    nargs=3,
+    type=int,
+    help="Background color (R G B) to replace the removed background with",
+)
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
 )
@@ -175,6 +183,15 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
     is_flag=True,
     show_default=True,
     help="watches a folder for changes",
+)
+@click.option(
+    "-c",
+    "--color",
+    default=None,
+    type=(int, int, int),
+    nargs=3,
+    metavar="R G B",
+    help="background color (RGB) to replace removed areas",
 )
 @click.argument(
     "input",
