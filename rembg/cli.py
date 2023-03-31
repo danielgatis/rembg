@@ -2,7 +2,7 @@ import pathlib
 import sys
 import time
 from enum import Enum
-from typing import IO, Optional, cast
+from typing import IO, Optional, Tuple, cast
 
 import aiohttp
 import click
@@ -377,7 +377,11 @@ def s(port: int, log_level: str, threads: int) -> None:
             self.ae = ae
             self.om = om
             self.ppm = ppm
-            self.bgc = map(int, bgc.split(",")) if bgc else None
+            self.bgc = (
+                cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
+                if bgc
+                else None
+            )
 
     class CommonQueryPostParams:
         def __init__(
@@ -413,7 +417,11 @@ def s(port: int, log_level: str, threads: int) -> None:
             self.ae = ae
             self.om = om
             self.ppm = ppm
-            self.bgc = map(int, bgc.split(",")) if bgc else None
+            self.bgc = (
+                cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
+                if bgc
+                else None
+            )
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
