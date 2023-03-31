@@ -2,7 +2,7 @@ import pathlib
 import sys
 import time
 from enum import Enum
-from typing import IO, cast
+from typing import IO, Optional, cast
 
 import aiohttp
 import click
@@ -93,12 +93,12 @@ def main() -> None:
     help="post process the mask",
 )
 @click.option(
-    "-c",
-    "--color",
+    "-bgc",
+    "--bgcolor",
     default=None,
-    nargs=3,
-    type=int,
-    help="Background color (R G B) to replace the removed background with",
+    type=(int, int, int, int),
+    nargs=4,
+    help="Background color (R G B A) to replace the removed background with",
 )
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
@@ -185,13 +185,12 @@ def i(model: str, input: IO, output: IO, **kwargs) -> None:
     help="watches a folder for changes",
 )
 @click.option(
-    "-c",
-    "--color",
+    "-bgc",
+    "--bgcolor",
     default=None,
-    type=(int, int, int),
-    nargs=3,
-    metavar="R G B",
-    help="background color (RGB) to replace removed areas",
+    type=(int, int, int, int),
+    nargs=4,
+    help="Background color (R G B A) to replace the removed background with",
 )
 @click.argument(
     "input",
@@ -369,6 +368,7 @@ def s(port: int, log_level: str, threads: int) -> None:
             ),
             om: bool = Query(default=False, description="Only Mask"),
             ppm: bool = Query(default=False, description="Post Process Mask"),
+            bgc: Optional[str] = Query(default=None, description="Background Color"),
         ):
             self.model = model
             self.a = a
@@ -377,6 +377,7 @@ def s(port: int, log_level: str, threads: int) -> None:
             self.ae = ae
             self.om = om
             self.ppm = ppm
+            self.bgc = map(int, bgc.split(",")) if bgc else None
 
     class CommonQueryPostParams:
         def __init__(
@@ -403,6 +404,7 @@ def s(port: int, log_level: str, threads: int) -> None:
             ),
             om: bool = Form(default=False, description="Only Mask"),
             ppm: bool = Form(default=False, description="Post Process Mask"),
+            bgc: Optional[str] = Query(default=None, description="Background Color"),
         ):
             self.model = model
             self.a = a
@@ -411,6 +413,7 @@ def s(port: int, log_level: str, threads: int) -> None:
             self.ae = ae
             self.om = om
             self.ppm = ppm
+            self.bgc = map(int, bgc.split(",")) if bgc else None
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         return Response(
@@ -425,6 +428,7 @@ def s(port: int, log_level: str, threads: int) -> None:
                 alpha_matting_erode_size=commons.ae,
                 only_mask=commons.om,
                 post_process_mask=commons.ppm,
+                bgcolor=commons.bgc,
             ),
             media_type="image/png",
         )

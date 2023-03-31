@@ -1,6 +1,6 @@
 import io
 from enum import Enum
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 from cv2 import (
@@ -105,9 +105,9 @@ def post_process(mask: np.ndarray) -> np.ndarray:
     return mask
 
 
-def apply_background_color(img: PILImage, color: List[int]) -> PILImage:
-    r, g, b = color
-    colored_image = Image.new("RGBA", img.size, (r, g, b, 255))
+def apply_background_color(img: PILImage, color: Tuple[int, int, int, int]) -> PILImage:
+    r, g, b, a = color
+    colored_image = Image.new("RGBA", img.size, (r, g, b, a))
     colored_image.paste(img, mask=img)
 
     return colored_image
@@ -122,7 +122,7 @@ def remove(
     session: Optional[BaseSession] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
-    color: Optional[List[int]] = None,
+    bgcolor: Optional[Tuple[int, int, int, int]] = None,
 ) -> Union[bytes, PILImage, np.ndarray]:
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
@@ -170,8 +170,8 @@ def remove(
     if len(cutouts) > 0:
         cutout = get_concat_v_multi(cutouts)
 
-    if color is not None:
-        cutout = apply_background_color(cutout, color)
+    if bgcolor is not None and not only_mask:
+        cutout = apply_background_color(cutout, bgcolor)
 
     if ReturnType.PILLOW == return_type:
         return cutout
