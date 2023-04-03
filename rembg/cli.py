@@ -1,9 +1,9 @@
 import pathlib
-import sys
+import sys,os
 import time
 from enum import Enum
 from typing import IO, Optional, Tuple, cast
-
+from PIL import Image
 import aiohttp
 import click
 import filetype
@@ -13,6 +13,7 @@ from fastapi import Depends, FastAPI, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 from tqdm import tqdm
+from tqdm import trange
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -482,3 +483,145 @@ def s(port: int, log_level: str, threads: int) -> None:
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     uvicorn.run(app, host="0.0.0.0", port=port, log_level=log_level)
+
+@main.command(short_help="read RGB24 image(s) (piped from another program) from stdin")
+@click.option(
+    "-m",
+    "--model",
+    default="u2net",
+    type=click.Choice(
+        [
+            "u2net",
+            "u2netp",
+            "u2net_human_seg",
+            "u2net_cloth_seg",
+            "silueta",
+            "isnet-general-use",
+        ]
+    ),
+    show_default=True,
+    show_choices=True,
+    help="model name",
+)
+@click.option(
+    "-a",
+    "--alpha-matting",
+    is_flag=True,
+    show_default=True,
+    help="use alpha matting",
+)
+@click.option(
+    "-af",
+    "--alpha-matting-foreground-threshold",
+    default=240,
+    type=int,
+    show_default=True,
+    help="trimap fg threshold",
+)
+@click.option(
+    "-ab",
+    "--alpha-matting-background-threshold",
+    default=10,
+    type=int,
+    show_default=True,
+    help="trimap bg threshold",
+)
+@click.option(
+    "-ae",
+    "--alpha-matting-erode-size",
+    default=10,
+    type=int,
+    show_default=True,
+    help="erode size",
+)
+@click.option(
+    "-om",
+    "--only-mask",
+    is_flag=True,
+    show_default=True,
+    help="output only the mask",
+)
+@click.option(
+    "-ppm",
+    "--post-process-mask",
+    is_flag=True,
+    show_default=True,
+    help="post process the mask",
+)
+@click.option(
+    "-bgc",
+    "--bgcolor",
+    default=None,
+    type=(int, int, int, int),
+    nargs=4,
+    help="Background color (R G B A) to replace the removed background with",
+)
+
+@click.argument("image_width", type=click.IntRange(1))
+@click.argument("image_height", type=click.IntRange(1))
+@click.argument("output_specifier", type=click.STRING)
+
+def rs(
+    model: str, image_width:int, image_height:int, output_specifier: str, **kwargs
+) -> None:
+    """Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such as FFMPEG, that
+    outputs RGB24 pixel data to stdout, which is piped into the stdin of this program, although nothing
+    prevents you from manually typing in images at stdin :)
+
+    image_width, image_height : dimension of image(s)
+
+    output_specifier: printf-style specifier for output filenames, for example if abc%03u.png, then
+    output files will be named abc000.png, abc001.png, abc002.png, etc.
+    Output files will be saved in PNG format regardless of the extension specified.
+
+    Example usage with FFMPEG:
+
+    \b
+      ffmpeg -i input.mp4 -ss 10 -an -f rawvideo -pix_fmt rgb24 pipe:1 | python rembg.py v 1280 720 out%03u.png
+
+    The width and height values must match the dimension of output images from FFMPEG.
+    Note for FFMPEG, the "-an -f rawvideo -pix_fmt rgb24 pipe:1" part is required.
+    """
+
+    img_index:int=0
+    bytesPerImage:int=image_width*image_height*3
+    fullBuf=bytearray(bytesPerImage)
+
+    output_dir=os.path.dirname(os.path.abspath(output_specifier))
+    if not os.path.isdir(output_dir): os.makedirs(output_dir)
+
+    session = new_session(model)
+    try:
+        while True:
+            #Most likely, pipe buffer is smaller than a full image, and there's no guarantee how
+            #many bytes are available to read at any time, thus this complicated read procedure.
+            #Basically, this is like reading a TCP/IP socket.
+            #On Windows, it seems I could read at most 32K bytes at a time.
+            bytesAlreadyRead:int=0 #how many bytes were already read for the current image
+            consecutive_errors:int=0
+            while True:
+                byteBuf=os.read(sys.stdin.fileno(),bytesPerImage-bytesAlreadyRead)
+                if (len(byteBuf)>0): #we read some bytes
+                    #print(f"read {len(byteBuf)} bytes\n")
+                    j:int=bytesAlreadyRead+len(byteBuf) #copy what we just read into the big buffer
+                    fullBuf[bytesAlreadyRead:j]=byteBuf
+                    bytesAlreadyRead=j
+                    if (bytesAlreadyRead==bytesPerImage): #yes, we got all bytes for this image
+                        break
+                    consecutive_errors=0 #reset error counter
+                else: #read failed
+                    consecutive_errors+=1
+                    if consecutive_errors==3:
+                        break
+                    time.sleep(1) #wait for more data to get into pipe
+            if bytesAlreadyRead!=bytesPerImage:
+                print(f"read stopped at image index {img_index}\n")
+                break
+
+            img_rm=remove(Image.frombytes("RGB",(image_width,image_height),bytes(fullBuf),"raw"),
+                          session=session, **kwargs)
+            img_rm.save((output_specifier % img_index), format="PNG")
+            img_index+=1
+            #if (img_index==3): break #for debugging, early stop
+    except Exception as e:
+        print(e)
