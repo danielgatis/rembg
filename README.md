@@ -180,6 +180,28 @@ Remove the background from an uploaded image
 curl -s -F file=@/path/to/input.jpg "http://localhost:5000"  -o output.png
 ```
 
+
+### rembg `rs`
+
+Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such as FFMPEG, that outputs RGB24 pixel data to stdout, which is piped into the stdin of this program, although nothing prevents you from manually typing in images at stdin :)
+
+```
+rembg rs image_width image_height output_specifier
+```
+image_width : width of input image(s)
+image_height : height of input image(s)
+output_specifier: printf-style specifier for output filenames, for example if `abc%03u.png`, then output files will be named `abc000.png`, `abc001.png`, `abc002.png`, etc. Output files will be saved in PNG format regardless of the extension specified.
+
+Example usage with FFMPEG:
+
+```
+ffmpeg -i input.mp4 -ss 10 -an -f rawvideo -pix_fmt rgb24 pipe:1 | python rembg.py v 1280 720 out%03u.png
+```
+
+The width and height values must match the dimension of output images from FFMPEG. Note for FFMPEG, the "`-an -f rawvideo -pix_fmt rgb24 pipe:1`" part is required for the whole thing to work.
+
+
+
 ## Usage as a library
 
 Input and output as bytes
