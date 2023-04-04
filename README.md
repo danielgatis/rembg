@@ -94,10 +94,11 @@ pip install rembg[gpu]
 
 After the installation step you can use rembg just typing `rembg` in your terminal window.
 
-The `rembg` command has 3 subcommands, one for each input type:
+The `rembg` command has 4 subcommands, one for each input type:
 - `i` for files
 - `p` for folders
 - `s` for http server
+- `rs` for piped binary RGB24 pixel data on stdin
 
 You can get help about the main command using:
 
@@ -188,9 +189,12 @@ Process a sequence of RGB24 images from stdin. This is intended to be used with 
 ```
 rembg rs image_width image_height output_specifier
 ```
-image_width : width of input image(s)
-image_height : height of input image(s)
-output_specifier: printf-style specifier for output filenames, for example if `abc%03u.png`, then output files will be named `abc000.png`, `abc001.png`, `abc002.png`, etc. Output files will be saved in PNG format regardless of the extension specified.
+
+Arguments:
+
+- image_width : width of input image(s)
+- image_height : height of input image(s)
+- output_specifier: printf-style specifier for output filenames, for example if `abc%03u.png`, then output files will be named `abc000.png`, `abc001.png`, `abc002.png`, etc. Output files will be saved in PNG format regardless of the extension specified.
 
 Example usage with FFMPEG:
 
