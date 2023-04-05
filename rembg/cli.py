@@ -1,5 +1,5 @@
 import pathlib
-import sys,os
+import sys,os,threading
 import time
 from enum import Enum
 from typing import IO, Optional, Tuple, cast
@@ -13,7 +13,6 @@ from fastapi import Depends, FastAPI, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 from tqdm import tqdm
-from tqdm import trange
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -556,17 +555,23 @@ def s(port: int, log_level: str, threads: int) -> None:
     nargs=4,
     help="Background color (R G B A) to replace the removed background with",
 )
+@click.option(
+    "-t",
+    "--threads",
+    default=1,
+    type=click.IntRange(1),
+    show_default=True,
+    help="number of worker threads",
+)
 
 @click.argument("image_width", type=click.IntRange(1))
 @click.argument("image_height", type=click.IntRange(1))
 @click.argument("output_specifier", type=click.STRING)
 
-def rs(
-    model: str, image_width:int, image_height:int, output_specifier: str, **kwargs
-) -> None:
-    """Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such as FFMPEG, that
-    outputs RGB24 pixel data to stdout, which is piped into the stdin of this program, although nothing
-    prevents you from manually typing in images at stdin :)
+def rs(model: str, threads:int, image_width:int, image_height:int, output_specifier: str, **kwargs) -> None:
+    """Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such
+    as FFMPEG, that outputs RGB24 pixel data to stdout, which is piped into the stdin of this program,
+    although nothing prevents you from manually typing in images at stdin :)
 
     image_width, image_height : dimension of image(s)
 
@@ -583,45 +588,79 @@ def rs(
     Note for FFMPEG, the "-an -f rawvideo -pix_fmt rgb24 pipe:1" part is required.
     """
 
-    img_index:int=0
-    bytesPerImage:int=image_width*image_height*3
-    fullBuf=bytearray(bytesPerImage)
+    def read_piped_input(file_number:int, outBuf:bytearray, bufLen:int) -> int :
+    #Most likely, pipe buffer is smaller than a full image, and there's no guarantee how
+    #many bytes are available to read at any time, thus this complicated read procedure.
+    #Basically, this is like reading a TCP/IP socket.
+    #On Windows, it seems I could read at most 32K bytes at a time.
+        bytesAlreadyRead:int=0 #how many bytes were already read
+        consecutive_errors:int=0
+        while True:
+            byteBuf=os.read(file_number,bufLen-bytesAlreadyRead)
+            if (len(byteBuf)>0): #we read some bytes
+                #print(f"read {len(byteBuf)} bytes\n")
+                j:int=bytesAlreadyRead+len(byteBuf) #copy what we just read into outBuf[]
+                outBuf[bytesAlreadyRead:j]=byteBuf
+                bytesAlreadyRead=j
+                if (bytesAlreadyRead==bufLen): #yes, we got all the bytes we need
+                    break
+                consecutive_errors=0 #reset error counter
+            else: #read failed
+                consecutive_errors+=1
+                if consecutive_errors==3:
+                    break
+                time.sleep(1) #wait for more data to get into pipe
+        return bytesAlreadyRead
 
+    #print(f"rs: model={model} threads={threads} xs={image_width} ys={image_height} out_file_spec={output_specifier}\n")
     output_dir=os.path.dirname(os.path.abspath(output_specifier))
     if not os.path.isdir(output_dir): os.makedirs(output_dir)
 
-    session = new_session(model)
-    try:
-        while True:
-            #Most likely, pipe buffer is smaller than a full image, and there's no guarantee how
-            #many bytes are available to read at any time, thus this complicated read procedure.
-            #Basically, this is like reading a TCP/IP socket.
-            #On Windows, it seems I could read at most 32K bytes at a time.
-            bytesAlreadyRead:int=0 #how many bytes were already read for the current image
-            consecutive_errors:int=0
-            while True:
-                byteBuf=os.read(sys.stdin.fileno(),bytesPerImage-bytesAlreadyRead)
-                if (len(byteBuf)>0): #we read some bytes
-                    #print(f"read {len(byteBuf)} bytes\n")
-                    j:int=bytesAlreadyRead+len(byteBuf) #copy what we just read into the big buffer
-                    fullBuf[bytesAlreadyRead:j]=byteBuf
-                    bytesAlreadyRead=j
-                    if (bytesAlreadyRead==bytesPerImage): #yes, we got all bytes for this image
-                        break
-                    consecutive_errors=0 #reset error counter
-                else: #read failed
-                    consecutive_errors+=1
-                    if consecutive_errors==3:
-                        break
-                    time.sleep(1) #wait for more data to get into pipe
-            if bytesAlreadyRead!=bytesPerImage:
-                print(f"read stopped at image index {img_index}\n")
-                break
+    lck=threading.Lock() #threads must acquire lock before reading input
+    img_index:int=0 #volatile, can be updated by any thread
+    exitFlag:bool=False #volatile, can be set by any thread. We can use an event object here but it's really not necessary.
 
-            img_rm=remove(Image.frombytes("RGB",(image_width,image_height),bytes(fullBuf),"raw"),
-                          session=session, **kwargs)
-            img_rm.save((output_specifier % img_index), format="PNG")
-            img_index+=1
-            #if (img_index==3): break #for debugging, early stop
-    except Exception as e:
-        print(e)
+    #Amazingly, the session object seems to be thread-safe and can be shared among threads (and runs faster when shared).
+    #If it's not, we can just create a separate instance in each thread.
+    session = new_session(model)
+
+    def worker_thread():
+        print(f"thread {threading.get_ident()} running...\n")
+        nonlocal model,image_width,image_height,output_specifier
+        nonlocal lck,img_index,exitFlag
+        nonlocal session #use shared instance
+        #session = new_session(model) #create per-thread instance
+
+        bytesPerImage:int=image_width*image_height*int(3)
+        fullBuf=bytearray(bytesPerImage)
+        while True:
+            lck.acquire() #acquire lock to read input
+            if exitFlag==True: #another thread has set the exit flag
+                lck.release()
+                return
+            cur_img_index:int=img_index #save current image index
+            img_index += int(1) #update image index
+            bytesRead:int=read_piped_input(sys.stdin.fileno(),fullBuf,bytesPerImage)
+            if (bytesRead!=bytesPerImage):
+                exitFlag=True #set the exit flag
+                lck.release()
+                print(f"read stopped at image index {cur_img_index}\n")
+                return
+            lck.release() #read success, release lock and process image
+            try:
+                img_rm=remove(Image.frombytes("RGB",(image_width,image_height),bytes(fullBuf),"raw"),
+                              session=session, **kwargs)
+                img_rm.save((output_specifier % cur_img_index), format="PNG")
+            except Exception as e:
+                exitFlag=True #set the exit flag
+                print(f"Exception at image index {cur_img_index}\n")
+                print(e)
+                return
+
+    workers = []
+    for i in range(threads):
+        wt = threading.Thread(target=worker_thread)
+        wt.start()
+        workers.append(wt)
+
+    for wt in workers: wt.join()
