@@ -140,6 +140,7 @@ def remove(
         session = new_session("u2net")
 
     masks = session.predict(img)
+    #masks=[] #just to test, in this case, we'll end up with an image filled with background color
     cutouts = []
 
     for mask in masks:
@@ -166,9 +167,10 @@ def remove(
 
         cutouts.append(cutout)
 
-    cutout = img
     if len(cutouts) > 0:
         cutout = get_concat_v_multi(cutouts)
+    else: #this should not happen, but if it did, treat the entire image as background
+        cutout=Image.new("RGBA", img.size, (0,0,0,0))
 
     if bgcolor is not None and not only_mask:
         cutout = apply_background_color(cutout, bgcolor)
