@@ -6,7 +6,7 @@ filetype==1.2.0
 pooch==1.6.0
 imagehash==4.3.1
 numpy==1.23.5
-onnxruntime==1.13.1
+onnxruntime==1.14.1
 opencv-python-headless==4.6.0.66
 pillow==9.3.0
 pymatting==1.1.8
