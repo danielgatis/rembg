@@ -75,7 +75,6 @@ def new_session(model_name: str = "u2net") -> BaseSession:
         decoder_md5 = "fa3d1c36a3187d3de1c8deebf33dd127"
         decoder_url = "https://github.com/Flippchen/rembg/releases/download/test/vit_b-decoder-quant.onnx"
 
-
         download_model(encoder_url, encoder_md5, fname_encoder, path)
         download_model(decoder_url, decoder_md5, fname_decoder, path)
 
@@ -86,8 +85,16 @@ def new_session(model_name: str = "u2net") -> BaseSession:
 
         return SamSession(
             model_name,
-            ort.InferenceSession(str(path / fname_encoder), providers=ort.get_available_providers(), sess_options=sess_opts),
-            ort.InferenceSession(str(path / fname_decoder), providers=ort.get_available_providers(), sess_options=sess_opts)
+            ort.InferenceSession(
+                str(path / fname_encoder),
+                providers=ort.get_available_providers(),
+                sess_options=sess_opts
+            ),
+            ort.InferenceSession(
+                str(path / fname_decoder),
+                providers=ort.get_available_providers(),
+                sess_options=sess_opts
+            ),
         )
 
     download_model(url, md5, fname, path)

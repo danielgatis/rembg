@@ -43,23 +43,39 @@ def pad_to_square(img: numpy.ndarray, size=1024):
     h, w = img.shape[:2]
     padh = size - h
     padw = size - w
-    img = np.pad(img, ((0, padh), (0, padw), (0, 0)), mode='constant')
+    img = np.pad(img, ((0, padh), (0, padw), (0, 0)), mode="constant")
     img = img.astype(np.float32)
     return img
 
 
 class SamSession(BaseSession):
-    def __init__(self, model_name: str, encoder: ort.InferenceSession, decoder: ort.InferenceSession):
+    def __init__(
+        self,
+        model_name: str,
+        encoder: ort.InferenceSession,
+        decoder: ort.InferenceSession
+    ):
         super().__init__(model_name, encoder)
         self.decoder = decoder
 
-    def normalize(self, img: numpy.ndarray, mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), size=(1024, 1024)):
+    def normalize(
+        self,
+        img: numpy.ndarray,
+        mean=(0.485, 0.456, 0.406),
+        std=(0.229, 0.224, 0.225),
+        size=(1024, 1024)
+    ):
         pixel_mean = np.array([123.675, 116.28, 103.53]).reshape(1, 1, -1)
         pixel_std = np.array([58.395, 57.12, 57.375]).reshape(1, 1, -1)
         x = (img - pixel_mean) / pixel_std
         return x
 
-    def predict(self, img: PILImage, input_point=np.array([[500, 375]]), input_label=np.array([1])) -> List[PILImage]:
+    def predict(
+        self,
+        img: PILImage,
+        input_point=np.array([[500, 375]]),
+        input_label=np.array([1])
+    ) -> List[PILImage]:
         # Preprocess image
         image = resize_longes_side(img)
         image = numpy.array(image)
@@ -73,8 +89,12 @@ class SamSession(BaseSession):
         image_embedding = encoded[0]
 
         # Add a batch index, concatenate a padding point, and transform.
-        onnx_coord = np.concatenate([input_point, np.array([[0.0, 0.0]])], axis=0)[None, :, :]
-        onnx_label = np.concatenate([input_label, np.array([-1])], axis=0)[None, :].astype(np.float32)
+        onnx_coord = np.concatenate([input_point, np.array([[0.0, 0.0]])], axis=0)[
+                     None, :, :
+        ]
+        onnx_label = np.concatenate([input_label, np.array([-1])], axis=0)[
+                     None, :
+        ].astype(np.float32)
         onnx_coord = apply_coords(onnx_coord, img.size[::1], 1024).astype(np.float32)
 
         # Create an empty mask input and an indicator for no mask.
@@ -87,11 +107,14 @@ class SamSession(BaseSession):
             "point_labels": onnx_label,
             "mask_input": onnx_mask_input,
             "has_mask_input": onnx_has_mask_input,
-            "orig_im_size": np.array(img.size[::-1], dtype=np.float32)
+            "orig_im_size": np.array(img.size[::-1], dtype=np.float32),
         }
 
         masks, _, low_res_logits = self.decoder.run(None, decoder_inputs)
         masks = masks > 0.0
-        masks = [Image.fromarray((masks[i, 0] * 255).astype(np.uint8)) for i in range(masks.shape[0])]
+        masks = [
+            Image.fromarray((masks[i, 0] * 255).astype(np.uint8))
+            for i in range(masks.shape[0])
+        ]
 
         return masks
