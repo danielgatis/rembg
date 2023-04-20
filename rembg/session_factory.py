@@ -88,12 +88,12 @@ def new_session(model_name: str = "u2net") -> BaseSession:
             ort.InferenceSession(
                 str(path / fname_encoder),
                 providers=ort.get_available_providers(),
-                sess_options=sess_opts
+                sess_options=sess_opts,
             ),
             ort.InferenceSession(
                 str(path / fname_decoder),
                 providers=ort.get_available_providers(),
-                sess_options=sess_opts
+                sess_options=sess_opts,
             ),
         )
 
