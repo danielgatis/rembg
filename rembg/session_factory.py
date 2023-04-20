@@ -64,7 +64,7 @@ def new_session(model_name: str = "u2net") -> BaseSession:
         md5 = "fc16ebd8b0c10d971d3513d564d01e29"
         url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx"
         session_class = DisSession
-    elif model_name == "SAM":
+    elif model_name == "sam":
         path = Path(u2net_home).expanduser()
 
         fname_encoder = f"{model_name}_encoder.onnx"

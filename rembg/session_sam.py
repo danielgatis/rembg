@@ -71,8 +71,8 @@ class SamSession(BaseSession):
     def predict(
         self,
         img: PILImage,
-        input_point=np.array([[500, 375]]),
-        input_label=np.array([1]),
+        input_point: np.ndarray,
+        input_label: np.ndarray,
     ) -> List[PILImage]:
         # Preprocess image
         image = resize_longes_side(img)
