@@ -11,8 +11,8 @@ import pooch
 from .session_base import BaseSession
 from .session_cloth import ClothSession
 from .session_dis import DisSession
-from .session_simple import SimpleSession
 from .session_sam import SamSession
+from .session_simple import SimpleSession
 
 
 def download_model(url: str, md5: str, fname: str, path: Path):
