@@ -68,7 +68,7 @@ class SamSession(BaseSession):
         x = (img - pixel_mean) / pixel_std
         return x
 
-    def predict(
+    def predict_sam(
         self,
         img: PILImage,
         input_point: np.ndarray,
