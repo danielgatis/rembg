@@ -1,9 +1,9 @@
 from typing import List
 
 import numpy as np
+import onnxruntime as ort
 from PIL import Image
 from PIL.Image import Image as PILImage
-import onnxruntime as ort
 
 from .session_base import BaseSession
 
