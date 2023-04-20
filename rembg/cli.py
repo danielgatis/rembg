@@ -21,7 +21,6 @@ from .bg import remove
 from .session_base import BaseSession
 from .session_factory import new_session
 
-
 @click.group()
 @click.version_option(version=_version.get_versions()["version"])
 def main() -> None:
@@ -614,7 +613,7 @@ def rs(model: str, threads:int, image_width:int, image_height:int, output_specif
 
     #print(f"rs: model={model} threads={threads} xs={image_width} ys={image_height} out_file_spec={output_specifier}\n")
     output_dir=os.path.dirname(os.path.abspath(output_specifier))
-    if not os.path.isdir(output_dir): os.makedirs(output_dir)
+    if not os.path.isdir(output_dir): os.makedirs(output_dir, exist_ok=True)
 
     lck=threading.Lock() #threads must acquire lock before reading input
     img_index:int=0 #volatile, can be updated by any thread
