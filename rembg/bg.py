@@ -20,6 +20,7 @@ from scipy.ndimage import binary_erosion
 
 from .session_base import BaseSession
 from .session_factory import new_session
+from .session_sam import SamSession
 
 kernel = getStructuringElement(MORPH_ELLIPSE, (3, 3))
 
@@ -119,10 +120,12 @@ def remove(
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_size: int = 10,
-    session: Optional[BaseSession] = None,
+    session: Optional[Union[BaseSession, SamSession]] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
+    input_point: Optional[np.ndarray] = None,
+    input_label: Optional[np.ndarray] = None,
 ) -> Union[bytes, PILImage, np.ndarray]:
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
@@ -139,7 +142,13 @@ def remove(
     if session is None:
         session = new_session("u2net")
 
-    masks = session.predict(img)
+    if isinstance(session, SamSession):
+        if input_point is None or input_label is None:
+            raise ValueError("Input point and label are required for SAM model.")
+        masks = session.predict_sam(img, input_point, input_label)
+    else:
+        masks = session.predict(img)
+
     cutouts = []
 
     for mask in masks:
