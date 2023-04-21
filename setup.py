@@ -34,7 +34,7 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     keywords="remove, background, u2net",
-    packages=["rembg"],
+    packages=["rembg", "rembg.sessions", "rembg.commands"],
     python_requires=">3.7, <3.11",
     install_requires=[
         "aiohttp>=3.8.1",
