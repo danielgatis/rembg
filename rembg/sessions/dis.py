@@ -34,7 +34,7 @@ class DisSession(BaseSession):
         fname = f"{cls.name()}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx",
-            f"md5:fc16ebd8b0c10d971d3513d564d01e29",
+            "md5:fc16ebd8b0c10d971d3513d564d01e29",
             fname=fname,
             path=cls.u2net_home(),
             progressbar=True,

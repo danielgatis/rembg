@@ -36,7 +36,7 @@ class U2netHumanSegSession(BaseSession):
         fname = f"{cls.name()}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx",
-            f"md5:c09ddc2e0104f800e3e1bb4652583d1f",
+            "md5:c09ddc2e0104f800e3e1bb4652583d1f",
             fname=fname,
             path=cls.u2net_home(),
             progressbar=True,

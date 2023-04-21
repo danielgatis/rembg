@@ -36,7 +36,7 @@ class SiluetaSession(BaseSession):
         fname = f"{cls.name()}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
-            f"md5:55e59e0d8062d2f5d013f4725ee84782",
+            "md5:55e59e0d8062d2f5d013f4725ee84782",
             fname=fname,
             path=cls.u2net_home(),
             progressbar=True,
