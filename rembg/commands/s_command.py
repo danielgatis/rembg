@@ -173,7 +173,7 @@ def s_command(port: int, log_level: str, threads: int) -> None:
             )
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
-        kwargs = dict()
+        kwargs = {}
 
         if commons.extras:
             try:
