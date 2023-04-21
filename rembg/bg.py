@@ -1,6 +1,6 @@
 import io
 from enum import Enum
-from typing import List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import numpy as np
 from cv2 import (
@@ -18,9 +18,8 @@ from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
 from pymatting.util.util import stack_images
 from scipy.ndimage import binary_erosion
 
-from .session_base import BaseSession
 from .session_factory import new_session
-from .session_sam import SamSession
+from .sessions.base import BaseSession
 
 kernel = getStructuringElement(MORPH_ELLIPSE, (3, 3))
 
@@ -120,12 +119,12 @@ def remove(
     alpha_matting_foreground_threshold: int = 240,
     alpha_matting_background_threshold: int = 10,
     alpha_matting_erode_size: int = 10,
-    session: Optional[Union[BaseSession, SamSession]] = None,
+    session: Optional[BaseSession] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
-    input_point: Optional[np.ndarray] = None,
-    input_label: Optional[np.ndarray] = None,
+    *args: Optional[Any],
+    **kwargs: Optional[Any]
 ) -> Union[bytes, PILImage, np.ndarray]:
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
@@ -140,15 +139,9 @@ def remove(
         raise ValueError("Input type {} is not supported.".format(type(data)))
 
     if session is None:
-        session = new_session("u2net")
+        session = new_session("u2net", *args, **kwargs)
 
-    if isinstance(session, SamSession):
-        if input_point is None or input_label is None:
-            raise ValueError("Input point and label are required for SAM model.")
-        masks = session.predict_sam(img, input_point, input_label)
-    else:
-        masks = session.predict(img)
-
+    masks = session.predict(img, *args, **kwargs)
     cutouts = []
 
     for mask in masks:

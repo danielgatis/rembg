@@ -1,11 +1,13 @@
+import os
 from typing import List
 
 import numpy as np
+import pooch
 from PIL import Image
 from PIL.Image import Image as PILImage
 from scipy.special import log_softmax
 
-from .session_base import BaseSession
+from .base import BaseSession
 
 pallete1 = [
     0,
@@ -53,8 +55,8 @@ pallete3 = [
 ]
 
 
-class ClothSession(BaseSession):
-    def predict(self, img: PILImage) -> List[PILImage]:
+class Unet2ClothSession(BaseSession):
+    def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -89,3 +91,20 @@ class ClothSession(BaseSession):
         masks.append(mask3)
 
         return masks
+
+    @classmethod
+    def download_models(cls, *args, **kwargs):
+        fname = f"{cls.name()}.onnx"
+        pooch.retrieve(
+            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx",
+            "md5:2434d1f3cb744e0e49386c906e5a08bb",
+            fname=fname,
+            path=cls.u2net_home(),
+            progressbar=True,
+        )
+
+        return os.path.join(cls.u2net_home(), fname)
+
+    @classmethod
+    def name(cls, *args, **kwargs):
+        return "u2net_cloth_seg"
