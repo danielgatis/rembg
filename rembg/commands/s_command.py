@@ -175,10 +175,11 @@ def s_command(port: int, log_level: str, threads: int) -> None:
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         kwargs = dict()
 
-        try:
-            kwargs.update(json.loads(commons.extras))
-        except Exception:
-            pass
+        if commons.extras:
+            try:
+                kwargs.update(json.loads(commons.extras))
+            except Exception:
+                pass
 
         return Response(
             remove(
