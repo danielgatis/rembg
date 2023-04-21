@@ -146,6 +146,12 @@ Remove the background applying an alpha matting
 rembg i -a path/to/input.png path/to/output.png
 ```
 
+Passing extras parameters
+
+```
+rembg i -m sam -x '{"input_labels": [1], "input_points": [[100,100]]}' path/to/input.png path/to/output.png
+```
+
 ### rembg `p`
 
 Used when input and output are folders.
@@ -266,6 +272,7 @@ The available models are:
 -   u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
 -   silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
 -   isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/DIS)): A new pre-trained model for general use cases.
+-   sam ([encoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx), [decoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx), [source](https://github.com/facebookresearch/segment-anything)): The Segment Anything Model (SAM).
 
 ### Some differences between the models result
 
@@ -278,6 +285,7 @@ The available models are:
         <th>u2net_cloth_seg</th>
         <th>silueta</th>
         <th>isnet-general-use</th>
+        <th>sam</th>
     </tr>
     <tr>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/fixtures/car-1.jpg" width="100" /></th>
@@ -287,6 +295,7 @@ The available models are:
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.u2net_cloth_seg.png" width="100" /></th>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.silueta.png" width="100" /></th>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.isnet-general-use.png" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/car-1.sam.png" width="100" /></th>
     </tr>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/fixtures/cloth-1.jpg" width="100" /></th>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.u2net.png" width="100" /></th>
@@ -295,6 +304,7 @@ The available models are:
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.u2net_cloth_seg.png" width="100" /></th>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.silueta.png" width="100" /></th>
         <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.isnet-general-use.png" width="100" /></th>
+        <th><img src="https://raw.githubusercontent.com/danielgatis/rembg/master/tests/results/cloth-1.sam.png" width="100" /></th>
     </tr>
 </table>
 

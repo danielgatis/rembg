@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List, Tuple
 
 import numpy as np
@@ -7,9 +8,13 @@ from PIL.Image import Image as PILImage
 
 
 class BaseSession:
-    def __init__(self, model_name: str, inner_session: ort.InferenceSession):
+    def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         self.model_name = model_name
-        self.inner_session = inner_session
+        self.inner_session = ort.InferenceSession(
+            str(self.__class__.download_models()),
+            providers=ort.get_available_providers(),
+            sess_options=sess_opts,
+        )
 
     def normalize(
         self,
@@ -17,6 +22,8 @@ class BaseSession:
         mean: Tuple[float, float, float],
         std: Tuple[float, float, float],
         size: Tuple[int, int],
+        *args,
+        **kwargs
     ) -> Dict[str, np.ndarray]:
         im = img.convert("RGB").resize(size, Image.LANCZOS)
 
@@ -36,5 +43,21 @@ class BaseSession:
             .astype(np.float32)
         }
 
-    def predict(self, img: PILImage) -> List[PILImage]:
+    def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        raise NotImplementedError
+
+    @classmethod
+    def u2net_home(cls, *args, **kwargs):
+        return os.path.expanduser(
+            os.getenv(
+                "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
+            )
+        )
+
+    @classmethod
+    def download_models(cls, *args, **kwargs):
+        raise NotImplementedError
+
+    @classmethod
+    def name(cls, *args, **kwargs):
         raise NotImplementedError
