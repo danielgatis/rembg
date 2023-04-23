@@ -52,15 +52,15 @@ output = remove(input, bgcolor=(255, 255, 255))
 ```
 
 ### Using input points
-You can use the `input_point` and `input_label` argument to specify the points that should be used for the masks. This only works with the `sam` model.
+You can use the `input_points` and `input_labels` arguments to specify the points that should be used for the masks. This only works with the `sam` model.
 ```python
 import numpy as np
 # Define the points and labels
 # The points are defined as [y, x]
-input_point = np.array([[400, 350], [700, 400], [200, 400]])
-input_label = np.array([1, 1, 2])
+input_points = np.array([[400, 350], [700, 400], [200, 400]])
+input_labels = np.array([1, 1, 2])
 
-image = remove(image,session=session, input_point=input_point, input_label=input_label)
+image = remove(image,session=session, input_points=input_points, input_labels=input_labels)
 ```
 
 ## Save the image
