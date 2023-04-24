@@ -86,7 +86,6 @@ def s_command(port: int, log_level: str, threads: int) -> None:
             model: Annotated[
                 str, Query(regex=r"(" + "|".join(sessions_names) + ")")
             ] = Query(
-                default="u2net",
                 description="Model to use when processing image",
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
@@ -132,7 +131,6 @@ def s_command(port: int, log_level: str, threads: int) -> None:
             model: Annotated[
                 str, Form(regex=r"(" + "|".join(sessions_names) + ")")
             ] = Form(
-                default="u2net",
                 description="Model to use when processing image",
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
