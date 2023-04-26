@@ -24,7 +24,7 @@ You can use the `new_session` function to create a session with a specific model
 ```python
 model_name = "isnet-general-use"
 session = new_session(model_name)
-output = session.remove(input, session=session)
+output = remove(input, session=session)
 ```
 
 ### With alpha metting
