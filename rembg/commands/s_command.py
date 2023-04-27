@@ -1,5 +1,5 @@
 import json
-from typing import Annotated, Optional, Tuple, cast
+from typing import Optional, Tuple, cast
 
 import aiohttp
 import click
@@ -83,10 +83,10 @@ def s_command(port: int, log_level: str, threads: int) -> None:
     class CommonQueryParams:
         def __init__(
             self,
-            model: Annotated[
-                str, Query(regex=r"(" + "|".join(sessions_names) + ")")
-            ] = Query(
+            model: str = Query(
                 description="Model to use when processing image",
+                regex=r"(" + "|".join(sessions_names) + ")",
+                default="u2net",
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
             af: int = Query(
@@ -128,10 +128,10 @@ def s_command(port: int, log_level: str, threads: int) -> None:
     class CommonQueryPostParams:
         def __init__(
             self,
-            model: Annotated[
-                str, Form(regex=r"(" + "|".join(sessions_names) + ")")
-            ] = Form(
+            model: str = Form(
                 description="Model to use when processing image",
+                regex=r"(" + "|".join(sessions_names) + ")",
+                default="u2net",
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
             af: int = Form(
