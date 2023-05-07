@@ -11,7 +11,7 @@ from cv2 import (
     getStructuringElement,
     morphologyEx,
 )
-from PIL import Image
+from PIL import Image, ImageOps
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
 from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
@@ -113,6 +113,10 @@ def apply_background_color(img: PILImage, color: Tuple[int, int, int, int]) -> P
     return colored_image
 
 
+def fix_image_orientation(img: PILImage) -> PILImage:
+    return ImageOps.exif_transpose(img)
+
+
 def remove(
     data: Union[bytes, PILImage, np.ndarray],
     alpha_matting: bool = False,
@@ -137,6 +141,9 @@ def remove(
         img = Image.fromarray(data)
     else:
         raise ValueError("Input type {} is not supported.".format(type(data)))
+
+    # Fix image orientation
+    img = fix_image_orientation(img)
 
     if session is None:
         session = new_session("u2net", *args, **kwargs)
