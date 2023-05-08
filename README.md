@@ -94,10 +94,11 @@ pip install rembg[gpu]
 
 After the installation step you can use rembg just typing `rembg` in your terminal window.
 
-The `rembg` command has 3 subcommands, one for each input type:
+The `rembg` command has 4 subcommands, one for each input type:
 - `i` for files
 - `p` for folders
 - `s` for http server
+- `b` for RGB24 pixel binary stream
 
 You can get help about the main command using:
 
@@ -185,6 +186,29 @@ Remove the background from an uploaded image
 ```
 curl -s -F file=@/path/to/input.jpg "http://localhost:5000"  -o output.png
 ```
+
+### rembg `b`
+
+Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such as FFMPEG, that outputs RGB24 pixel data to stdout, which is piped into the stdin of this program, although nothing prevents you from manually typing in images at stdin.
+
+```
+rembg b image_width image_height -o output_specifier
+```
+
+Arguments:
+
+- image_width : width of input image(s)
+- image_height : height of input image(s)
+- output_specifier: printf-style specifier for output filenames, for example if `output-%03u.png`, then output files will be named `output-000.png`, `output-001.png`, `output-002.png`, etc. Output files will be saved in PNG format regardless of the extension specified. You can omit it to write results to stdout.
+
+Example usage with FFMPEG:
+
+```
+ffmpeg -i input.mp4 -ss 10 -an -f rawvideo -pix_fmt rgb24 pipe:1 | rembg b 1280 720 -o folder/output-%03u.png
+```
+
+The width and height values must match the dimension of output images from FFMPEG. Note for FFMPEG, the "`-an -f rawvideo -pix_fmt rgb24 pipe:1`" part is required for the whole thing to work.
+
 
 ## Usage as a library
 
