@@ -48,7 +48,7 @@ class BaseSession:
 
     @classmethod
     def checksum_disabled(cls, *args, **kwargs):
-        return os.getenv("MODEL_CHECKSUM_DISABLED", None) != None
+        return os.getenv("MODEL_CHECKSUM_DISABLED", None) is not None
 
     @classmethod
     def u2net_home(cls, *args, **kwargs):
