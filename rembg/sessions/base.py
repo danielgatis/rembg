@@ -47,6 +47,10 @@ class BaseSession:
         raise NotImplementedError
 
     @classmethod
+    def checksum_disabled(cls, *args, **kwargs):
+        return os.getenv("MODEL_CHECKSUM_DISABLED", None) != None
+
+    @classmethod
     def u2net_home(cls, *args, **kwargs):
         return os.path.expanduser(
             os.getenv(

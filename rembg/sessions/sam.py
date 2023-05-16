@@ -141,17 +141,21 @@ class SamSession(BaseSession):
 
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx",
-            "md5:13d97c5c79ab13ef86d67cbde5f1b250",
+            None
+            if cls.checksum_disabled(*args, **kwargs)
+            else "md5:13d97c5c79ab13ef86d67cbde5f1b250",
             fname=fname_encoder,
-            path=cls.u2net_home(),
+            path=cls.u2net_home(*args, **kwargs),
             progressbar=True,
         )
 
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx",
-            "md5:fa3d1c36a3187d3de1c8deebf33dd127",
+            None
+            if cls.checksum_disabled(*args, **kwargs)
+            else "md5:fa3d1c36a3187d3de1c8deebf33dd127",
             fname=fname_decoder,
-            path=cls.u2net_home(),
+            path=cls.u2net_home(*args, **kwargs),
             progressbar=True,
         )
 
