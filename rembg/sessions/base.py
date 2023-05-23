@@ -21,9 +21,6 @@ class BaseSession:
         else:
             self.providers.extend(_providers)
             
-        
-        self.providers=
-        
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models()),
             providers=self.providers,
