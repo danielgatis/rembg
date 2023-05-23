@@ -127,9 +127,10 @@ def remove(
     only_mask: bool = False,
     post_process_mask: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
+    return_list: bool = False,
     *args: Optional[Any],
     **kwargs: Optional[Any]
-) -> Union[bytes, PILImage, np.ndarray]:
+) -> Union[bytes, PILImage, np.ndarray, List[PILImage], List[np.ndarray]]:
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
         img = data
@@ -176,20 +177,33 @@ def remove(
         cutouts.append(cutout)
 
     cutout = img
-    if len(cutouts) > 0:
-        cutout = get_concat_v_multi(cutouts)
+    if return_list:
+        if len(cutouts) == 0:
+            cutouts = [cutout]
+        if bgcolor is not None and not only_mask:
+            cutouts = [apply_background_color(cutout, bgcolor) for cutout in cutouts]
 
-    if bgcolor is not None and not only_mask:
-        cutout = apply_background_color(cutout, bgcolor)
+        if ReturnType.PILLOW == return_type:
+            return cutouts
+        elif ReturnType.NDARRAY == return_type:
+            return [np.asarray(c) for c in cutouts]
+        else:
+            raise NotImplementedError("Return type Bytes is not supported when return_list == True.")
+    else:
+        if len(cutouts) > 0:
+            cutout = get_concat_v_multi(cutouts)
 
-    if ReturnType.PILLOW == return_type:
-        return cutout
+        if bgcolor is not None and not only_mask:
+            cutout = apply_background_color(cutout, bgcolor)
 
-    if ReturnType.NDARRAY == return_type:
-        return np.asarray(cutout)
+        if ReturnType.PILLOW == return_type:
+            return cutout
 
-    bio = io.BytesIO()
-    cutout.save(bio, "PNG")
-    bio.seek(0)
+        elif ReturnType.NDARRAY == return_type:
+            return np.asarray(cutout)
 
-    return bio.read()
+        bio = io.BytesIO()
+        cutout.save(bio, "PNG")
+        bio.seek(0)
+
+        return bio.read()
