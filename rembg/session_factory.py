@@ -8,7 +8,9 @@ from .sessions.base import BaseSession
 from .sessions.u2net import U2netSession
 
 
-def new_session(model_name: str = "u2net", providers=None, *args, **kwargs) -> BaseSession:
+def new_session(
+    model_name: str = "u2net", providers=None, *args, **kwargs
+) -> BaseSession:
     session_class: Type[BaseSession] = U2netSession
 
     for sc in sessions_class:
