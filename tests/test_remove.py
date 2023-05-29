@@ -11,6 +11,11 @@ here = Path(__file__).parent.resolve()
 def test_remove():
     kwargs = {
         "sam": {
+            "anime-girl-1" : {
+                "input_points": [[400, 165]],
+                "input_labels": [1],
+            },
+
             "car-1" : {
                 "input_points": [[250, 200]],
                 "input_labels": [1],
@@ -19,7 +24,7 @@ def test_remove():
             "cloth-1" : {
                 "input_points": [[370, 495]],
                 "input_labels": [1],
-            }
+            },
         }
     }
 
@@ -30,9 +35,10 @@ def test_remove():
         "u2net_cloth_seg",
         "silueta",
         "isnet-general-use",
+        "isnet-anime",
         "sam"
     ]:
-        for picture in ["car-1", "cloth-1"]:
+        for picture in ["anime-girl-1", "car-1", "cloth-1"]:
             image_path = Path(here / "fixtures" / f"{picture}.jpg")
             image = image_path.read_bytes()
 
