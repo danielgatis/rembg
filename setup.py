@@ -42,6 +42,7 @@ setup(
         "click>=8.1.3",
         "fastapi>=0.92.0",
         "filetype>=1.2.0",
+        "gradio>=3.32.0",
         "imagehash>=4.3.1",
         "numpy>=1.23.5",
         "onnxruntime>=1.14.1",
