@@ -203,7 +203,7 @@ def s_command(port: int, log_level: str, threads: int) -> None:
     def startup():
         try:
             webbrowser.open(f"http://localhost:{port}")
-        except:
+        except Exception:
             pass
 
         if threads is not None:
