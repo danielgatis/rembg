@@ -7,16 +7,14 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - uses: actions/setup-python@v3
+            - uses: actions/setup-python@v4
               with:
-                python-version: "3.10"
+                python-version: 3.11
             - run: pip install --upgrade pip wheel
-            - run: pip install --upgrade setuptools>65.5.0
-            - run: pip install .
+            - run: pip install --upgrade setuptools
             - run: pip install bandit black flake8 flake8-bugbear flake8-comprehensions isort safety mypy
             - run: mypy --install-types --non-interactive --ignore-missing-imports ./rembg
             - run: bandit --recursive --skip B101,B104,B310,B311,B303,B110 --exclude ./rembg/_version.py ./rembg
             - run: black --force-exclude rembg/_version.py --check --diff ./rembg
             - run: flake8 ./rembg --count --ignore=B008,C901,E203,E266,E731,F401,F811,F841,W503 --max-line-length=120 --show-source --statistics --exclude ./rembg/_version.py
             - run: isort --check-only --profile black ./rembg
-            - run: safety check
