@@ -19,6 +19,7 @@ from pymatting.util.util import stack_images
 from scipy.ndimage import binary_erosion
 
 from .session_factory import new_session
+from .sessions import sessions_class
 from .sessions.base import BaseSession
 
 kernel = getStructuringElement(MORPH_ELLIPSE, (3, 3))
@@ -115,6 +116,11 @@ def apply_background_color(img: PILImage, color: Tuple[int, int, int, int]) -> P
 
 def fix_image_orientation(img: PILImage) -> PILImage:
     return ImageOps.exif_transpose(img)
+
+
+def download_models() -> None:
+    for session in sessions_class:
+        session.download_models()
 
 
 def remove(
