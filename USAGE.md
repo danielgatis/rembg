@@ -48,7 +48,7 @@ output = remove(input, post_process_mask=True)
 ### Replacing the background color
 You can use the `bgcolor` argument to replace the background color.
 ```python
-output = remove(input, bgcolor=(255, 255, 255))
+output = remove(input, bgcolor=(255, 255, 255, 255))
 ```
 
 ### Using input points
