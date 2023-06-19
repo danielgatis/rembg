@@ -51,9 +51,10 @@ extras_require = {
 
 entry_points = {
     "console_scripts": [
-        "rembg=rembg.cli:main [cli]",
+        "rembg=rembg.cli:main",
     ],
 }
+
 
 setup(
     name="rembg",
@@ -79,8 +80,8 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     keywords="remove, background, u2net",
-    packages=["rembg", "rembg.sessions", "rembg.commands"],
     python_requires=">=3.8, <3.12",
+    packages=find_packages(),
     install_requires=install_requires,
     entry_points=entry_points,
     extras_require=extras_require,
