@@ -9,9 +9,9 @@ def main() -> None:
             requirements = package_distribution.requires(extras=(extra,))
             for requirement in requirements:
                 try:
-                    pkg_resources.require(requirement.name)
+                    pkg_resources.require(requirement.project_name)
                 except pkg_resources.DistributionNotFound:
-                    print(f"Missing dependency: '{requirement.name}'")
+                    print(f"Missing dependency: '{requirement.project_name}'")
                     print(
                         f"Please, install rembg with the cli feature: pip install rembg[cli]"
                     )
