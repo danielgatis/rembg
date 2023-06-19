@@ -20,6 +20,7 @@ install_requires = [
     "pymatting",
     "scikit-image",
     "scipy",
+    "tqdm",
 ]
 
 extras_require = {
@@ -44,7 +45,6 @@ extras_require = {
         "filetype",
         "gradio",
         "python-multipart",
-        "tqdm",
         "uvicorn",
         "watchdog",
     ],
