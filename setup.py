@@ -30,6 +30,7 @@ extras_require = {
         "imagehash",
         "isort",
         "mypy",
+        "pytest",
         "setuptools",
         "twine",
         "wheel",

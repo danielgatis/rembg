@@ -16,7 +16,7 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies
-              run: pip install .[cli,dev] pytest
+              run: pip install .[cli,dev]
             - name: Test installation with pytest
               run: |
                   pytest
