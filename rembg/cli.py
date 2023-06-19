@@ -13,7 +13,7 @@ def main() -> None:
                 except pkg_resources.DistributionNotFound:
                     print(f"Missing dependency: '{requirement.name}'")
                     print(
-                        f"Please install rembg with the cli extra: pip install rembg[cli]"
+                        f"Please, install rembg with the cli feature: pip install rembg[cli]"
                     )
                     exit(1)
 
