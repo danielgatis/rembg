@@ -6,7 +6,7 @@ def main() -> None:
 
     for extra in package_distribution.extras:
         if extra == "cli":
-            requirements = package_distribution.requires(extras=[extra])
+            requirements = package_distribution.requires(extras=(extra,))
             for requirement in requirements:
                 try:
                     pkg_resources.require(requirement.name)
