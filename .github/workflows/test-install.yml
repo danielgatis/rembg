@@ -15,10 +15,8 @@ jobs:
               uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python-version }}
-            - name: Install package
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install .[cli,dev]
+            - name: Install dependencies
+              run: pip install .[cli,dev]
             - name: Test installation with pytest
               run: |
                   pytest

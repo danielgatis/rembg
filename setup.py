@@ -30,6 +30,9 @@ extras_require = {
         "imagehash",
         "isort",
         "mypy",
+        "setuptools",
+        "twine",
+        "wheel",
     ],
     "gpu": ["onnxruntime-gpu"],
     "cli": [
