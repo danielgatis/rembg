@@ -4,7 +4,7 @@ WORKDIR /rembg
 
 COPY . .
 RUN pip install --upgrade pip
-RUN python -m pip install .
+RUN python -m pip install ".[cli]"
 RUN python -c 'from rembg.bg import download_models; download_models()'
 
 EXPOSE 5000
