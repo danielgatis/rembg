@@ -47,7 +47,7 @@ def test_remove():
 
             expected_path = Path(here / "results" / f"{picture}.{model}.png")
             # Uncomment to update the expected results
-            # f = open(expected_path, "ab")
+            # f = open(expected_path, "wb")
             # f.write(actual)
             # f.close()
 
