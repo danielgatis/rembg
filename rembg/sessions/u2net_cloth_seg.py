@@ -9,7 +9,7 @@ from scipy.special import log_softmax
 
 from .base import BaseSession
 
-pallete1 = [
+palette1 = [
     0,
     0,
     0,
@@ -24,7 +24,7 @@ pallete1 = [
     0,
 ]
 
-pallete2 = [
+palette2 = [
     0,
     0,
     0,
@@ -39,7 +39,7 @@ pallete2 = [
     0,
 ]
 
-pallete3 = [
+palette3 = [
     0,
     0,
     0,
@@ -76,17 +76,17 @@ class Unet2ClothSession(BaseSession):
         masks = []
 
         mask1 = mask.copy()
-        mask1.putpalette(pallete1)
+        mask1.putpalette(palette1)
         mask1 = mask1.convert("RGB").convert("L")
         masks.append(mask1)
 
         mask2 = mask.copy()
-        mask2.putpalette(pallete2)
+        mask2.putpalette(palette2)
         mask2 = mask2.convert("RGB").convert("L")
         masks.append(mask2)
 
         mask3 = mask.copy()
-        mask3.putpalette(pallete3)
+        mask3.putpalette(palette3)
         mask3 = mask3.convert("RGB").convert("L")
         masks.append(mask3)
 
