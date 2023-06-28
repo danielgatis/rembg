@@ -9,7 +9,7 @@ from PIL.Image import Image as PILImage
 from .base import BaseSession
 
 
-class SiluetaSession(BaseSession):
+class U2netCustomSession(BaseSession):
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         ort_outs = self.inner_session.run(
             None,
@@ -33,19 +33,13 @@ class SiluetaSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
-        fname = f"{cls.name()}.onnx"
-        pooch.retrieve(
-            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
-            None
-            if cls.checksum_disabled(*args, **kwargs)
-            else "md5:55e59e0d8062d2f5d013f4725ee84782",
-            fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
-            progressbar=True,
-        )
+        model_path = kwargs.get("model_path")
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        if model_path is None:
+            raise ValueError("model_path is required")
+
+        return os.path.abspath(os.path.expanduser(model_path))
 
     @classmethod
     def name(cls, *args, **kwargs):
-        return "silueta"
+        return "u2net_custom"

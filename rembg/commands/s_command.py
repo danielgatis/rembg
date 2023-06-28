@@ -186,7 +186,9 @@ def s_command(port: int, log_level: str, threads: int) -> None:
         return Response(
             remove(
                 content,
-                session=sessions.setdefault(commons.model, new_session(commons.model)),
+                session=sessions.setdefault(
+                    commons.model, new_session(commons.model, **kwargs)
+                ),
                 alpha_matting=commons.a,
                 alpha_matting_foreground_threshold=commons.af,
                 alpha_matting_background_threshold=commons.ab,
@@ -245,12 +247,18 @@ def s_command(port: int, log_level: str, threads: int) -> None:
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     def gr_app(app):
-        def inference(input_path, model):
+        def inference(input_path, model, cmd_args):
             output_path = "output.png"
+
+            kwargs = {}
+            if cmd_args:
+                kwargs.update(json.loads(cmd_args))
+            kwargs["session"] = new_session(model, **kwargs)
+
             with open(input_path, "rb") as i:
                 with open(output_path, "wb") as o:
                     input = i.read()
-                    output = remove(input, session=new_session(model))
+                    output = remove(input, **kwargs)
                     o.write(output)
             return os.path.join(output_path)
 
@@ -258,19 +266,8 @@ def s_command(port: int, log_level: str, threads: int) -> None:
             inference,
             [
                 gr.components.Image(type="filepath", label="Input"),
-                gr.components.Dropdown(
-                    [
-                        "u2net",
-                        "u2netp",
-                        "u2net_human_seg",
-                        "u2net_cloth_seg",
-                        "silueta",
-                        "isnet-general-use",
-                        "isnet-anime",
-                    ],
-                    value="u2net",
-                    label="Models",
-                ),
+                gr.components.Dropdown(sessions_names, value="u2net", label="Models"),
+                gr.components.Textbox(label="Arguments"),
             ],
             gr.components.Image(type="filepath", label="Output"),
         )

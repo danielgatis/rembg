@@ -33,7 +33,7 @@ class U2netpSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
-        fname = f"{cls.name()}.onnx"
+        fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx",
             None
@@ -44,7 +44,7 @@ class U2netpSession(BaseSession):
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(), fname)
+        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

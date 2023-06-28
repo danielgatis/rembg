@@ -122,7 +122,7 @@ def p_command(
     except Exception:
         pass
 
-    session = new_session(model)
+    session = new_session(model, **kwargs)
 
     def process(each_input: pathlib.Path) -> None:
         try:
