@@ -90,4 +90,4 @@ def i_command(model: str, extras: str, input: IO, output: IO, **kwargs) -> None:
     except Exception:
         pass
 
-    output.write(remove(input.read(), session=new_session(model), **kwargs))
+    output.write(remove(input.read(), session=new_session(model, **kwargs), **kwargs))

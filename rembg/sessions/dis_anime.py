@@ -31,7 +31,7 @@ class DisSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
-        fname = f"{cls.name()}.onnx"
+        fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-anime.onnx",
             None
@@ -42,7 +42,7 @@ class DisSession(BaseSession):
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(), fname)
+        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

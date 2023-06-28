@@ -136,8 +136,8 @@ class SamSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
-        fname_encoder = f"{cls.name()}_encoder.onnx"
-        fname_decoder = f"{cls.name()}_decoder.onnx"
+        fname_encoder = f"{cls.name(*args, **kwargs)}_encoder.onnx"
+        fname_decoder = f"{cls.name(*args, **kwargs)}_decoder.onnx"
 
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx",
@@ -160,8 +160,8 @@ class SamSession(BaseSession):
         )
 
         return (
-            os.path.join(cls.u2net_home(), fname_encoder),
-            os.path.join(cls.u2net_home(), fname_decoder),
+            os.path.join(cls.u2net_home(*args, **kwargs), fname_encoder),
+            os.path.join(cls.u2net_home(*args, **kwargs), fname_decoder),
         )
 
     @classmethod

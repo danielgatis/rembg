@@ -164,6 +164,10 @@ Passing extras parameters
 rembg i -m sam -x '{"input_labels": [1], "input_points": [[100,100]]}' path/to/input.png path/to/output.png
 ```
 
+```
+rembg i -m u2net_custom -x '{"model_path": "~/.u2net/u2net.onnx"}' path/to/input.png path/to/output.png
+```
+
 ### rembg `p`
 
 Used when input and output are folders.

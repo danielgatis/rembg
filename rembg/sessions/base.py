@@ -29,7 +29,7 @@ class BaseSession:
             self.providers.extend(_providers)
 
         self.inner_session = ort.InferenceSession(
-            str(self.__class__.download_models()),
+            str(self.__class__.download_models(*args, **kwargs)),
             providers=self.providers,
             sess_options=sess_opts,
         )

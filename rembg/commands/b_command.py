@@ -107,7 +107,7 @@ def rs_command(
     except Exception:
         pass
 
-    session = new_session(model)
+    session = new_session(model, **kwargs)
     bytes_per_img = image_width * image_height * 3
 
     if output_specifier:
