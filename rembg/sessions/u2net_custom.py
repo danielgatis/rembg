@@ -34,9 +34,8 @@ class U2netCustomSession(BaseSession):
     @classmethod
     def download_models(cls, *args, **kwargs):
         model_path = kwargs.get("model_path")
-
         if model_path is None:
-            raise ValueError("model_path is required")
+            return
 
         return os.path.abspath(os.path.expanduser(model_path))
 
