@@ -28,11 +28,6 @@ class BaseSession:
         else:
             self.providers.extend(_providers)
 
-        model_path = kwargs.get("model_path")
-
-        if model_path is None:
-            raise ValueError("model_path is required")
-
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
             providers=self.providers,
