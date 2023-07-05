@@ -23,6 +23,13 @@ from ..sessions import sessions_names
     help="model name",
 )
 @click.option(
+    "-cc",
+    "--cloth-category",
+    type=click.Choice(["upper", "lower", "full"]),
+    show_choices=True,
+    help="category of clothes for u2net_cloth_seg model",
+)
+@click.option(
     "-a",
     "--alpha-matting",
     is_flag=True,
