@@ -56,7 +56,7 @@ palette3 = [
 
 
 class Unet2ClothSession(BaseSession):
-    def predict(self, img: PILImage, cloth_category: str, *args, **kwargs) -> List[PILImage]:
+    def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -74,6 +74,8 @@ class Unet2ClothSession(BaseSession):
         mask = mask.resize(img.size, Image.LANCZOS)
 
         masks = []
+
+        cloth_category = kwargs.get("cc") or kwargs.get("cloth_category")
 
         def upper_cloth():
             mask1 = mask.copy()
