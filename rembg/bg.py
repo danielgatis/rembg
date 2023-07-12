@@ -74,6 +74,12 @@ def alpha_matting_cutout(
 
 
 def naive_cutout(img: PILImage, mask: PILImage) -> PILImage:
+    empty = Image.new("RGBA", (img.size), 0)
+    cutout = Image.composite(img, empty, mask)
+    return cutout
+
+
+def putalpha_cutout(img: PILImage, mask: PILImage) -> PILImage:
     img.putalpha(mask)
     return img
 
@@ -147,6 +153,8 @@ def remove(
     else:
         raise ValueError("Input type {} is not supported.".format(type(data)))
 
+    putalpha = kwargs.pop("putalpha", False)
+
     # Fix image orientation
     img = fix_image_orientation(img)
 
@@ -173,10 +181,15 @@ def remove(
                     alpha_matting_erode_size,
                 )
             except ValueError:
-                cutout = naive_cutout(img, mask)
-
+                if putalpha:
+                    cutout = putalpha_cutout(img, mask)
+                else:
+                    cutout = naive_cutout(img, mask)
         else:
-            cutout = naive_cutout(img, mask)
+            if putalpha:
+                cutout = putalpha_cutout(img, mask)
+            else:
+                cutout = naive_cutout(img, mask)
 
         cutouts.append(cutout)
 
