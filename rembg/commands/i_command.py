@@ -9,7 +9,7 @@ from ..session_factory import new_session
 from ..sessions import sessions_names
 
 
-@click.command( # type: ignore
+@click.command(  # type: ignore
     name="i",
     help="for a file as input",
 )

@@ -13,7 +13,7 @@ from ..session_factory import new_session
 from ..sessions import sessions_names
 
 
-@click.command( # type: ignore
+@click.command(  # type: ignore
     name="b",
     help="for a byte stream as input",
 )
