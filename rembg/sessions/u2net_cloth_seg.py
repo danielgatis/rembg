@@ -82,13 +82,13 @@ class Unet2ClothSession(BaseSession):
             mask1.putpalette(palette1)
             mask1 = mask1.convert("RGB").convert("L")
             masks.append(mask1)
-      
+
         def lower_cloth():
             mask2 = mask.copy()
             mask2.putpalette(palette2)
             mask2 = mask2.convert("RGB").convert("L")
             masks.append(mask2)
-        
+
         def full_cloth():
             mask3 = mask.copy()
             mask3.putpalette(palette3)
