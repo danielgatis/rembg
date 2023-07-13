@@ -19,7 +19,7 @@ from ..sessions import sessions_names
 from ..sessions.base import BaseSession
 
 
-@click.command(
+@click.command( # type: ignore
     name="s",
     help="for a http server",
 )

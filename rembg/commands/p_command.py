@@ -14,7 +14,7 @@ from ..session_factory import new_session
 from ..sessions import sessions_names
 
 
-@click.command(
+@click.command( # type: ignore
     name="p",
     help="for a folder as input",
 )
