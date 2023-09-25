@@ -24,7 +24,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            robjuz/rembg
+            ${{ secrets.DOCKER_HUB_USERNAME }}/rembg
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
@@ -55,5 +55,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=robjuz/rembg:buildcache
-          cache-to: type=registry,ref=robjuz/rembg:buildcache,mode=max
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/rembg:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/rembg:buildcache,mode=max
