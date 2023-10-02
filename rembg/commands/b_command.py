@@ -102,6 +102,22 @@ def rs_command(
     output_specifier: str,
     **kwargs
 ) -> None:
+    """
+    Command-line interface for processing images by removing the background using a specified model and generating a mask.
+
+    This CLI command takes several options and arguments to configure the background removal process and save the processed images.
+
+    Parameters:
+        model (str): The name of the model to use for background removal.
+        extras (str): Additional options in JSON format that can be passed to customize the background removal process.
+        image_width (int): The width of the input images in pixels.
+        image_height (int): The height of the input images in pixels.
+        output_specifier (str): A printf-style specifier for the output filenames. If specified, the processed images will be saved to the specified output directory with filenames generated using the specifier.
+        **kwargs: Additional keyword arguments that can be used to customize the background removal process.
+
+    Returns:
+        None
+    """
     try:
         kwargs.update(json.loads(extras))
     except Exception:

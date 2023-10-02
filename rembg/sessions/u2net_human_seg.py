@@ -10,7 +10,21 @@ from .base import BaseSession
 
 
 class U2netHumanSegSession(BaseSession):
+    """
+    This class represents a session for performing human segmentation using the U2Net model.
+    """
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predicts human segmentation masks for the input image.
+
+        Parameters:
+            img (PILImage): The input image.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            List[PILImage]: A list of predicted masks.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -33,6 +47,16 @@ class U2netHumanSegSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
+        """
+        Downloads the U2Net model weights.
+
+        Parameters:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            str: The path to the downloaded model weights.
+        """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx",
@@ -48,4 +72,14 @@ class U2netHumanSegSession(BaseSession):
 
     @classmethod
     def name(cls, *args, **kwargs):
+        """
+        Returns the name of the U2Net model.
+
+        Parameters:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            str: The name of the model.
+        """
         return "u2net_human_seg"
