@@ -22,5 +22,6 @@ def new_session(
 
     if "OMP_NUM_THREADS" in os.environ:
         sess_opts.inter_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
+        sess_opts.intra_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
 
     return session_class(model_name, sess_opts, providers, *args, **kwargs)
