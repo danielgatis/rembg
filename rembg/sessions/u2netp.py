@@ -11,6 +11,7 @@ from .base import BaseSession
 
 class U2netpSession(BaseSession):
     """This class represents a session for using the U2netp model."""
+
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
         Predicts the mask for the given image using the U2netp model.

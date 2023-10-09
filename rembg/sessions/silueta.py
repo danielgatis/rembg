@@ -11,6 +11,7 @@ from .base import BaseSession
 
 class SiluetaSession(BaseSession):
     """This is a class representing a SiluetaSession object."""
+
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
         Predict the mask of the input image.

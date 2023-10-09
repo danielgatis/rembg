@@ -13,6 +13,7 @@ class U2netSession(BaseSession):
     """
     This class represents a U2net session, which is a subclass of BaseSession.
     """
+
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
         Predicts the output masks for the input image using the inner session.

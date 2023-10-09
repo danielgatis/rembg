@@ -12,6 +12,7 @@ from .base import BaseSession
 
 class U2netCustomSession(BaseSession):
     """This is a class representing a custom session for the U2net model."""
+
     def __init__(
         self,
         model_name: str,

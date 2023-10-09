@@ -13,6 +13,7 @@ class DisSession(BaseSession):
     """
     This class represents a session for object detection.
     """
+
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
         Use a pre-trained model to predict the object in the given image.

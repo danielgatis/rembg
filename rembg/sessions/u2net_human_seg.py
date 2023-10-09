@@ -13,6 +13,7 @@ class U2netHumanSegSession(BaseSession):
     """
     This class represents a session for performing human segmentation using the U2Net model.
     """
+
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
         Predicts human segmentation masks for the input image.
