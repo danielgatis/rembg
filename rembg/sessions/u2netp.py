@@ -10,7 +10,17 @@ from .base import BaseSession
 
 
 class U2netpSession(BaseSession):
+    """This class represents a session for using the U2netp model."""
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predicts the mask for the given image using the U2netp model.
+
+        Parameters:
+            img (PILImage): The input image.
+
+        Returns:
+            List[PILImage]: The predicted mask.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -33,6 +43,12 @@ class U2netpSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
+        """
+        Downloads the U2netp model.
+
+        Returns:
+            str: The path to the downloaded model.
+        """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx",
@@ -48,4 +64,10 @@ class U2netpSession(BaseSession):
 
     @classmethod
     def name(cls, *args, **kwargs):
+        """
+        Returns the name of the U2netp model.
+
+        Returns:
+            str: The name of the model.
+        """
         return "u2netp"

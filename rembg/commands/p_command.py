@@ -117,6 +117,26 @@ def p_command(
     watch: bool,
     **kwargs,
 ) -> None:
+    """
+    Command-line interface (CLI) program for performing background removal on images in a folder.
+
+    This program takes a folder as input and uses a specified model to remove the background from the images in the folder.
+    It provides various options for configuration, such as choosing the model, enabling alpha matting, setting trimap thresholds, erode size, etc.
+    Additional options include outputting only the mask and post-processing the mask.
+    The program can also watch the input folder for changes and automatically process new images.
+    The resulting images with the background removed are saved in the specified output folder.
+
+    Parameters:
+        model (str): The name of the model to use for background removal.
+        extras (str): Additional options in JSON format.
+        input (pathlib.Path): The path to the input folder.
+        output (pathlib.Path): The path to the output folder.
+        watch (bool): Whether to watch the input folder for changes.
+        **kwargs: Additional keyword arguments.
+
+    Returns:
+        None
+    """
     try:
         kwargs.update(json.loads(extras))
     except Exception:

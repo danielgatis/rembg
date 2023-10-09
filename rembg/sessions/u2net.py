@@ -10,7 +10,21 @@ from .base import BaseSession
 
 
 class U2netSession(BaseSession):
+    """
+    This class represents a U2net session, which is a subclass of BaseSession.
+    """
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predicts the output masks for the input image using the inner session.
+
+        Parameters:
+            img (PILImage): The input image.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            List[PILImage]: The list of output masks.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -33,6 +47,16 @@ class U2netSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
+        """
+        Downloads the U2net model file from a specific URL and saves it.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The path to the downloaded model file.
+        """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx",
@@ -48,4 +72,14 @@ class U2netSession(BaseSession):
 
     @classmethod
     def name(cls, *args, **kwargs):
+        """
+        Returns the name of the U2net session.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The name of the session.
+        """
         return "u2net"

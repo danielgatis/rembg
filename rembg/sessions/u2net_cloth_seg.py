@@ -57,6 +57,22 @@ palette3 = [
 
 class Unet2ClothSession(BaseSession):
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predict the cloth category of an image.
+
+        This method takes an image as input and predicts the cloth category of the image.
+        The method uses the inner_session to make predictions using a pre-trained model.
+        The predicted mask is then converted to an image and resized to match the size of the input image.
+        Depending on the cloth category specified in the method arguments, the method applies different color palettes to the mask and appends the resulting images to a list.
+
+        Parameters:
+            img (PILImage): The input image.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            List[PILImage]: A list of images representing the predicted masks.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(

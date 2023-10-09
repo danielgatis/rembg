@@ -48,6 +48,12 @@ from ..sessions.base import BaseSession
     help="number of worker threads",
 )
 def s_command(port: int, log_level: str, threads: int) -> None:
+    """
+    Command-line interface for running the FastAPI web server.
+
+    This function starts the FastAPI web server with the specified port and log level.
+    If the number of worker threads is specified, it sets the thread limiter accordingly.
+    """
     sessions: dict[str, BaseSession] = {}
     tags_metadata = [
         {

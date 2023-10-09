@@ -11,6 +11,7 @@ from .base import BaseSession
 
 
 class U2netCustomSession(BaseSession):
+    """This is a class representing a custom session for the U2net model."""
     def __init__(
         self,
         model_name: str,
@@ -19,6 +20,19 @@ class U2netCustomSession(BaseSession):
         *args,
         **kwargs
     ):
+        """
+        Initialize a new U2netCustomSession object.
+
+        Parameters:
+            model_name (str): The name of the model.
+            sess_opts (ort.SessionOptions): The session options.
+            providers: The providers.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Raises:
+            ValueError: If model_path is None.
+        """
         model_path = kwargs.get("model_path")
         if model_path is None:
             raise ValueError("model_path is required")
@@ -26,6 +40,17 @@ class U2netCustomSession(BaseSession):
         super().__init__(model_name, sess_opts, providers, *args, **kwargs)
 
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predict the segmentation mask for the input image.
+
+        Parameters:
+            img (PILImage): The input image.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            List[PILImage]: A list of PILImage objects representing the segmentation mask.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -48,6 +73,16 @@ class U2netCustomSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
+        """
+        Download the model files.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The absolute path to the model files.
+        """
         model_path = kwargs.get("model_path")
         if model_path is None:
             return
@@ -56,4 +91,14 @@ class U2netCustomSession(BaseSession):
 
     @classmethod
     def name(cls, *args, **kwargs):
+        """
+        Get the name of the model.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The name of the model.
+        """
         return "u2net_custom"

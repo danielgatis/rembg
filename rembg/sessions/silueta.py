@@ -10,7 +10,21 @@ from .base import BaseSession
 
 
 class SiluetaSession(BaseSession):
+    """This is a class representing a SiluetaSession object."""
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
+        """
+        Predict the mask of the input image.
+
+        This method takes an image as input, preprocesses it, and performs a prediction to generate a mask. The generated mask is then post-processed and returned as a list of PILImage objects.
+
+        Parameters:
+            img (PILImage): The input image to be processed.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            List[PILImage]: A list of post-processed masks.
+        """
         ort_outs = self.inner_session.run(
             None,
             self.normalize(
@@ -33,6 +47,18 @@ class SiluetaSession(BaseSession):
 
     @classmethod
     def download_models(cls, *args, **kwargs):
+        """
+        Download the pre-trained model file.
+
+        This method downloads the pre-trained model file from a specified URL. The file is saved to the U2NET home directory.
+
+        Parameters:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            str: The path to the downloaded model file.
+        """
         fname = f"{cls.name()}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
@@ -48,4 +74,16 @@ class SiluetaSession(BaseSession):
 
     @classmethod
     def name(cls, *args, **kwargs):
+        """
+        Return the name of the model.
+
+        This method returns the name of the Silueta model.
+
+        Parameters:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            str: The name of the model.
+        """
         return "silueta"
