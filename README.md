@@ -159,10 +159,14 @@ rembg i -a path/to/input.png path/to/output.png
 Passing extras parameters
 
 ```
-rembg i -m sam -x '{"input_labels": [1], "input_points": [[100,100]]}' path/to/input.png path/to/output.png
+SAM example
+
+rembg i -m sam -x '{ "sam_prompt": [{"type": "point", "data": [724, 740], "label": 1}] }' examples/plants-1.jpg examples/plants-1.out.png
 ```
 
 ```
+Custom model example
+
 rembg i -m u2net_custom -x '{"model_path": "~/.u2net/u2net.onnx"}' path/to/input.png path/to/output.png
 ```
 
