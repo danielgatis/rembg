@@ -336,6 +336,12 @@ https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289
 - https://github.com/NathanUA/U-2-Net
 - https://github.com/pymatting/pymatting
 
+## FAQ
+
+### When will this library provide support for Python version 3.xx?
+
+This library directly depends on the [onnxruntime](https://pypi.org/project/onnxruntime) library. Therefore, we can only update the Python version when [onnxruntime](https://pypi.org/project/onnxruntime) provides support for that specific version.
+
 ## Buy me a coffee
 
 Liked some of my work? Buy me a coffee (or more likely a beer)
