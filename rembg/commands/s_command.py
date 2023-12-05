@@ -276,9 +276,9 @@ def s_command(port: int, log_level: str, threads: int) -> None:
                 gr.components.Textbox(label="Arguments"),
             ],
             gr.components.Image(type="filepath", label="Output"),
+            concurrency_limit=3
         )
 
-        interface.queue(concurrency_count=3)
         app = gr.mount_gradio_app(app, interface, path="/")
         return app
 
