@@ -70,7 +70,7 @@ from ..sessions import sessions_names
 @click.option(
     "-bgc",
     "--bgcolor",
-    default=None,
+    default=(0, 0, 0, 0),
     type=(int, int, int, int),
     nargs=4,
     help="Background color (R G B A) to replace the removed background with",
