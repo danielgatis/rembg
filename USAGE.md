@@ -27,6 +27,16 @@ session = new_session(model_name)
 output = remove(input, session=session)
 ```
 
+### For processing multiple image files
+By default, `remove` initialises a new session every call. This can be a large bottleneck if you're having to process multiple images. Initialise a session and pass it in to the `remove` function for fast multi-image support
+```python
+model_name = "unet"
+rembg_session = new_session(model_name)
+for img in images:
+    output = remove(img, session=rembg_session)
+```
+
+
 ### With alpha metting
 Alpha metting is a post processing step that can be used to improve the quality of the output.
 ```python
