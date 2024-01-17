@@ -190,6 +190,10 @@ rembg p -w path/to/input path/to/output
 
 Used to start http server.
 
+```
+rembg s --host 0.0.0.0 --port 5000 --log_level info
+```
+
 To see the complete endpoints documentation, go to: `http://localhost:5000/api`.
 
 Remove the background from an image url
