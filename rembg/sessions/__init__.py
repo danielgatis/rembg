@@ -1,22 +1,53 @@
-from importlib import import_module
-from inspect import isclass
-from pathlib import Path
-from pkgutil import iter_modules
+from __future__ import annotations
+
+from typing import List
 
 from .base import BaseSession
 
-sessions_class = []
-sessions_names = []
+sessions_class: List[type[BaseSession]] = []
+sessions_names: List[str] = []
 
-package_dir = Path(__file__).resolve().parent
-for _b, module_name, _p in iter_modules([str(package_dir)]):
-    module = import_module(f"{__name__}.{module_name}")
-    for attribute_name in dir(module):
-        attribute = getattr(module, attribute_name)
-        if (
-            isclass(attribute)
-            and issubclass(attribute, BaseSession)
-            and attribute != BaseSession
-        ):
-            sessions_class.append(attribute)
-            sessions_names.append(attribute.name())
+from .dis_anime import DisSession
+
+sessions_class.append(DisSession)
+sessions_names.append(DisSession.name())
+
+from .dis_general_use import DisSession as DisSessionGeneralUse
+
+sessions_class.append(DisSessionGeneralUse)
+sessions_names.append(DisSessionGeneralUse.name())
+
+from .sam import SamSession
+
+sessions_class.append(SamSession)
+sessions_names.append(SamSession.name())
+
+from .silueta import SiluetaSession
+
+sessions_class.append(SiluetaSession)
+sessions_names.append(SiluetaSession.name())
+
+from .u2net_cloth_seg import Unet2ClothSession
+
+sessions_class.append(Unet2ClothSession)
+sessions_names.append(Unet2ClothSession.name())
+
+from .u2net_custom import U2netCustomSession
+
+sessions_class.append(U2netCustomSession)
+sessions_names.append(U2netCustomSession.name())
+
+from .u2net_human_seg import U2netHumanSegSession
+
+sessions_class.append(U2netHumanSegSession)
+sessions_names.append(U2netHumanSegSession.name())
+
+from .u2net import U2netSession
+
+sessions_class.append(U2netSession)
+sessions_names.append(U2netSession.name())
+
+from .u2netp import U2netpSession
+
+sessions_class.append(U2netpSession)
+sessions_names.append(U2netpSession.name())

@@ -1,13 +1,13 @@
-from importlib import import_module
-from pathlib import Path
-from pkgutil import iter_modules
-
 command_functions = []
 
-package_dir = Path(__file__).resolve().parent
-for _b, module_name, _p in iter_modules([str(package_dir)]):
-    module = import_module(f"{__name__}.{module_name}")
-    for attribute_name in dir(module):
-        attribute = getattr(module, attribute_name)
-        if attribute_name.endswith("_command"):
-            command_functions.append(attribute)
+from .b_command import b_command
+from .d_command import d_command
+from .i_command import i_command
+from .p_command import p_command
+from .s_command import s_command
+
+command_functions.append(b_command)
+command_functions.append(d_command)
+command_functions.append(i_command)
+command_functions.append(p_command)
+command_functions.append(s_command)
