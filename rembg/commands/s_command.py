@@ -290,7 +290,11 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
         app = gr.mount_gradio_app(app, interface, path="/")
         return app
 
-    print(f"To access the API documentation, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}/api")
-    print(f"To access the UI, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}")
+    print(
+        f"To access the API documentation, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}/api"
+    )
+    print(
+        f"To access the UI, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}"
+    )
 
     uvicorn.run(gr_app(app), host=host, port=port, log_level=log_level)
