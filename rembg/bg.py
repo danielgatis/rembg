@@ -157,7 +157,7 @@ def post_process(mask: np.ndarray) -> np.ndarray:
     """
     mask = morphologyEx(mask, MORPH_OPEN, kernel)
     mask = GaussianBlur(mask, (5, 5), sigmaX=2, sigmaY=2, borderType=BORDER_DEFAULT)
-    mask = np.where(mask < 127, 0, 255).astype(np.uint8)  # convert again to binary
+    mask = np.where(mask < 127, 0, 255).astype(np.uint8)  # type: ignore
     return mask
 
 
