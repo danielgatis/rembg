@@ -94,7 +94,7 @@ from ..sessions import sessions_names
     "image_height",
     type=int,
 )
-def rs_command(
+def b_command(
     model: str,
     extras: str,
     image_width: int,

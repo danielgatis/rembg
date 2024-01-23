@@ -1,3 +1,0 @@
-#!/bin/sh
-
-pyinstaller -y -p ./rembg rembg.py

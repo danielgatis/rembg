@@ -191,21 +191,21 @@ rembg p -w path/to/input path/to/output
 Used to start http server.
 
 ```
-rembg s --host 0.0.0.0 --port 5000 --log_level info
+rembg s --host 0.0.0.0 --port 7000 --log_level info
 ```
 
-To see the complete endpoints documentation, go to: `http://localhost:5000/api`.
+To see the complete endpoints documentation, go to: `http://localhost:7000/api`.
 
 Remove the background from an image url
 
 ```
-curl -s "http://localhost:5000/api/remove?url=http://input.png" -o output.png
+curl -s "http://localhost:7000/api/remove?url=http://input.png" -o output.png
 ```
 
 Remove the background from an uploaded image
 
 ```
-curl -s -F file=@/path/to/input.jpg "http://localhost:5000/api/remove"  -o output.png
+curl -s -F file=@/path/to/input.jpg "http://localhost:7000/api/remove"  -o output.png
 ```
 
 ### rembg `b`
