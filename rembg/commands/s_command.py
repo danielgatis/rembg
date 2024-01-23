@@ -32,6 +32,14 @@ from ..sessions.base import BaseSession
     help="port",
 )
 @click.option(
+    "-h",
+    "--host",
+    default="0.0.0.0",
+    type=str,
+    show_default=True,
+    help="host",
+)
+@click.option(
     "-l",
     "--log_level",
     default="info",
@@ -47,7 +55,7 @@ from ..sessions.base import BaseSession
     show_default=True,
     help="number of worker threads",
 )
-def s_command(port: int, log_level: str, threads: int) -> None:
+def s_command(port: int, host: str, log_level: str, threads: int) -> None:
     """
     Command-line interface for running the FastAPI web server.
 
@@ -282,7 +290,7 @@ def s_command(port: int, log_level: str, threads: int) -> None:
         app = gr.mount_gradio_app(app, interface, path="/")
         return app
 
-    print(f"To access the API documentation, go to http://localhost:{port}/api")
-    print(f"To access the UI, go to http://localhost:{port}")
+    print(f"To access the API documentation, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}/api")
+    print(f"To access the UI, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}")
 
-    uvicorn.run(gr_app(app), host="0.0.0.0", port=port, log_level=log_level)
+    uvicorn.run(gr_app(app), host=host, port=port, log_level=log_level)
