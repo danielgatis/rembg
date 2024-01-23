@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# pip install -e ".[cli]"
-# pyi-makespec --collect-data=gradio_client --collect-data=gradio rembg.py
-pyinstaller rembg.spec
