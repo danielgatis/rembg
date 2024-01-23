@@ -3,7 +3,6 @@ build/
 dist/
 .venv/
 .direnv/
-*.spec
 *.egg-info/
 *.egg
 *.py[cod]
