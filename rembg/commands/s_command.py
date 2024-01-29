@@ -15,7 +15,7 @@ from starlette.responses import Response
 
 from .._version import get_versions
 from ..bg import remove
-from ..filters import smooth
+from ..filters import smooth, grayscale
 from ..session_factory import new_session
 from ..sessions import sessions_names
 from ..sessions.base import BaseSession
@@ -229,11 +229,27 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
             )
 
     def im_filters(content: bytes, filter_params: FilterQueryPostParams) -> Response:
-        img = smooth(content, filter_params.threshold, filter_params.sigma_color, filter_params.sigma_space)
-        return Response(
-            img,
-            media_type="image/png",
-        )
+        # add a switch case
+        if filter_params.name == "glam":
+            img = smooth(content, filter_params.threshold, filter_params.sigma_color, filter_params.sigma_space)
+            return Response(
+                img,
+                media_type="image/png",
+            )
+        elif filter_params.name == "grayscale":
+            img = grayscale(content)
+            return Response(
+                img,
+                media_type="image/png",
+            )
+        else:
+            # return an error
+            return Response(
+                "Filter not found",
+                status_code=404,
+                media_type="text/plain",
+                headers={"X-Error": "Filter not found"},
+            )
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         kwargs = {}

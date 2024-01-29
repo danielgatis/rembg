@@ -23,3 +23,10 @@ def smooth(content, threshold, sigma_color, sigma_space):
     output_img = cv.add(masked_img2, masked_img)
     retval, buffer = cv.imencode('.png', output_img)
     return buffer.tobytes()
+
+def grayscale(content):
+    nparr = np.fromstring(content, np.uint8)
+    roi_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    output_img = cv.cvtColor(roi_img, cv.COLOR_BGR2GRAY)
+    retval, buffer = cv.imencode('.png', output_img)
+    return buffer.tobytes()
