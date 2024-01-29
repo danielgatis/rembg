@@ -1,5 +1,6 @@
 import json
 import os
+
 # import webbrowser
 from typing import Optional, Tuple, cast
 
@@ -144,14 +145,43 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
                 else None
             )
 
-    class FilterQueryPostParams:
-        def __int__(
+    class FilterQueryParams:
+        def __init__(
             self,
-            name: str = Form(description="Filter name", default="glam"),
-            threshold: int = Form(description="Filter threshold", default=15, ge=5, le=25)
+            name: str = Query(description="Filter name", default="glam"),
+            threshold: int = Query(
+                description="Filter threshold", default=15, ge=5, le=25
+            ),
+            sigma_color: int = Query(
+                description="Filter sigmaColor", default=50, ge=5, le=100
+            ),
+            sigma_space: int = Query(
+                description="Filter sigmaSpace", default=50, ge=5, le=100
+            ),
         ):
             self.name = name
             self.threshold = threshold
+            self.sigma_color = sigma_color
+            self.sigma_space = sigma_space
+
+    class FilterQueryPostParams:
+        def __init__(
+            self,
+            name: str = Form(description="Filter name", default="glam"),
+            threshold: int = Form(
+                description="Filter threshold", default=15, ge=5, le=25
+            ),
+            sigma_color: int = Form(
+                description="Filter sigmaColor", default=50, ge=5, le=100
+            ),
+            sigma_space: int = Form(
+                description="Filter sigmaSpace", default=50, ge=5, le=100
+            ),
+        ):
+            self.name = name
+            self.threshold = threshold
+            self.sigma_color = sigma_color
+            self.sigma_space = sigma_space
 
     class CommonQueryPostParams:
         def __init__(
@@ -199,8 +229,7 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
             )
 
     def im_filters(content: bytes, filter_params: FilterQueryPostParams) -> Response:
-        # print(filter_params.threshold, filter_params.name)
-        img = smooth(content, 7)
+        img = smooth(content, filter_params.threshold, filter_params.sigma_color, filter_params.sigma_space)
         return Response(
             img,
             media_type="image/png",
@@ -277,6 +306,23 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
         commons: CommonQueryPostParams = Depends(),
     ):
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
+
+    @app.get(
+        path="/api/filter",
+        tags=["Apply filter"],
+        summary="Apply filter from URL",
+        description="Apply filter on an image obtained by retrieving an URL.",
+    )
+    async def get_filter(
+        url: str = Query(
+            default=..., description="URL of the image that has to be filtered."
+        ),
+        filter_params: FilterQueryParams = Depends(),
+    ):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                file = await response.read()
+                return await asyncify(im_filters)(file, filter_params)
 
     @app.post(
         path="/api/filter",

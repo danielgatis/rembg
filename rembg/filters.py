@@ -2,7 +2,7 @@ import cv2 as cv
 import numpy as np
 
 
-def smooth(content, threshold):
+def smooth(content, threshold, sigma_color, sigma_space):
     nparr = np.fromstring(content, np.uint8)
     roi_img = cv.imdecode(nparr, cv.IMREAD_COLOR)
     temp_img = roi_img.copy()
@@ -12,7 +12,7 @@ def smooth(content, threshold):
     # Make a 3 channel mask
     full_mask = cv.merge((hsv_mask, hsv_mask, hsv_mask))
     # Apply blur on the created image
-    blurred_img = cv.bilateralFilter(roi_img, threshold, 50, 50)
+    blurred_img = cv.bilateralFilter(roi_img, threshold, sigma_color, sigma_space)
     # Apply mask to image
     masked_img = cv.bitwise_and(blurred_img, full_mask)
     # Invert mask
