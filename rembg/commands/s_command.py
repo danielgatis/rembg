@@ -1,6 +1,6 @@
 import json
 import os
-import webbrowser
+# import webbrowser
 from typing import Optional, Tuple, cast
 
 import aiohttp
@@ -14,6 +14,7 @@ from starlette.responses import Response
 
 from .._version import get_versions
 from ..bg import remove
+from ..filters import smooth
 from ..session_factory import new_session
 from ..sessions import sessions_names
 from ..sessions.base import BaseSession
@@ -143,6 +144,15 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
                 else None
             )
 
+    class FilterQueryPostParams:
+        def __int__(
+            self,
+            name: str = Form(description="Filter name", default="glam"),
+            threshold: int = Form(description="Filter threshold", default=15, ge=5, le=25)
+        ):
+            self.name = name
+            self.threshold = threshold
+
     class CommonQueryPostParams:
         def __init__(
             self,
@@ -188,6 +198,14 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
                 else None
             )
 
+    def im_filters(content: bytes, filter_params: FilterQueryPostParams) -> Response:
+        # print(filter_params.threshold, filter_params.name)
+        img = smooth(content, 7)
+        return Response(
+            img,
+            media_type="image/png",
+        )
+
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
         kwargs = {}
 
@@ -217,10 +235,10 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
 
     @app.on_event("startup")
     def startup():
-        try:
-            webbrowser.open(f"http://localhost:{port}")
-        except Exception:
-            pass
+        # try:
+        #     webbrowser.open(f"http://localhost:{port}")
+        # except Exception:
+        #     pass
 
         if threads is not None:
             from anyio import CapacityLimiter
@@ -259,6 +277,21 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
         commons: CommonQueryPostParams = Depends(),
     ):
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
+
+    @app.post(
+        path="/api/filter",
+        tags=["Apply filter"],
+        summary="Apply filter from Stream",
+        description="Apply filter on an image sent within the request itself.",
+    )
+    async def post_filter(
+        file: bytes = File(
+            default=...,
+            description="Image file (byte stream) that has to be filtered.",
+        ),
+        filter_params: FilterQueryPostParams = Depends(),
+    ):
+        return await asyncify(im_filters)(file, filter_params)  # type: ignore
 
     def gr_app(app):
         def inference(input_path, model, cmd_args):
