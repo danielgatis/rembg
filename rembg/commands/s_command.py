@@ -261,8 +261,9 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     def gr_app(app):
-        def inference(input_path, model, cmd_args):
+        def inference(input_path, model, *args):
             output_path = "output.png"
+            a, af, ab, ae, om, ppm, cmd_args = args
 
             kwargs = {
                 "alpha_matting": a,
