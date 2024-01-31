@@ -129,9 +129,11 @@ class Unet2ClothSession(BaseSession):
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx",
-            None
-            if cls.checksum_disabled(*args, **kwargs)
-            else "md5:2434d1f3cb744e0e49386c906e5a08bb",
+            (
+                None
+                if cls.checksum_disabled(*args, **kwargs)
+                else "md5:2434d1f3cb744e0e49386c906e5a08bb"
+            ),
             fname=fname,
             path=cls.u2net_home(*args, **kwargs),
             progressbar=True,
