@@ -3,7 +3,7 @@ name: Test installation
 on: [push]
 
 jobs:
-    build:
+    test_install:
         runs-on: ubuntu-latest
         strategy:
             matrix:

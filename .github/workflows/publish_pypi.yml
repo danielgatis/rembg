@@ -6,7 +6,7 @@ on:
             - "v*.*.*"
 
 jobs:
-    push_to_pypi:
+    publish_pypi:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3

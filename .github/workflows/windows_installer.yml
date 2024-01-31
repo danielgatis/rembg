@@ -1,0 +1,19 @@
+name: Build Windows Installer
+on:
+    push:
+        tags:
+            - "v*.*.*"
+jobs:
+  windows_installer:
+    name: Build the Inno Setup Installer
+    runs-on: windows-latest
+    steps:
+      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - shell: pwsh
+        run: ./build-exe.ps1
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: setup.iss
+          options: /O+
