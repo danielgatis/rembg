@@ -290,9 +290,15 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
                 gr.components.Image(type="filepath", label="Input"),
                 gr.components.Dropdown(sessions_names, value="u2net", label="Models"),
                 gr.components.Checkbox(value=True, label="Alpha matting"),
-                gr.components.Slider(value=240, minimum=0, maximum=255, label="Foreground threshold"),
-                gr.components.Slider(value=10, minimum=0, maximum=255, label="Background threshold"),
-                gr.components.Slider(value=40, minimum=0, maximum=255, label="Erosion size"),
+                gr.components.Slider(
+                    value=240, minimum=0, maximum=255, label="Foreground threshold"
+                ),
+                gr.components.Slider(
+                    value=10, minimum=0, maximum=255, label="Background threshold"
+                ),
+                gr.components.Slider(
+                    value=40, minimum=0, maximum=255, label="Erosion size"
+                ),
                 gr.components.Checkbox(value=False, label="Only mask"),
                 gr.components.Checkbox(value=True, label="Post process mask"),
                 gr.components.Textbox(label="Arguments"),
