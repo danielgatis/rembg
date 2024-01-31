@@ -3,9 +3,10 @@
 #define MyAppPublisher "danielgatis"
 #define MyAppURL "https://github.com/danielgatis/rembg"
 #define MyAppExeName "rembg.exe"
+#define MyAppId "49AB7484-212F-4B31-A49F-533A480F3FD4"
 
 [Setup]
-AppId={{49AB7484-212F-4B31-A49F-533A480F3FD4}
+AppId={#MyAppId}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
@@ -15,7 +16,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=setup
+OutputBaseFilename=rembg-cli-installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -35,9 +36,6 @@ Name: modifypath; Description: "Add to PATH variable"
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
-[Run]
-Filename: "{app}\{#MyAppExeName}"; Parameters: "--version"; Flags: runhidden
-
 [Code]
 const
     ModPathName = 'modifypath';
@@ -48,4 +46,4 @@ begin
     setArrayLength(Result, 1)
     Result[0] := ExpandConstant('{app}');
 end;
-#include "modpath.iss"
+#include "_modpath.iss"
