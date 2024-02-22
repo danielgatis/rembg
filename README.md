@@ -302,7 +302,7 @@ Just replace the `rembg` command for `docker run danielgatis/rembg`.
 Try this:
 
 ```
-docker run danielgatis/rembg i path/to/input.png path/to/output.png
+docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
 ```
 
 ## Models
