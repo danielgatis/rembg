@@ -37,8 +37,8 @@ for img in images:
 ```
 
 
-### With alpha metting
-Alpha metting is a post processing step that can be used to improve the quality of the output.
+### With alpha matting
+Alpha matting is a post processing step that can be used to improve the quality of the output.
 ```python
 output = remove(input, alpha_matting=True, alpha_matting_foreground_threshold=270,alpha_matting_background_threshold=20, alpha_matting_erode_size=11)
 ```
