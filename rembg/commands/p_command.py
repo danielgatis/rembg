@@ -146,8 +146,7 @@ def p_command(
 
     def process(each_input: pathlib.Path) -> None:
         try:
-            mimetype = filetype.guess(each_input)
-            if mimetype is None:
+            if (mimetype := filetype.guess(each_input)) is None:
                 return
             if mimetype.mime.find("image") < 0:
                 return

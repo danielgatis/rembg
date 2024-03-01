@@ -34,8 +34,7 @@ class U2netCustomSession(BaseSession):
         Raises:
             ValueError: If model_path is None.
         """
-        model_path = kwargs.get("model_path")
-        if model_path is None:
+        if (model_path := kwargs.get("model_path")) is None:
             raise ValueError("model_path is required")
 
         super().__init__(model_name, sess_opts, providers, *args, **kwargs)
@@ -84,8 +83,7 @@ class U2netCustomSession(BaseSession):
         Returns:
             str: The absolute path to the model files.
         """
-        model_path = kwargs.get("model_path")
-        if model_path is None:
+        if (model_path := kwargs.get("model_path")) is None:
             return
 
         return os.path.abspath(os.path.expanduser(model_path))

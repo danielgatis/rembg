@@ -1103,8 +1103,7 @@ def git_versions_from_keywords(keywords, tag_prefix, verbose):
     """Get version information from git keywords."""
     if "refnames" not in keywords:
         raise NotThisMethod("Short version file found")
-    date = keywords.get("date")
-    if date is not None:
+    if (date := keywords.get("date")) is not None:
         # Use only the last line.  Previous lines may contain GPG signature
         # information.
         date = date.splitlines()[-1]
@@ -1224,7 +1223,7 @@ def git_pieces_from_vcs(tag_prefix, root, verbose, runner=run_command):
         raise NotThisMethod("'git rev-parse --abbrev-ref' returned error")
     branch_name = branch_name.strip()
 
-    if branch_name == "HEAD":
+    if (branch_name := branch_name.strip()) == "HEAD":
         # If we aren't exactly on a branch, pick a branch which represents
         # the current commit. If all else fails, we are on a branchless
         # commit.
@@ -1726,8 +1725,7 @@ def get_versions(verbose=False):
     except NotThisMethod:
         pass
 
-    from_vcs_f = handlers.get("pieces_from_vcs")
-    if from_vcs_f:
+    if from_vcs_f := handlers.get("pieces_from_vcs"):
         try:
             pieces = from_vcs_f(cfg.tag_prefix, root, verbose)
             ver = render(pieces, cfg.style)
