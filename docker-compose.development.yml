@@ -7,6 +7,6 @@ services:
     tty: true
     stdin_open: true
     ports:
-      - "6100:5000"
+      - "6100:7000"
     environment:
       OMP_NUM_THREADS: 4
