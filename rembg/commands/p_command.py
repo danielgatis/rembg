@@ -81,6 +81,14 @@ from ..sessions import sessions_names
     help="watches a folder for changes",
 )
 @click.option(
+    "-d",
+    "--delete_input",
+    default=False,
+    is_flag=True,
+    show_default=True,
+    help="delete input file after processing",
+)
+@click.option(
     "-bgc",
     "--bgcolor",
     default=(0, 0, 0, 0),
@@ -115,6 +123,7 @@ def p_command(
     input: pathlib.Path,
     output: pathlib.Path,
     watch: bool,
+    delete_input: bool,
     **kwargs,
 ) -> None:
     """
@@ -132,6 +141,7 @@ def p_command(
         input (pathlib.Path): The path to the input folder.
         output (pathlib.Path): The path to the output folder.
         watch (bool): Whether to watch the input folder for changes.
+        delete_input (bool): Whether to delete the input file after processing.
         **kwargs: Additional keyword arguments.
 
     Returns:
@@ -167,6 +177,10 @@ def p_command(
                     print(
                         f"processed: {each_input.absolute()} -> {each_output.absolute()}"
                     )
+
+            if delete_input:
+                each_input.unlink()
+
         except Exception as e:
             print(e)
 
@@ -179,13 +193,23 @@ def p_command(
             process(each_input)
 
     if watch:
+        should_watch = True
         observer = Observer()
 
         class EventHandler(FileSystemEventHandler):
             def on_any_event(self, event: FileSystemEvent) -> None:
-                if not (
-                    event.is_directory or event.event_type in ["deleted", "closed"]
+                if (
+                    not (
+                        event.is_directory or event.event_type in ["deleted", "closed"]
+                    )
+                    and pathlib.Path(event.src_path).exists()
                 ):
+                    if event.src_path.endswith("stop.txt"):
+                        nonlocal should_watch
+                        should_watch = False
+                        pathlib.Path(event.src_path).unlink()
+                        return
+
                     process(pathlib.Path(event.src_path))
 
         event_handler = EventHandler()
@@ -193,7 +217,7 @@ def p_command(
         observer.start()
 
         try:
-            while True:
+            while should_watch:
                 time.sleep(1)
 
         finally:

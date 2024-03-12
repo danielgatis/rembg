@@ -22,6 +22,10 @@ from .session_factory import new_session
 from .sessions import sessions_class
 from .sessions.base import BaseSession
 
+import onnxruntime as ort
+
+ort.set_default_logger_severity(3)
+
 kernel = getStructuringElement(MORPH_ELLIPSE, (3, 3))
 
 
