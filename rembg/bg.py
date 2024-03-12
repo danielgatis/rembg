@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Any, List, Optional, Tuple, Union
 
 import numpy as np
+import onnxruntime as ort
 from cv2 import (
     BORDER_DEFAULT,
     MORPH_ELLIPSE,
@@ -21,8 +22,6 @@ from scipy.ndimage import binary_erosion
 from .session_factory import new_session
 from .sessions import sessions_class
 from .sessions.base import BaseSession
-
-import onnxruntime as ort
 
 ort.set_default_logger_severity(3)
 
