@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM nvcr.io/nvidia/tensorrt:24.02-py3
 
 WORKDIR /rembg
 
