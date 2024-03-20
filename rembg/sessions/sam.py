@@ -95,6 +95,7 @@ class SamSession(BaseSession):
         """
         self.model_name = model_name
         paths = self.__class__.download_models(*args, **kwargs)
+        print("SAM detected providers: %s" % ort.get_available_providers())
         self.encoder = ort.InferenceSession(
             str(paths[0]),
             providers=ort.get_available_providers(),

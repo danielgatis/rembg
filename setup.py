@@ -14,7 +14,6 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 install_requires = [
     "jsonschema",
     "numpy",
-    "onnxruntime",
     "opencv-python-headless",
     "pillow",
     "pooch",
@@ -86,6 +85,7 @@ setup(
     python_requires=">=3.8, <3.13",
     packages=find_packages(),
     install_requires=install_requires,
+    dependency_links=['https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/'],
     entry_points=entry_points,
     extras_require=extras_require,
     version=versioneer.get_version(),

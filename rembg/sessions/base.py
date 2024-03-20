@@ -31,6 +31,11 @@ class BaseSession:
         else:
             self.providers.extend(_providers)
 
+        self.providers.remove("TensorrtExecutionProvider")
+
+        print("Detected providers: %s" % _providers)
+        print("Selected providers: %s" % self.providers)
+
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
             providers=self.providers,
