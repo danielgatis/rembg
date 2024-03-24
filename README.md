@@ -5,43 +5,42 @@
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
 [![Streamlit App](https://img.shields.io/badge/🎈%20Streamlit%20Community-Cloud-blue)](https://bgremoval.streamlit.app/)
 
-
 Rembg is a tool to remove images background.
 
 <p style="display: flex;align-items: center;justify-content: center;">
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-1.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-1.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-2.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-2.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-3.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-3.out.png" width="100" />
+  <img alt="example car-1" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-1.jpg" width="100" />
+  <img alt="example car-1.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-1.out.png" width="100" />
+  <img alt="example car-2" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-2.jpg" width="100" />
+  <img alt="example car-2.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-2.out.png" width="100" />
+  <img alt="example car-3" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-3.jpg" width="100" />
+  <img alt="example car-3.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/car-3.out.png" width="100" />
 </p>
 
 <p style="display: flex;align-items: center;justify-content: center;">
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-1.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-1.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-2.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-2.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-3.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-3.out.png" width="100" />
+  <img alt="example animal-1" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-1.jpg" width="100" />
+  <img alt="example animal-1.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-1.out.png" width="100" />
+  <img alt="example animal-2" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-2.jpg" width="100" />
+  <img alt="example animal-2.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-2.out.png" width="100" />
+  <img alt="example animal-3" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-3.jpg" width="100" />
+  <img alt="example animal-3.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/animal-3.out.png" width="100" />
 </p>
 
 <p style="display: flex;align-items: center;justify-content: center;">
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-1.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-1.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-2.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-2.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
+  <img alt="example girl-1" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-1.jpg" width="100" />
+  <img alt="example girl-1.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-1.out.png" width="100" />
+  <img alt="example girl-2" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-2.jpg" width="100" />
+  <img alt="example girl-2.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-2.out.png" width="100" />
+  <img alt="example girl-3" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.jpg" width="100" />
+  <img alt="example girl-3.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/girl-3.out.png" width="100" />
 </p>
 
 <p style="display: flex;align-items: center;justify-content: center;">
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-1.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-1.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-2.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-2.out.png" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-3.jpg" width="100" />
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-3.out.png" width="100" />
+  <img alt="example anime-girl-1" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-1.jpg" width="100" />
+  <img alt="example anime-girl-1.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-1.out.png" width="100" />
+  <img alt="example anime-girl-2" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-2.jpg" width="100" />
+  <img alt="example anime-girl-2.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-2.out.png" width="100" />
+  <img alt="example anime-girl-3" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-3.jpg" width="100" />
+  <img alt="example anime-girl-3.out" src="https://raw.githubusercontent.com/danielgatis/rembg/master/examples/anime-girl-3.out.png" width="100" />
 </p>
 
 **If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
@@ -69,7 +68,7 @@ Rembg is a tool to remove images background.
 
 ## Requirements
 
-```
+```text
 python: >3.7, <3.13
 ```
 
@@ -86,10 +85,10 @@ GPU support:
 
 First of all, you need to check if your system supports the `onnxruntime-gpu`.
 
-Go to https://onnxruntime.ai and check the installation matrix.
+Go to <https://onnxruntime.ai> and check the installation matrix.
 
 <p style="display: flex;align-items: center;justify-content: center;">
-  <img src="https://raw.githubusercontent.com/danielgatis/rembg/master/onnxruntime-installation-matrix.png" width="400" />
+  <img alt="onnxruntime-installation-matrix" src="https://raw.githubusercontent.com/danielgatis/rembg/master/onnxruntime-installation-matrix.png" width="400" />
 </p>
 
 If yes, just run:
@@ -104,6 +103,7 @@ pip install rembg[gpu,cli] # for library + cli
 After the installation step you can use rembg just typing `rembg` in your terminal window.
 
 The `rembg` command has 4 subcommands, one for each input type:
+
 - `i` for files
 - `p` for folders
 - `s` for http server
@@ -111,13 +111,13 @@ The `rembg` command has 4 subcommands, one for each input type:
 
 You can get help about the main command using:
 
-```
+```shell
 rembg --help
 ```
 
 As well, about all the subcommands using:
 
-```
+```shell
 rembg <COMMAND> --help
 ```
 
@@ -127,44 +127,43 @@ Used when input and output are files.
 
 Remove the background from a remote image
 
-```
+```shell
 curl -s http://input.png | rembg i > output.png
 ```
 
 Remove the background from a local file
 
-```
+```shell
 rembg i path/to/input.png path/to/output.png
 ```
 
 Remove the background specifying a model
 
-```
+```shell
 rembg i -m u2netp path/to/input.png path/to/output.png
 ```
 
 Remove the background returning only the mask
 
-```
+```shell
 rembg i -om path/to/input.png path/to/output.png
 ```
 
-
 Remove the background applying an alpha matting
 
-```
+```shell
 rembg i -a path/to/input.png path/to/output.png
 ```
 
 Passing extras parameters
 
-```
+```shell
 SAM example
 
 rembg i -m sam -x '{ "sam_prompt": [{"type": "point", "data": [724, 740], "label": 1}] }' examples/plants-1.jpg examples/plants-1.out.png
 ```
 
-```
+```shell
 Custom model example
 
 rembg i -m u2net_custom -x '{"model_path": "~/.u2net/u2net.onnx"}' path/to/input.png path/to/output.png
@@ -176,13 +175,13 @@ Used when input and output are folders.
 
 Remove the background from all images in a folder
 
-```
+```shell
 rembg p path/to/input path/to/output
 ```
 
 Same as before, but watching for new/changed files to process
 
-```
+```shell
 rembg p -w path/to/input path/to/output
 ```
 
@@ -190,7 +189,7 @@ rembg p -w path/to/input path/to/output
 
 Used to start http server.
 
-```
+```shell
 rembg s --host 0.0.0.0 --port 7000 --log_level info
 ```
 
@@ -198,13 +197,13 @@ To see the complete endpoints documentation, go to: `http://localhost:7000/api`.
 
 Remove the background from an image url
 
-```
+```shell
 curl -s "http://localhost:7000/api/remove?url=http://input.png" -o output.png
 ```
 
 Remove the background from an uploaded image
 
-```
+```shell
 curl -s -F file=@/path/to/input.jpg "http://localhost:7000/api/remove"  -o output.png
 ```
 
@@ -212,7 +211,7 @@ curl -s -F file=@/path/to/input.jpg "http://localhost:7000/api/remove"  -o outpu
 
 Process a sequence of RGB24 images from stdin. This is intended to be used with another program, such as FFMPEG, that outputs RGB24 pixel data to stdout, which is piped into the stdin of this program, although nothing prevents you from manually typing in images at stdin.
 
-```
+```shell
 rembg b image_width image_height -o output_specifier
 ```
 
@@ -224,12 +223,11 @@ Arguments:
 
 Example usage with FFMPEG:
 
-```
+```shell
 ffmpeg -i input.mp4 -ss 10 -an -f rawvideo -pix_fmt rgb24 pipe:1 | rembg b 1280 720 -o folder/output-%03u.png
 ```
 
 The width and height values must match the dimension of output images from FFMPEG. Note for FFMPEG, the "`-an -f rawvideo -pix_fmt rgb24 pipe:1`" part is required for the whole thing to work.
-
 
 ## Usage as a library
 
@@ -294,14 +292,16 @@ for file in Path('path/to/folder').glob('*.png'):
             output = remove(input, session=session)
             o.write(output)
 ```
+
 To see a full list of examples on how to use rembg, go to the [examples](USAGE.md) page.
+
 ## Usage as a docker
 
 Just replace the `rembg` command for `docker run danielgatis/rembg`.
 
 Try this:
 
-```
+```shell
 docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
 ```
 
@@ -311,33 +311,32 @@ All models are downloaded and saved in the user home folder in the `.u2net` dire
 
 The available models are:
 
--   u2net ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for general use cases.
--   u2netp ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A lightweight version of u2net model.
--   u2net_human_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
--   u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
--   silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
--   isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/DIS)): A new pre-trained model for general use cases.
--   isnet-anime ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-anime.onnx), [source](https://github.com/SkyTNT/anime-segmentation)): A high-accuracy segmentation for anime character.
--   sam ([download encoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx), [download decoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx), [source](https://github.com/facebookresearch/segment-anything)): A pre-trained model for any use cases.
+- u2net ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for general use cases.
+- u2netp ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A lightweight version of u2net model.
+- u2net_human_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
+- u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
+- silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
+- isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/DIS)): A new pre-trained model for general use cases.
+- isnet-anime ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-anime.onnx), [source](https://github.com/SkyTNT/anime-segmentation)): A high-accuracy segmentation for anime character.
+- sam ([download encoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx), [download decoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx), [source](https://github.com/facebookresearch/segment-anything)): A pre-trained model for any use cases.
 
 ### How to train your own model
 
 If You need more fine tuned models try this:
-https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289
-
+<https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289>
 
 ## Some video tutorials
 
-- https://www.youtube.com/watch?v=3xqwpXjxyMQ
-- https://www.youtube.com/watch?v=dFKRGXdkGJU
-- https://www.youtube.com/watch?v=Ai-BS_T7yjE
-- https://www.youtube.com/watch?v=D7W-C0urVcQ
+- <https://www.youtube.com/watch?v=3xqwpXjxyMQ>
+- <https://www.youtube.com/watch?v=dFKRGXdkGJU>
+- <https://www.youtube.com/watch?v=Ai-BS_T7yjE>
+- <https://www.youtube.com/watch?v=D7W-C0urVcQ>
 
 ## References
 
-- https://arxiv.org/pdf/2005.09007.pdf
-- https://github.com/NathanUA/U-2-Net
-- https://github.com/pymatting/pymatting
+- <https://arxiv.org/pdf/2005.09007.pdf>
+- <https://github.com/NathanUA/U-2-Net>
+- <https://github.com/pymatting/pymatting>
 
 ## FAQ
 
@@ -349,7 +348,7 @@ This library directly depends on the [onnxruntime](https://pypi.org/project/onnx
 
 Liked some of my work? Buy me a coffee (or more likely a beer)
 
-<a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a>
+<a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a> <!-- markdownlint-disable MD033 -->
 
 ## Star History
 
