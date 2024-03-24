@@ -1,0 +1,16 @@
+---
+name: Markdown Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v15
