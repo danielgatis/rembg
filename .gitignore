@@ -9,6 +9,7 @@ dist/
 __pycache__/
 *.so
 *~≈
+.env
 .envrc
 .python-version
 .idea
