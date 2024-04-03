@@ -303,7 +303,14 @@ def remove(
         return np.asarray(cutout)
 
     bio = io.BytesIO()
-    cutout.save(bio, "PNG")
+
+    mimetype = kwargs.get("mimetype", "").lower()
+    if mimetype == "image/jpeg":
+        cutout = cutout.convert("RGB")
+        cutout.save(bio, "JPEG")
+    else:
+        cutout.save(bio, "PNG")
+
     bio.seek(0)
 
     return bio.read()
