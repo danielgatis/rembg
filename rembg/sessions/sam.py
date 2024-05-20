@@ -87,7 +87,6 @@ class SamSession(BaseSession):
         self,
         model_name: str,
         sess_opts: ort.SessionOptions,
-        providers=None,
         *args,
         **kwargs,
     ):
