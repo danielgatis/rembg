@@ -105,10 +105,9 @@ class SamSession(BaseSession):
         self.providers = []
 
         _providers = ort.get_available_providers()
-        if providers:
-            for provider in providers:
-                if provider in _providers:
-                    self.providers.append(provider)
+        for provider in kwargs.get("providers", []):
+            if provider in _providers:
+                self.providers.append(provider)
         else:
             self.providers.extend(_providers)
 
