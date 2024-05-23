@@ -89,7 +89,7 @@ class SamSession(BaseSession):
         sess_opts: ort.SessionOptions,
         providers=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """
         Initialize a new SamSession with the given model name and session options.
@@ -105,7 +105,7 @@ class SamSession(BaseSession):
         valid_providers = []
         available_providers = ort.get_available_providers()
 
-        for provider in (providers or []):
+        for provider in providers or []:
             if provider in available_providers:
                 valid_providers.append(provider)
         else:
