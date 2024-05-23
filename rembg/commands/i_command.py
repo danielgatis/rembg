@@ -76,6 +76,29 @@ from ..sessions import sessions_names
     help="Background color (R G B A) to replace the removed background with",
 )
 @click.option("-x", "--extras", type=str)
+@click.option(
+    "-sm",
+    "--sticker-mode",
+    is_flag=True,
+    show_default=True,
+    help="enable sticker mode with white border",
+)
+@click.option(
+    "-bc",
+    "--border-color",
+    default=(255, 255, 255, 255),
+    type=(int, int, int, int),
+    nargs=4,
+    help="Border color (R G B A) for sticker mode",
+)
+@click.option(
+    "-bw",
+    "--border-width",
+    default=30,
+    type=int,
+    show_default=True,
+    help="Border width for sticker mode",
+)
 @click.argument(
     "input", default=(None if sys.stdin.isatty() else "-"), type=click.File("rb")
 )
@@ -105,4 +128,4 @@ def i_command(model: str, extras: str, input: IO, output: IO, **kwargs) -> None:
     except Exception:
         pass
 
-    output.write(remove(input.read(), session=new_session(model, **kwargs), **kwargs))
+    output.write(remove(input.read(), session=new_session(model, **kwargs), **kwargs, sticker_mode=kwargs.get('sticker_mode'), border_color=kwargs.get('border_color'), border_width=kwargs.get('border_width')))

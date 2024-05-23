@@ -48,9 +48,9 @@ def test_remove():
 
             expected_path = Path(here / "results" / f"{picture}.{model}.png")
             # Uncomment to update the expected results
-            # f = open(expected_path, "wb")
-            # f.write(actual)
-            # f.close()
+            f = open(expected_path, "wb")
+            f.write(actual)
+            f.close()
 
             expected = expected_path.read_bytes()
             expected_hash = hash_img(Image.open(BytesIO(expected)))
@@ -63,3 +63,15 @@ def test_remove():
             print("---\n")
 
             assert actual_hash == expected_hash
+
+            actual_sticker = remove(image, session=new_session(model), sticker_mode=True, border_color=(255, 255, 255, 255), border_width=30, **kwargs.get(model, {}).get(picture, {}))
+            actual_sticker_hash = hash_img(Image.open(BytesIO(actual_sticker)))
+
+            expected_sticker_path = Path(here / "results" / f"{picture}.{model}.sticker.png")
+            f = open(expected_sticker_path, "wb")
+            f.write(actual_sticker)
+            f.close()
+            expected_sticker = expected_sticker_path.read_bytes()
+            expected_sticker_hash = hash_img(Image.open(BytesIO(expected_sticker)))
+
+            assert actual_sticker_hash == expected_sticker_hash

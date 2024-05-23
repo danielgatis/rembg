@@ -203,6 +203,46 @@ def download_models() -> None:
         session.download_models()
 
 
+def create_sticker(img: PILImage, border_color: Tuple[int, int, int, int] = (255, 255, 255, 255), border_width: int = 30) -> PILImage:
+    import cv2
+    import numpy as np
+
+    def extract_alpha_channel(img):
+        return np.array(img)[:, :, 3]
+
+    def get_all_contours(alpha_channel):
+        smoothed = cv2.GaussianBlur(alpha_channel, (15, 15), 0)
+        contours, _ = cv2.findContours(smoothed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        return contours
+
+    def draw_filled_contour_on_black_background(contours, shape):
+        contour_img = np.zeros(shape, dtype=np.uint8)
+        for contour in contours:
+            cv2.drawContours(contour_img, [contour], 0, 255, -1)
+        return contour_img
+
+    def apply_dilation(img):
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (border_width, border_width))
+        return cv2.dilate(img, kernel, iterations=1)
+
+    def apply_overlays(canvas, img, dilate):
+        alpha = np.expand_dims(np.array(img)[:, :, 3], 2)
+        alpha = np.repeat(alpha, 3, 2) / 255
+        canvas[dilate == 255] = border_color
+        canvas[:, :, 0:3] = canvas[:, :, 0:3] * (1 - alpha) + alpha * np.array(img)[:, :, 0:3]
+        return canvas
+
+    alpha = extract_alpha_channel(img)
+    contours = get_all_contours(alpha)
+    if not contours:
+        return img  # or handle the case as needed
+    contour_img = draw_filled_contour_on_black_background(contours, alpha.shape)
+    dilate = apply_dilation(contour_img)
+    canvas = np.zeros((img.height, img.width, 4), dtype=np.uint8)
+    canvas = apply_overlays(canvas, img, dilate)
+    return Image.fromarray(canvas)
+
+
 def remove(
     data: Union[bytes, PILImage, np.ndarray],
     alpha_matting: bool = False,
@@ -213,6 +253,9 @@ def remove(
     only_mask: bool = False,
     post_process_mask: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
+    sticker_mode: bool = False,
+    border_color: Tuple[int, int, int, int] = (255, 255, 255, 255),
+    border_width: int = 30,
     *args: Optional[Any],
     **kwargs: Optional[Any]
 ) -> Union[bytes, PILImage, np.ndarray]:
@@ -231,6 +274,9 @@ def remove(
         only_mask (bool, optional): Flag indicating whether to return only the binary masks. Defaults to False.
         post_process_mask (bool, optional): Flag indicating whether to post-process the masks. Defaults to False.
         bgcolor (Optional[Tuple[int, int, int, int]], optional): Background color for the cutout image. Defaults to None.
+        sticker_mode (bool, optional): Flag indicating whether to enable sticker mode with a white border. Defaults to False.
+        border_color (Tuple[int, int, int, int], optional): Border color for sticker mode. Defaults to (255, 255, 255, 255).
+        border_width (int, optional): Border width for sticker mode. Defaults to 30.
         *args (Optional[Any]): Additional positional arguments.
         **kwargs (Optional[Any]): Additional keyword arguments.
 
@@ -295,6 +341,9 @@ def remove(
 
     if bgcolor is not None and not only_mask:
         cutout = apply_background_color(cutout, bgcolor)
+
+    if sticker_mode:
+        cutout = create_sticker(cutout, border_color, border_width)
 
     if ReturnType.PILLOW == return_type:
         return cutout
