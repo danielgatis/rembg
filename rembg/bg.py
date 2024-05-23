@@ -1,6 +1,6 @@
 import io
 from enum import Enum
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union, cast
 
 import numpy as np
 import onnxruntime as ort
@@ -192,7 +192,7 @@ def fix_image_orientation(img: PILImage) -> PILImage:
     Returns:
         PILImage: The fixed image.
     """
-    return ImageOps.exif_transpose(img)
+    return cast(PILImage, ImageOps.exif_transpose(img))
 
 
 def download_models() -> None:
