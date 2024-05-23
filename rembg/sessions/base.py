@@ -46,7 +46,7 @@ class BaseSession:
         *args,
         **kwargs
     ) -> Dict[str, np.ndarray]:
-        im = img.convert("RGB").resize(size, Image.LANCZOS)
+        im = img.convert("RGB").resize(size, Image.Resampling.LANCZOS)
 
         im_ary = np.array(im)
         im_ary = im_ary / np.max(im_ary)

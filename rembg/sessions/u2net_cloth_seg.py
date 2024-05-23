@@ -87,7 +87,7 @@ class Unet2ClothSession(BaseSession):
         pred = np.squeeze(pred, 0)
 
         mask = Image.fromarray(pred.astype("uint8"), mode="L")
-        mask = mask.resize(img.size, Image.LANCZOS)
+        mask = mask.resize(img.size, Image.Resampling.LANCZOS)
 
         masks = []
 
