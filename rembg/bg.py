@@ -55,11 +55,11 @@ def alpha_matting_cutout(
     if img.mode == "RGBA" or img.mode == "CMYK":
         img = img.convert("RGB")
 
-    img = np.asarray(img)
-    mask = np.asarray(mask)
+    img_array = np.asarray(img)
+    mask_array = np.asarray(mask)
 
-    is_foreground = mask > foreground_threshold
-    is_background = mask < background_threshold
+    is_foreground = mask_array > foreground_threshold
+    is_background = mask_array < background_threshold
 
     structure = None
     if erode_structure_size > 0:
@@ -70,11 +70,11 @@ def alpha_matting_cutout(
     is_foreground = binary_erosion(is_foreground, structure=structure)
     is_background = binary_erosion(is_background, structure=structure, border_value=1)
 
-    trimap = np.full(mask.shape, dtype=np.uint8, fill_value=128)
+    trimap = np.full(mask_array.shape, dtype=np.uint8, fill_value=128)
     trimap[is_foreground] = 255
     trimap[is_background] = 0
 
-    img_normalized = img / 255.0
+    img_normalized = img_array / 255.0
     trimap_normalized = trimap / 255.0
 
     alpha = estimate_alpha_cf(img_normalized, trimap_normalized)

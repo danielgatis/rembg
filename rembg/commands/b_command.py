@@ -6,7 +6,7 @@ import sys
 from typing import IO
 
 import click
-from PIL import Image
+from PIL.Image import Image as PILImage
 
 from ..bg import remove
 from ..session_factory import new_session
@@ -134,7 +134,7 @@ def b_command(
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir, exist_ok=True)
 
-    def img_to_byte_array(img: Image) -> bytes:
+    def img_to_byte_array(img: PILImage) -> bytes:
         buff = io.BytesIO()
         img.save(buff, format="PNG")
         return buff.getvalue()
