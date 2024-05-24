@@ -162,7 +162,7 @@ def b_command(
                 if not img_bytes:
                     break
 
-                img = Image.frombytes("RGB", (image_width, image_height), img_bytes)
+                img = PILImage.frombytes("RGB", (image_width, image_height), img_bytes)
                 output = remove(img, session=session, **kwargs)
 
                 if output_specifier:
