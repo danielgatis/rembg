@@ -206,24 +206,25 @@ def download_models() -> None:
 def create_sticker(img: PILImage, border_color: Tuple[int, int, int, int] = (255, 255, 255, 255), border_width: int = 30) -> PILImage:
     import cv2
     import numpy as np
-    from PIL import Image
 
     def extract_alpha_channel(img):
-        return np.array(img)[:, :, 3] if img.mode == 'RGBA' else None
+        return np.array(img)[:, :, 3]
 
     def get_all_contours(alpha_channel):
         smoothed = cv2.GaussianBlur(alpha_channel, (15, 15), 0)
         contours, _ = cv2.findContours(smoothed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         return contours
 
-    def get_largest_contour(contours):
+    def get_largest_contour(alpha_channel):
+        contours = get_all_contours(alpha_channel)
         if not contours:
             return None
         return max(contours, key=cv2.contourArea)
 
-    def draw_filled_contour_on_black_background(contour, shape):
+    def draw_filled_contour_on_black_background(contours, shape):
         contour_img = np.zeros(shape, dtype=np.uint8)
-        cv2.drawContours(contour_img, [contour], 0, 255, -1)
+        for contour in contours:
+            cv2.drawContours(contour_img, [contour], 0, 255, -1)
         return contour_img
 
     def apply_dilation(img):
@@ -238,23 +239,11 @@ def create_sticker(img: PILImage, border_color: Tuple[int, int, int, int] = (255
         return canvas
 
     alpha = extract_alpha_channel(img)
-    if alpha is None:
-        # If no alpha channel is found, return the original image with a white background
-        canvas = np.zeros((img.height, img.width, 4), dtype=np.uint8)
-        canvas[:, :, :] = (255, 255, 255, 255)
-        canvas[:, :, 0:3] = np.array(img)[:, :, 0:3]
-        return Image.fromarray(canvas)
-
-    contours = get_all_contours(alpha)
-    largest_contour = get_largest_contour(contours)
+    largest_contour = get_largest_contour(alpha)
     if largest_contour is None:
-        # If no contour is found, return the original image with a white background
-        canvas = np.zeros((img.height, img.width, 4), dtype=np.uint8)
-        canvas[:, :, :] = (255, 255, 255, 255)
-        canvas[:, :, 0:3] = np.array(img)[:, :, 0:3]
-        return Image.fromarray(canvas)
+        return img
 
-    contour_img = draw_filled_contour_on_black_background(largest_contour, alpha.shape)
+    contour_img = draw_filled_contour_on_black_background([largest_contour], alpha.shape)
     dilate = apply_dilation(contour_img)
     canvas = np.zeros((img.height, img.width, 4), dtype=np.uint8)
     canvas = apply_overlays(canvas, img, dilate)
