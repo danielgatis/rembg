@@ -240,14 +240,12 @@ def remove(
     if isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
         img = data
-    elif isinstance(data, bytes):
-        return_type = ReturnType.BYTES
-        img = Image.open(io.BytesIO(data))
     elif isinstance(data, np.ndarray):
         return_type = ReturnType.NDARRAY
         img = Image.fromarray(data)
     else:
-        raise ValueError("Input type {} is not supported.".format(type(data)))
+        return_type = ReturnType.BYTES
+        img = Image.open(io.BytesIO(data))
 
     putalpha = kwargs.pop("putalpha", False)
 
