@@ -241,7 +241,7 @@ def remove(
     """
     if isinstance(data, bytes) or force_return_bytes:
         return_type = ReturnType.BYTES
-        img = Image.open(io.BytesIO(data))
+        img = Image.open(io.BytesIO(cast(bytes, data)))
     elif isinstance(data, PILImage):
         return_type = ReturnType.PILLOW
         img = data
@@ -249,7 +249,11 @@ def remove(
         return_type = ReturnType.NDARRAY
         img = Image.fromarray(data)
     else:
-        raise ValueError("Input type {} is not supported. Try using force_return_bytes=True to force python bytes output".format(type(data)))
+        raise ValueError(
+            "Input type {} is not supported. Try using force_return_bytes=True to force python bytes output".format(
+                type(data)
+            )
+        )
 
     putalpha = kwargs.pop("putalpha", False)
 
