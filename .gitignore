@@ -11,7 +11,6 @@ __pycache__/
 *~≈
 .env
 .envrc
-.python-version
 .idea
 .pytest_cache
 
