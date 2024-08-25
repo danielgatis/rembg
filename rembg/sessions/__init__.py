@@ -7,6 +7,16 @@ from .base import BaseSession
 sessions_class: List[type[BaseSession]] = []
 sessions_names: List[str] = []
 
+from .birefnet_general import BiRefNetSessionGeneral
+
+sessions_class.append(BiRefNetSessionGeneral)
+sessions_names.append(BiRefNetSessionGeneral.name())
+
+from .birefnet_portrait import BiRefNetSessionPortrait
+
+sessions_class.append(BiRefNetSessionPortrait)
+sessions_names.append(BiRefNetSessionPortrait.name())
+
 from .dis_anime import DisSession
 
 sessions_class.append(DisSession)

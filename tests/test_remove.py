@@ -37,7 +37,9 @@ def test_remove():
         "silueta",
         "isnet-general-use",
         "isnet-anime",
-        "sam"
+        "sam",
+        "birefnet-general",
+        "birefnet-portrait"
     ]:
         for picture in ["anime-girl-1", "car-1", "cloth-1", "plants-1"]:
             image_path = Path(here / "fixtures" / f"{picture}.jpg")
