@@ -19,7 +19,7 @@ class BiRefNetSessionGeneralLite(BiRefNetSessionGeneral):
             str: The name of the session.
         """
         return "birefnet-general-lite"
-    
+
     @classmethod
     def url_fname(cls, *args, **kwargs):
         """
@@ -33,7 +33,7 @@ class BiRefNetSessionGeneralLite(BiRefNetSessionGeneral):
             str: The name of the model file in the model url.
         """
         return "BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx"
-    
+
     @classmethod
     def model_md5(cls, *args, **kwargs):
         """

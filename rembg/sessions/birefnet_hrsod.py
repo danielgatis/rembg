@@ -19,7 +19,7 @@ class BiRefNetSessionHRSOD(BiRefNetSessionGeneral):
             str: The name of the session.
         """
         return "birefnet-hrsod"
-    
+
     @classmethod
     def url_fname(cls, *args, **kwargs):
         """
@@ -33,7 +33,7 @@ class BiRefNetSessionHRSOD(BiRefNetSessionGeneral):
             str: The name of the model file in the model url.
         """
         return "BiRefNet-HRSOD_DHU-epoch_115.onnx"
-    
+
     @classmethod
     def model_md5(cls, *args, **kwargs):
         """

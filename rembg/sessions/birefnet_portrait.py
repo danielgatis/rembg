@@ -19,7 +19,7 @@ class BiRefNetSessionPortrait(BiRefNetSessionGeneral):
             str: The name of the session.
         """
         return "birefnet-portrait"
-    
+
     @classmethod
     def url_fname(cls, *args, **kwargs):
         """
@@ -33,7 +33,7 @@ class BiRefNetSessionPortrait(BiRefNetSessionGeneral):
             str: The name of the model file in the model url.
         """
         return "BiRefNet-portrait-epoch_150.onnx"
-    
+
     @classmethod
     def model_md5(cls, *args, **kwargs):
         """

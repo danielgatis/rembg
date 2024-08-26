@@ -19,7 +19,7 @@ class BiRefNetSessionMassive(BiRefNetSessionGeneral):
             str: The name of the session.
         """
         return "birefnet-massive"
-    
+
     @classmethod
     def url_fname(cls, *args, **kwargs):
         """
@@ -33,7 +33,7 @@ class BiRefNetSessionMassive(BiRefNetSessionGeneral):
             str: The name of the model file in the model url.
         """
         return "BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx"
-    
+
     @classmethod
     def model_md5(cls, *args, **kwargs):
         """

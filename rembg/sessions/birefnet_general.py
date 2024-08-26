@@ -76,15 +76,10 @@ class BiRefNetSessionGeneral(BaseSession):
                     else cls.model_hash(*args, **kwargs)
                 )
             },
-            urls={
-                fname: url
-            },
-            retry_if_failed=2
+            urls={fname: url},
+            retry_if_failed=2,
         )
-        pooch_instance.fetch(
-            fname,
-            progressbar=True
-        )
+        pooch_instance.fetch(fname, progressbar=True)
 
         return os.path.join(path, fname)
 
@@ -101,7 +96,7 @@ class BiRefNetSessionGeneral(BaseSession):
             str: The name of the session.
         """
         return "birefnet-general"
-    
+
     @classmethod
     def url_fname(cls, *args, **kwargs):
         """
@@ -115,7 +110,7 @@ class BiRefNetSessionGeneral(BaseSession):
             str: The name of the model file in the model url.
         """
         return "BiRefNet-general-epoch_244.onnx"
-    
+
     @classmethod
     def model_hash(cls, *args, **kwargs):
         """
