@@ -19,6 +19,13 @@ jobs:
               run: pip install .[cli,dev]
             - name: Test installation with pytest
               run: |
-                  rembg d
-                  while [ $? -ne 0 ]; do !!; done
+                  attempt=0
+                  until rembg d || [ $attempt -eq 5 ]; do
+                      attempt=$((attempt+1))
+                      echo "Attempt $attempt to download the models..."
+                  done
+                  if [ $attempt -eq 5 ]; then
+                      echo "downloading the models failed 5 times, exiting..."
+                      exit 1
+                  fi
                   pytest
