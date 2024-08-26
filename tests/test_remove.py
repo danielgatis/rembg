@@ -39,7 +39,12 @@ def test_remove():
         "isnet-anime",
         "sam",
         "birefnet-general",
-        "birefnet-portrait"
+        "birefnet-general-lite",
+        "birefnet-portrait",
+        "birefnet-dis",
+        "birefnet-hrsod",
+        "birefnet-cod",
+        "birefnet-massive"
     ]:
         for picture in ["anime-girl-1", "car-1", "cloth-1", "plants-1"]:
             image_path = Path(here / "fixtures" / f"{picture}.jpg")
