@@ -37,13 +37,13 @@ class BiRefNetSessionMassive(BiRefNetSessionGeneral):
     @classmethod
     def model_hash(cls, *args, **kwargs):
         """
-        Returns the md5 of the BiRefNet-Massive model file.
+        Returns the hash of the BiRefNet-Massive model file.
 
         Parameters:
             *args: Additional positional arguments.
             **kwargs: Additional keyword arguments.
 
         Returns:
-            str: The md5 of the model file.
+            str: The hash of the model file.
         """
         return "md5:33e726a2136a3d59eb0fdf613e31e3e9"

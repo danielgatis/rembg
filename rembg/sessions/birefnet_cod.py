@@ -37,13 +37,13 @@ class BiRefNetSessionCOD(BiRefNetSessionGeneral):
     @classmethod
     def model_hash(cls, *args, **kwargs):
         """
-        Returns the md5 of the BiRefNet-COD model file.
+        Returns the hash of the BiRefNet-COD model file.
 
         Parameters:
             *args: Additional positional arguments.
             **kwargs: Additional keyword arguments.
 
         Returns:
-            str: The md5 of the model file.
+            str: The hash of the model file.
         """
         return "md5:f6d0d21ca89d287f17e7afe9f5fd3b45"

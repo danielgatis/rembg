@@ -37,13 +37,13 @@ class BiRefNetSessionPortrait(BiRefNetSessionGeneral):
     @classmethod
     def model_hash(cls, *args, **kwargs):
         """
-        Returns the md5 of the BiRefNet-Portrait model file.
+        Returns the hash of the BiRefNet-Portrait model file.
 
         Parameters:
             *args: Additional positional arguments.
             **kwargs: Additional keyword arguments.
 
         Returns:
-            str: The md5 of the model file.
+            str: The hash of the model file.
         """
         return "md5:c3a64a6abf20250d090cd055f12a3b67"
