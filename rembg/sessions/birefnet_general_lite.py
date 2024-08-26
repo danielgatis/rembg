@@ -35,7 +35,7 @@ class BiRefNetSessionGeneralLite(BiRefNetSessionGeneral):
         return "BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx"
 
     @classmethod
-    def model_md5(cls, *args, **kwargs):
+    def model_hash(cls, *args, **kwargs):
         """
         Returns the md5 of the BiRefNet-General-Lite model file.
 

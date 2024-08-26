@@ -35,7 +35,7 @@ class BiRefNetSessionMassive(BiRefNetSessionGeneral):
         return "BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx"
 
     @classmethod
-    def model_md5(cls, *args, **kwargs):
+    def model_hash(cls, *args, **kwargs):
         """
         Returns the md5 of the BiRefNet-Massive model file.
 

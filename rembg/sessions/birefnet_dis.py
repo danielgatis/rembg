@@ -35,7 +35,7 @@ class BiRefNetSessionDIS(BiRefNetSessionGeneral):
         return "BiRefNet-DIS-epoch_590.onnx"
 
     @classmethod
-    def model_md5(cls, *args, **kwargs):
+    def model_hash(cls, *args, **kwargs):
         """
         Returns the md5 of the BiRefNet-DIS model file.
 
