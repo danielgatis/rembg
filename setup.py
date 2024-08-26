@@ -47,7 +47,7 @@ extras_require = {
         "gradio",
         "python-multipart",
         "uvicorn",
-        "watchdog",
+        "watchdog < 5.0.0",
     ],
 }
 
