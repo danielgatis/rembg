@@ -15,7 +15,7 @@ class BiRefNetSessionGeneral(BaseSession):
     """
 
     def sigmoid(self, mat):
-        return 1/(1+np.exp(-mat))
+        return 1 / (1 + np.exp(-mat))
 
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
@@ -63,15 +63,11 @@ class BiRefNetSessionGeneral(BaseSession):
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
-            # TODO:
-            # - Change this url to https://github.com/danielgatis/rembg/releases/download/v0.0.0/birefnet-general.onnx if needed
-            # - Then replace below sha256 with md5 checksum
-            # - And update url in README file
-            "https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-epoch_244.onnx",
+            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx",
             (
                 None
                 if cls.checksum_disabled(*args, **kwargs)
-                else "sha256:58f621f00f5d756097615970a88a791584600dcf7c45b18a0a6267535a1ebd3c"
+                else "md5:7a35a0141cbbc80de11d9c9a28f52697"
             ),
             fname=fname,
             path=cls.u2net_home(*args, **kwargs),
