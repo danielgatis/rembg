@@ -14,6 +14,8 @@ class BiRefNetSessionGeneral(BaseSession):
     This class represents a BiRefNet-General session, which is a subclass of BaseSession.
     """
 
+    base_url = "https://github.com/danielgatis/rembg/releases/download/v0.0.0/"
+
     def sigmoid(self, mat):
         return 1 / (1 + np.exp(-mat))
 
@@ -62,19 +64,29 @@ class BiRefNetSessionGeneral(BaseSession):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
-        pooch.retrieve(
-            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx",
-            (
-                None
-                if cls.checksum_disabled(*args, **kwargs)
-                else "md5:7a35a0141cbbc80de11d9c9a28f52697"
-            ),
-            fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
-            progressbar=True,
+        url = "".join([cls.base_url, cls.url_fname(*args, **kwargs)])
+        path = cls.u2net_home(*args, **kwargs)
+        pooch_instance = pooch.create(
+            path=path,
+            base_url=cls.base_url,
+            registry={
+                fname: (
+                    None
+                    if cls.checksum_disabled(*args, **kwargs)
+                    else cls.model_hash(*args, **kwargs)
+                )
+            },
+            urls={
+                fname: url
+            },
+            retry_if_failed=2
+        )
+        pooch_instance.fetch(
+            fname,
+            progressbar=True
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(path, fname)
 
     @classmethod
     def name(cls, *args, **kwargs):
@@ -89,3 +101,31 @@ class BiRefNetSessionGeneral(BaseSession):
             str: The name of the session.
         """
         return "birefnet-general"
+    
+    @classmethod
+    def url_fname(cls, *args, **kwargs):
+        """
+        Returns the name of the BiRefNet-General file in the model url.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The name of the model file in the model url.
+        """
+        return "BiRefNet-general-epoch_244.onnx"
+    
+    @classmethod
+    def model_hash(cls, *args, **kwargs):
+        """
+        Returns the hash of the BiRefNet-General model file.
+
+        Parameters:
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            str: The hash of the model file.
+        """
+        return "md5:7a35a0141cbbc80de11d9c9a28f52697"
