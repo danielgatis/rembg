@@ -19,4 +19,6 @@ jobs:
               run: pip install .[cli,dev]
             - name: Test installation with pytest
               run: |
+                  rembg d
+                  while [ $? -ne 0 ]; do !!; done
                   pytest
