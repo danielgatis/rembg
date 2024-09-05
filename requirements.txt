@@ -1,0 +1,7 @@
+aiohttp==3.10.5
+asyncer==0.0.8
+click==8.1.7
+filetype==1.2.0
+gradio==4.42.0
+rembg==2.0.59
+watchdog==5.0.2
