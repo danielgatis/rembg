@@ -78,7 +78,7 @@ CPU support:
 
 ```bash
 pip install rembg # for library
-pip install rembg[cli] # for library + cli
+pip install "rembg[cli]" # for library + cli
 ```
 
 GPU support:
@@ -94,8 +94,8 @@ Go to <https://onnxruntime.ai> and check the installation matrix.
 If yes, just run:
 
 ```bash
-pip install rembg[gpu] # for library
-pip install rembg[gpu,cli] # for library + cli
+pip install "rembg[GPU]" # for library
+pip install "rembg[gpu,cli]" # for library + cli
 ```
 
 ## Usage as a cli
