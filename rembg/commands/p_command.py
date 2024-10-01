@@ -198,22 +198,23 @@ def p_command(
 
         class EventHandler(FileSystemEventHandler):
             def on_any_event(self, event: FileSystemEvent) -> None:
+                src_path = cast(str, event.src_path)
                 if (
                     not (
                         event.is_directory or event.event_type in ["deleted", "closed"]
                     )
-                    and pathlib.Path(event.src_path).exists()
+                    and pathlib.Path(src_path).exists()
                 ):
-                    if event.src_path.endswith("stop.txt"):
+                    if src_path.endswith("stop.txt"):
                         nonlocal should_watch
                         should_watch = False
-                        pathlib.Path(event.src_path).unlink()
+                        pathlib.Path(src_path).unlink()
                         return
 
-                    process(pathlib.Path(event.src_path))
+                    process(pathlib.Path(src_path))
 
         event_handler = EventHandler()
-        observer.schedule(event_handler, input, recursive=False)
+        observer.schedule(event_handler, str(input), recursive=False)
         observer.start()
 
         try:
