@@ -74,11 +74,20 @@ python: >3.7, <3.13
 
 ## Installation
 
-CPU support:
+If you have `onnxruntime` already installed, just install `rembg`:
 
 ```bash
 pip install rembg # for library
 pip install "rembg[cli]" # for library + cli
+```
+
+Otherwise, install `rembg` with explicit CPU/GPU support.
+
+CPU support:
+
+```bash
+pip install rembg[cpu] # for library
+pip install "rembg[cpu,cli]" # for library + cli
 ```
 
 GPU support:
@@ -94,7 +103,7 @@ Go to <https://onnxruntime.ai> and check the installation matrix.
 If yes, just run:
 
 ```bash
-pip install "rembg[GPU]" # for library
+pip install "rembg[gpu]" # for library
 pip install "rembg[gpu,cli]" # for library + cli
 ```
 
