@@ -6,7 +6,7 @@ RUN pip install --upgrade pip
 
 COPY . .
 
-RUN python -m pip install ".[cli]"
+RUN python -m pip install ".[cpu,cli]"
 RUN rembg d
 
 EXPOSE 7000
