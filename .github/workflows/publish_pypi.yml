@@ -12,7 +12,7 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
             - name: Install dependencies
-              run: pip install .[cli,dev]
+              run: pip install .[cpu,cli,dev]
             - name: Builds and uploads to PyPI
               run: |
                   python3 setup.py sdist bdist_wheel
