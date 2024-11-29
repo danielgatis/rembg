@@ -1,6 +1,6 @@
 import os
 from copy import deepcopy
-from typing import Dict, List, Tuple
+from typing import List
 
 import cv2
 import numpy as np
