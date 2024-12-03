@@ -86,3 +86,8 @@ from .u2netp import U2netpSession
 
 sessions_class.append(U2netpSession)
 sessions_names.append(U2netpSession.name())
+
+from .bria_rmbg import BriaRmBgSession
+
+sessions_class.append(BriaRmBgSession)
+sessions_names.append(BriaRmBgSession.name())
