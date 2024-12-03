@@ -60,7 +60,7 @@ class BriaRmBgSession(BaseSession):
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
         pooch.retrieve(
-            "https://huggingface.co/briaai/RMBG-2.0/resolve/main/onnx/model.onnx",
+            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx",
             (
                 None
                 if cls.checksum_disabled(*args, **kwargs)
