@@ -306,6 +306,7 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
             ],
             gr.components.Image(type="filepath", label="Output"),
             concurrency_limit=3,
+            analytics_enabled=False,
         )
 
         app = gr.mount_gradio_app(app, interface, path="/")
