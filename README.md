@@ -1,3 +1,13 @@
+# OPEN TO WORK
+
+Hello everyone!
+
+I am currently looking for a new remote job opportunity and would greatly appreciate it if anyone could share any vacancies or opportunities they know of. If you happen to come across something, please consider letting me know.
+
+Thank you so much for your help and support!
+
+email: danielgatis@gmail.com
+
 # Rembg
 
 [![Downloads](https://img.shields.io/pypi/dm/rembg.svg)](https://img.shields.io/pypi/dm/rembg.svg)
