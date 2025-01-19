@@ -1,14 +1,17 @@
-# OPEN TO WORK
+# Rembg
+
+## OPEN TO WORK
 
 Hello everyone!
 
-I am currently looking for a new remote job opportunity and would greatly appreciate it if anyone could share any vacancies or opportunities they know of. If you happen to come across something, please consider letting me know.
+I’m currently looking for new remote job opportunities and would greatly appreciate your support. If you come across any openings or opportunities that might be a good fit, please don’t hesitate to share them with me.
 
-Thank you so much for your help and support!
+Thank you so much for your help—it means a lot!
 
-email: danielgatis@gmail.com
+Feel free to reach out to me via email: danielgatis@gmail.com
 
-# Rembg
+
+---
 
 [![Downloads](https://img.shields.io/pypi/dm/rembg.svg)](https://img.shields.io/pypi/dm/rembg.svg)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
