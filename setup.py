@@ -21,6 +21,7 @@ install_requires = [
     "scikit-image",
     "scipy",
     "tqdm",
+    "onnxruntime",
 ]
 
 extras_require = {
@@ -36,7 +37,7 @@ extras_require = {
         "twine",
         "wheel",
     ],
-    "cpu": ["onnxruntime"],
+    "cpu": [],
     "gpu": ["onnxruntime-gpu"],
     "cli": [
         "aiohttp",
