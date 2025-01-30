@@ -6,7 +6,7 @@ import sys
 from typing import IO
 
 import click
-from PIL.Image import Image as PILImage
+import PIL
 
 from ..bg import remove
 from ..session_factory import new_session
@@ -118,10 +118,11 @@ def b_command(
     Returns:
         None
     """
-    try:
-        kwargs.update(json.loads(extras))
-    except Exception:
-        pass
+    if extras:
+        try:
+            kwargs.update(json.loads(extras))
+        except Exception:
+            raise click.BadParameter("extras must be a valid JSON string")
 
     session = new_session(model, **kwargs)
     bytes_per_img = image_width * image_height * 3
@@ -134,7 +135,7 @@ def b_command(
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir, exist_ok=True)
 
-    def img_to_byte_array(img: PILImage) -> bytes:
+    def img_to_byte_array(img: PIL.Image) -> bytes:
         buff = io.BytesIO()
         img.save(buff, format="PNG")
         return buff.getvalue()
@@ -162,7 +163,7 @@ def b_command(
                 if not img_bytes:
                     break
 
-                img = PILImage.frombytes("RGB", (image_width, image_height), img_bytes)
+                img = PIL.Image.frombytes("RGB", (image_width, image_height), img_bytes)
                 output = remove(img, session=session, **kwargs)
 
                 if output_specifier:
