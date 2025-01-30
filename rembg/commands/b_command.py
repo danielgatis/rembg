@@ -135,9 +135,7 @@ def b_command(
             os.makedirs(output_dir, exist_ok=True)
 
     def img_to_byte_array(img: PILImage) -> bytes:
-        buff = io.BytesIO()
-        img.save(buff, format="PNG")
-        return buff.getvalue()
+        return img.convert('RGB').tobytes("raw", "RGB")
 
     async def connect_stdin_stdout():
         loop = asyncio.get_event_loop()
