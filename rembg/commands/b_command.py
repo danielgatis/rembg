@@ -135,7 +135,7 @@ def b_command(
         if not os.path.isdir(output_dir):
             os.makedirs(output_dir, exist_ok=True)
 
-    def img_to_byte_array(img: PIL.Image) -> bytes:
+    def img_to_byte_array(img: PIL.Image.Image) -> bytes:
         buff = io.BytesIO()
         img.save(buff, format="PNG")
         return buff.getvalue()
