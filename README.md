@@ -392,7 +392,7 @@ This library directly depends on the [onnxruntime](https://pypi.org/project/onnx
 
 Liked some of my work? Buy me a coffee (or more likely a beer)
 
-<a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a> <!-- markdownlint-disable MD033 -->
+<a href="https://www.buymeacoffee.com/danielgatis" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;"></a>
 
 ## Star History
 
