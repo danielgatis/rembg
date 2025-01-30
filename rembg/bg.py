@@ -175,9 +175,8 @@ def apply_background_color(img: PILImage, color: Tuple[int, int, int, int]) -> P
     Returns:
         PILImage: The modified image with the background color applied.
     """
-    r, g, b, a = color
-    colored_image = Image.new("RGBA", img.size, (r, g, b, a))
-    colored_image.paste(img, mask=img)
+    background = Image.new("RGBA", img.size, tuple(color))
+    colored_image = Image.alpha_composite(background, img)
 
     return colored_image
 
