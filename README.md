@@ -58,10 +58,27 @@ Rembg is a tool to remove images background.
 
 **If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
-## Sponsor
+## Sponsors
 
 <table>
   <tr>
+    <td align="center" vertical-align="center">
+      <a href="https://withoutbg.com/?utm_source=rembg&utm_medium=github_readme&utm_campaign=sponsorship" >
+        <img src="https://withoutbg.com/images/logo-social.png" width="120px;" alt="withoutBG API Logo" />
+      </a>
+    </td>
+    <td align="center" vertical-align="center">
+      <b>withoutBG API</b>
+      <br />
+      <a href="https://withoutbg.com/?utm_source=rembg&utm_medium=github_readme&utm_campaign=sponsorship">https://withoutbg.com</a>
+      <br />
+      <p width="200px">
+      High-quality background removal API at affordable rates
+        <br/>
+      </p>
+    </td>
+  </tr>
+ <tr>
     <td align="center" vertical-align="center">
       <a href="https://photoroom.com/api/remove-background?utm_source=rembg&utm_medium=github_webpage&utm_campaign=sponsor" >
         <img src="https://font-cdn.photoroom.com/media/api-logo.png" width="120px;" alt="Unsplash" />
