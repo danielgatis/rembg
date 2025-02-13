@@ -1,18 +1,5 @@
 # Rembg
 
-## OPEN TO WORK
-
-Hello everyone!
-
-I’m currently looking for new remote job opportunities and would greatly appreciate your support. If you come across any openings or opportunities that might be a good fit, please don’t hesitate to share them with me.
-
-Thank you so much for your help—it means a lot!
-
-Feel free to reach out to me via email: danielgatis@gmail.com
-
-
----
-
 [![Downloads](https://img.shields.io/pypi/dm/rembg.svg)](https://img.shields.io/pypi/dm/rembg.svg)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
