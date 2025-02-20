@@ -8,9 +8,7 @@ from .sessions.base import BaseSession
 from .sessions.u2net import U2netSession
 
 
-def new_session(
-    model_name: str = "u2net", providers=None, *args, **kwargs
-) -> BaseSession:
+def new_session(model_name: str = "u2net", *args, **kwargs) -> BaseSession:
     """
     Create a new session object based on the specified model name.
 
@@ -21,7 +19,6 @@ def new_session(
 
     Parameters:
         model_name (str): The name of the model.
-        providers: The providers for the session.
         *args: Additional positional arguments.
         **kwargs: Additional keyword arguments.
 
@@ -41,4 +38,4 @@ def new_session(
         sess_opts.inter_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
         sess_opts.intra_op_num_threads = int(os.environ["OMP_NUM_THREADS"])
 
-    return session_class(model_name, sess_opts, providers, *args, **kwargs)
+    return session_class(model_name, sess_opts, *args, **kwargs)
