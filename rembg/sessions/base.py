@@ -10,30 +10,11 @@ from PIL.Image import Image as PILImage
 class BaseSession:
     """This is a base class for managing a session with a machine learning model."""
 
-    def __init__(
-        self,
-        model_name: str,
-        sess_opts: ort.SessionOptions,
-        providers=None,
-        *args,
-        **kwargs
-    ):
+    def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         """Initialize an instance of the BaseSession class."""
         self.model_name = model_name
-
-        self.providers = []
-
-        _providers = ort.get_available_providers()
-        if providers:
-            for provider in providers:
-                if provider in _providers:
-                    self.providers.append(provider)
-        else:
-            self.providers.extend(_providers)
-
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
-            providers=self.providers,
             sess_options=sess_opts,
         )
 

@@ -87,7 +87,6 @@ class SamSession(BaseSession):
         self,
         model_name: str,
         sess_opts: ort.SessionOptions,
-        providers=None,
         *args,
         **kwargs,
     ):
@@ -102,25 +101,13 @@ class SamSession(BaseSession):
         """
         self.model_name = model_name
 
-        valid_providers = []
-        available_providers = ort.get_available_providers()
-
-        if providers:
-            for provider in providers or []:
-                if provider in available_providers:
-                    valid_providers.append(provider)
-        else:
-            valid_providers.extend(available_providers)
-
         paths = self.__class__.download_models(*args, **kwargs)
         self.encoder = ort.InferenceSession(
             str(paths[0]),
-            providers=valid_providers,
             sess_options=sess_opts,
         )
         self.decoder = ort.InferenceSession(
             str(paths[1]),
-            providers=valid_providers,
             sess_options=sess_opts,
         )
 
