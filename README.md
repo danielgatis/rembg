@@ -348,6 +348,8 @@ Try this:
 docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
 ```
 
+Notice: Right now docker version only support CPU Acceleration.
+
 ## Models
 
 All models are downloaded and saved in the user home folder in the `.u2net` directory.
