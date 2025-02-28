@@ -100,14 +100,14 @@ pip install "rembg[cli]" # for library + cli
 
 Otherwise, install `rembg` with explicit CPU/GPU support.
 
-CPU support:
+### CPU support:
 
 ```bash
 pip install rembg[cpu] # for library
 pip install "rembg[cpu,cli]" # for library + cli
 ```
 
-GPU support:
+### GPU support:
 
 First of all, you need to check if your system supports the `onnxruntime-gpu`.
 
@@ -123,6 +123,8 @@ If yes, just run:
 pip install "rembg[gpu]" # for library
 pip install "rembg[gpu,cli]" # for library + cli
 ```
+
+Nvidia GPU may require onnxruntime-gpu, cuda, and cudnn-devel. [#668](https://github.com/danielgatis/rembg/issues/668#issuecomment-2689830314) . If rembg[gpu] couldn't work probably and your can't install cuda or cudnn-devel, use rembg[cpu] and onnxruntime instead.
 
 ## Usage as a cli
 
@@ -345,6 +347,8 @@ Try this:
 ```shell
 docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
 ```
+
+Notice: Right now docker version only support CPU Acceleration.
 
 ## Models
 
