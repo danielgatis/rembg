@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: rembg
+message: Rembg is a tool to remove images background
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Gatis
+    email: danielgatis@gmail.com
+identifiers:
+  - type: url
+    value: 'https://github.com/danielgatis'
+repository-code: 'https://github.com/danielgatis/rembg'
+url: 'https://github.com/danielgatis/rembg'
+abstract: Rembg is a tool to remove images background.
+license: MIT
+commit: 9079508935ae55d6eefa0fd75f870599640e8593
+version: 2.0.63
+date-released: '2025-02-21'
+
