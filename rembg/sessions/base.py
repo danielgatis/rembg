@@ -13,9 +13,17 @@ class BaseSession:
     def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         """Initialize an instance of the BaseSession class."""
         self.model_name = model_name
+
+        device_type = ort.get_device()
+        if device_type == 'GPU' and 'CUDAExecutionProvider' in ort.get_available_providers():
+            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+        else:
+            providers = ['CPUExecutionProvider']
+
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
             sess_options=sess_opts,
+            providers=providers,
         )
 
     def normalize(
