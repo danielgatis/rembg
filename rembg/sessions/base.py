@@ -15,10 +15,13 @@ class BaseSession:
         self.model_name = model_name
 
         device_type = ort.get_device()
-        if device_type == 'GPU' and 'CUDAExecutionProvider' in ort.get_available_providers():
-            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+        if (
+            device_type == "GPU"
+            and "CUDAExecutionProvider" in ort.get_available_providers()
+        ):
+            providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
         else:
-            providers = ['CPUExecutionProvider']
+            providers = ["CPUExecutionProvider"]
 
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
