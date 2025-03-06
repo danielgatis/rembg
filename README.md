@@ -340,6 +340,8 @@ To see a full list of examples on how to use rembg, go to the [examples](USAGE.m
 
 ## Usage as a docker
 
+### Only CPU
+
 Just replace the `rembg` command for `docker run danielgatis/rembg`.
 
 Try this:
@@ -348,7 +350,24 @@ Try this:
 docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
 ```
 
-Notice: Right now docker version only support CPU Acceleration.
+### Nvidia CUDA Hardware Acceleration
+
+Requirement: using CUDA in docker needs your **host** has **NVIDIA Container Toolkit** installed. [NVIDIA Container Toolkit Install Guide](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+
+**Nvidia CUDA Hardware Acceleration** needs cudnn-devel so you need to build the docker image by yourself. [#668](https://github.com/danielgatis/rembg/issues/668#issuecomment-2689914205)
+
+Here is a example shows you how to build an image and name it *rembg-nvidia-cuda-cudnn-gpu*
+```shell
+docker build -t rembg-nvidia-cuda-cudnn-gpu -f Dockerfile_nvidia_cuda_cudnn_gpu .
+```
+Be aware: It would take 11GB of your disk space. (The cpu version only takes about 1.6GB). Models didn't included.
+
+After you build the image, run it like this as a cli
+```shell
+sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/rembg rembg-nvidia-cuda-cudnn-gpu i -m birefnet-general input.png output.png
+```
+
+Trick: Actually you can also make up a nvidia-cuda-cudnn-gpu image and install rembg[gpu, cli] in it.
 
 ## Models
 
