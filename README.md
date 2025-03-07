@@ -124,7 +124,7 @@ pip install "rembg[gpu]" # for library
 pip install "rembg[gpu,cli]" # for library + cli
 ```
 
-Nvidia GPU may require onnxruntime-gpu, cuda, and cudnn-devel. [#668](https://github.com/danielgatis/rembg/issues/668#issuecomment-2689830314) . If rembg[gpu] couldn't work probably and your can't install cuda or cudnn-devel, use rembg[cpu] and onnxruntime instead.
+Nvidia GPU may require onnxruntime-gpu, cuda, and cudnn-devel. [#668](https://github.com/danielgatis/rembg/issues/668#issuecomment-2689830314) . If rembg[gpu] doesn't work and you can't install cuda or cudnn-devel, use rembg[cpu] and onnxruntime instead.
 
 ## Usage as a cli
 
