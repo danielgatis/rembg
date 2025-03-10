@@ -111,7 +111,7 @@ pip install "rembg[cpu,cli]" # for library + cli
 
 First of all, you need to check if your system supports the `onnxruntime-gpu`.
 
-Go to <https://onnxruntime.ai> and check the installation matrix.
+Go to [onnxruntime.ai](<https://onnxruntime.ai/getting-started>) and check the installation matrix.
 
 <p style="display: flex;align-items: center;justify-content: center;">
   <img alt="onnxruntime-installation-matrix" src="https://raw.githubusercontent.com/danielgatis/rembg/master/onnxruntime-installation-matrix.png" width="400" />
