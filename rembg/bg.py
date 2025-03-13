@@ -1,4 +1,5 @@
 import io
+import sys
 from enum import Enum
 from typing import Any, List, Optional, Tuple, Union, cast
 
@@ -20,7 +21,7 @@ from pymatting.util.util import stack_images
 from scipy.ndimage import binary_erosion
 
 from .session_factory import new_session
-from .sessions import sessions_class
+from .sessions import sessions, sessions_names
 from .sessions.base import BaseSession
 
 ort.set_default_logger_severity(3)
@@ -194,12 +195,22 @@ def fix_image_orientation(img: PILImage) -> PILImage:
     return cast(PILImage, ImageOps.exif_transpose(img))
 
 
-def download_models() -> None:
+def download_models(models: tuple[str, ...]) -> None:
     """
     Download models for image processing.
     """
-    for session in sessions_class:
-        session.download_models()
+    if len(models) == 0:
+        print("No models specified, downloading all models")
+        models = tuple(sessions_names)
+
+    for model in models:
+        session = sessions.get(model)
+        if session is None:
+            print(f"Error: no model found: {model}")
+            sys.exit(1)
+        else:
+            print(f"Downloading model: {model}")
+            session.download_models()
 
 
 def remove(
@@ -214,7 +225,7 @@ def remove(
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
     force_return_bytes: bool = False,
     *args: Optional[Any],
-    **kwargs: Optional[Any]
+    **kwargs: Optional[Any],
 ) -> Union[bytes, PILImage, np.ndarray]:
     """
     Remove the background from an input image.
