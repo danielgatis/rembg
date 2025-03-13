@@ -5,10 +5,11 @@ from ..bg import download_models
 
 @click.command(  # type: ignore
     name="d",
-    help="download all models",
+    help="download models",
 )
-def d_command(*args, **kwargs) -> None:
+@click.argument("models", nargs=-1)
+def d_command(models: tuple[str, ...]) -> None:
     """
-    Download all models
+    Download models
     """
-    download_models()
+    download_models(models)
