@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-pip pyt
 COPY . .
 
 RUN python -m pip install ".[gpu,cli]" --break-system-packages
-RUN rembg d
+RUN rembg d u2net
 
 EXPOSE 7000
 ENTRYPOINT ["rembg"]
