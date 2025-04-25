@@ -41,7 +41,7 @@ class BaseSession:
         im = img.convert("RGB").resize(size, Image.Resampling.LANCZOS)
 
         im_ary = np.array(im)
-        im_ary = im_ary / np.max(im_ary)
+        im_ary = im_ary / max(np.max(im_ary), 1e-6)
 
         tmpImg = np.zeros((im_ary.shape[0], im_ary.shape[1], 3))
         tmpImg[:, :, 0] = (im_ary[:, :, 0] - mean[0]) / std[0]
