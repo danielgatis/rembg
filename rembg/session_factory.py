@@ -1,5 +1,5 @@
 import os
-from typing import Type
+from typing import Optional, Type
 
 import onnxruntime as ort
 

@@ -5,14 +5,8 @@ from typing import Any, List, Optional, Tuple, Union, cast
 
 import numpy as np
 import onnxruntime as ort
-from cv2 import (
-    BORDER_DEFAULT,
-    MORPH_ELLIPSE,
-    MORPH_OPEN,
-    GaussianBlur,
-    getStructuringElement,
-    morphologyEx,
-)
+from cv2 import (BORDER_DEFAULT, MORPH_ELLIPSE, MORPH_OPEN, GaussianBlur,
+                 getStructuringElement, morphologyEx)
 from PIL import Image, ImageOps
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
