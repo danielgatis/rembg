@@ -24,11 +24,17 @@ class U2netCustomSession(BaseSession):
             **kwargs: Additional keyword arguments.
 
         Raises:
-            ValueError: If model_path is None.
+            ValueError: If 'model_path' is not provided.
+            FileNotFoundError: If the file at 'model_path' does not exist.
+            PermissionError: If the file at 'model_path' is not readable.
         """
         model_path = kwargs.get("model_path")
         if model_path is None:
             raise ValueError("model_path is required")
+        if not os.path.isfile(model_path):
+            raise FileNotFoundError(f"No file found at '{model_path}'.")
+        if not os.access(model_path, os.R_OK):
+            raise PermissionError(f"The file at '{model_path}' is not readable.")
 
         super().__init__(model_name, sess_opts, *args, **kwargs)
 
