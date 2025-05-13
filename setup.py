@@ -38,6 +38,7 @@ extras_require = {
     ],
     "cpu": ["onnxruntime"],
     "gpu": ["onnxruntime-gpu"],
+    "rocm": ["onnxruntime-rocm"],
     "cli": [
         "aiohttp",
         "asyncer",

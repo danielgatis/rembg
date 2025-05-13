@@ -20,6 +20,11 @@ class BaseSession:
             and "CUDAExecutionProvider" in ort.get_available_providers()
         ):
             providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        elif (
+            device_type[0:3] == "GPU"
+            and "ROCMExecutionProvider" in ort.get_available_providers()
+        ):
+            providers = ["ROCMExecutionProvider", "CPUExecutionProvider"]
         else:
             providers = ["CPUExecutionProvider"]
 
