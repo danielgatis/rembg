@@ -109,7 +109,7 @@ pip install rembg[cpu] # for library
 pip install "rembg[cpu,cli]" # for library + cli
 ```
 
-### GPU support:
+### GPU support (NVidia/Cuda):
 
 First of all, you need to check if your system supports the `onnxruntime-gpu`.
 
@@ -127,6 +127,19 @@ pip install "rembg[gpu,cli]" # for library + cli
 ```
 
 Nvidia GPU may require onnxruntime-gpu, cuda, and cudnn-devel. [#668](https://github.com/danielgatis/rembg/issues/668#issuecomment-2689830314) . If rembg[gpu] doesn't work and you can't install cuda or cudnn-devel, use rembg[cpu] and onnxruntime instead.
+
+### GPU support (AMD/ROCM):
+
+ROCM support requires the `onnxruntime-rocm` package. Install it following
+[AMD's documentation](https://rocm.docs.amd.com/projects/radeon/en/latest/docs/install/native_linux/install-onnx.html).
+
+If `onnxruntime-rocm` is installed and working, install the `rembg[rocm]`
+version of rembg:
+
+```bash
+pip install "rembg[rocm]" # for library
+pip install "rembg[rocm,cli]" # for library + cli
+```
 
 ## Usage as a cli
 
