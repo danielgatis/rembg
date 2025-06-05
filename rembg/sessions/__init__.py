@@ -78,5 +78,9 @@ from .bria_rmbg import BriaRmBgSession
 
 sessions[BriaRmBgSession.name()] = BriaRmBgSession
 
+from .ben_custom import BenCustomSession
+
+sessions[BenCustomSession.name()] = BenCustomSession
+
 sessions_names = list(sessions.keys())
 sessions_class = list(sessions.values())
