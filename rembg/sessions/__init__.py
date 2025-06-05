@@ -38,6 +38,10 @@ from .dis_anime import DisSession
 
 sessions[DisSession.name()] = DisSession
 
+from .dis_custom import DisCustomSession
+
+sessions[DisCustomSession.name()] = DisCustomSession
+
 from .dis_general_use import DisSession as DisSessionGeneralUse
 
 sessions[DisSessionGeneralUse.name()] = DisSessionGeneralUse
