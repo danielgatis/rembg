@@ -123,4 +123,4 @@ class BenCustomSession(BaseSession):
         Returns:
             str: The name of the model.
         """
-        return "ben-custom"
+        return "ben_custom"

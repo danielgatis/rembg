@@ -8,7 +8,6 @@ from PIL.Image import Image as PILImage
 
 from .base import BaseSession
 
-
 class DisCustomSession(BaseSession):
     """This is a class representing a custom session for the Dis model."""
 
@@ -89,4 +88,4 @@ class DisCustomSession(BaseSession):
         Returns:
             str: The name of the model.
         """
-        return "dis-custom"
+        return "dis_custom"
