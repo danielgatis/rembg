@@ -72,7 +72,7 @@ class DisCustomSession(BaseSession):
         """
         model_path = kwargs.get("model_path")
         if model_path is None:
-            return
+            raise ValueError("model_path is required")
 
         return os.path.abspath(os.path.expanduser(model_path))
 
