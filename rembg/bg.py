@@ -210,7 +210,10 @@ def download_models(models: tuple[str, ...]) -> None:
             sys.exit(1)
         else:
             print(f"Downloading model: {model}")
-            session.download_models()
+            try:
+                session.download_models()
+            except Exception as e:
+                print(f"Error downloading model: {e}")
 
 
 def remove(

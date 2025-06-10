@@ -1,15 +1,12 @@
 import os
 from typing import List
-import onnxruntime as ort
-import numpy as np
 
+import numpy as np
+import onnxruntime as ort
 from PIL import Image
 from PIL.Image import Image as PILImage
 
 from .base import BaseSession
-
-import numpy as np
-from PIL import Image
 
 
 class BenCustomSession(BaseSession):

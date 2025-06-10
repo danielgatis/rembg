@@ -1,8 +1,8 @@
 import os
 from typing import List
-import onnxruntime as ort
-import numpy as np
 
+import numpy as np
+import onnxruntime as ort
 from PIL import Image
 from PIL.Image import Image as PILImage
 
