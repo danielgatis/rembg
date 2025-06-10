@@ -406,6 +406,7 @@ The available models are:
 - birefnet-hrsod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-HRSOD_DHU-epoch_115.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for high-resolution salient object detection (HRSOD).
 - birefnet-cod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-COD-epoch_125.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for concealed object detection (COD).
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
+- ben2-base ([download](https://huggingface.co/PramaLLC/BEN2/resolve/main/BEN2_Base.onnx), [source](https://huggingface.co/PramaLLC/BEN2)): Introduces a novel approach to foreground segmentation through its innovative Confidence Guided Matting (CGM) pipeline.
 
 ### How to train your own model
 
