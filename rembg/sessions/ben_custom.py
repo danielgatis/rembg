@@ -1,30 +1,29 @@
 import os
 from typing import List
-
-import numpy as np
 import onnxruntime as ort
-import pooch
+import numpy as np
+
 from PIL import Image
 from PIL.Image import Image as PILImage
 
 from .base import BaseSession
 
+import numpy as np
+from PIL import Image
 
-class U2netCustomSession(BaseSession):
-    """This is a class representing a custom session for the U2net model."""
+
+class BenCustomSession(BaseSession):
+    """This is a class representing a custom session for the Ben model."""
 
     def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         """
-        Initialize a new U2netCustomSession object.
+        Initialize a new BenCustomSession object.
 
         Parameters:
             model_name (str): The name of the model.
-            sess_opts (ort.SessionOptions): The session options.
+            sess_opts: The session options.
             *args: Additional positional arguments.
             **kwargs: Additional keyword arguments.
-
-        Raises:
-            ValueError: If model_path is None.
         """
         model_path = kwargs.get("model_path")
         if model_path is None:
@@ -34,21 +33,20 @@ class U2netCustomSession(BaseSession):
 
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
-        Predict the segmentation mask for the input image.
+        Predicts the mask image for the input image.
+
+        This method takes a PILImage object as input and returns a list of PILImage objects as output. It performs several image processing operations to generate the mask image.
 
         Parameters:
             img (PILImage): The input image.
-            *args: Additional positional arguments.
-            **kwargs: Additional keyword arguments.
 
         Returns:
-            List[PILImage]: A list of PILImage objects representing the segmentation mask.
+            List[PILImage]: A list of PILImage objects representing the generated mask image.
         """
+
         ort_outs = self.inner_session.run(
             None,
-            self.normalize(
-                img, (0.485, 0.456, 0.406), (0.229, 0.224, 0.225), (320, 320)
-            ),
+            self.normalize(img, (0.5, 0.5, 0.5), (1.0, 1.0, 1.0), (1024, 1024)),
         )
 
         pred = ort_outs[0][:, 0, :, :]
@@ -61,6 +59,7 @@ class U2netCustomSession(BaseSession):
 
         mask = Image.fromarray((pred * 255).astype("uint8"), mode="L")
         mask = mask.resize(img.size, Image.Resampling.LANCZOS)
+
 
         return [mask]
 
@@ -94,4 +93,4 @@ class U2netCustomSession(BaseSession):
         Returns:
             str: The name of the model.
         """
-        return "u2net_custom"
+        return "ben_custom"

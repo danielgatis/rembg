@@ -38,6 +38,10 @@ from .dis_anime import DisSession
 
 sessions[DisSession.name()] = DisSession
 
+from .dis_custom import DisCustomSession
+
+sessions[DisCustomSession.name()] = DisCustomSession
+
 from .dis_general_use import DisSession as DisSessionGeneralUse
 
 sessions[DisSessionGeneralUse.name()] = DisSessionGeneralUse
@@ -73,6 +77,10 @@ sessions[U2netpSession.name()] = U2netpSession
 from .bria_rmbg import BriaRmBgSession
 
 sessions[BriaRmBgSession.name()] = BriaRmBgSession
+
+from .ben_custom import BenCustomSession
+
+sessions[BenCustomSession.name()] = BenCustomSession
 
 sessions_names = list(sessions.keys())
 sessions_class = list(sessions.values())
