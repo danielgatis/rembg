@@ -8,6 +8,7 @@ from PIL.Image import Image as PILImage
 
 from .base import BaseSession
 
+
 class DisCustomSession(BaseSession):
     """This is a class representing a custom session for the Dis model."""
 
@@ -26,7 +27,6 @@ class DisCustomSession(BaseSession):
             raise ValueError("model_path is required")
 
         super().__init__(model_name, sess_opts, *args, **kwargs)
-
 
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
         """
