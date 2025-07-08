@@ -1,5 +1,6 @@
 import os
 from typing import Dict, List, Tuple
+import warnings
 
 import numpy as np
 import onnxruntime as ort
@@ -10,6 +11,20 @@ from PIL.Image import Image as PILImage
 class BaseSession:
     """This is a base class for managing a session with a machine learning model."""
 
+    # Define provider constants
+    PROVIDER_TENSORRT = ("TensorrtExecutionProvider", {"trt_engine_cache_enable": True})
+    PROVIDER_CUDA = ("CUDAExecutionProvider", {})
+    PROVIDER_ROCM = ("ROCMExecutionProvider", {})
+    # Define CPU provider
+    PROVIDER_CPU = ("CPUExecutionProvider", {})
+
+    # Define GPU provider priority
+    DEFAULT_GPU_PROVIDER_PRIORITY = [
+        PROVIDER_TENSORRT,
+        PROVIDER_CUDA,
+        PROVIDER_ROCM
+    ]
+
     def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         """Initialize an instance of the BaseSession class."""
         self.model_name = model_name
@@ -17,25 +32,43 @@ class BaseSession:
         if "providers" in kwargs and isinstance(kwargs["providers"], list):
             providers = kwargs.pop("providers")
         else:
-            device_type = ort.get_device()
-            if (
-                device_type == "GPU"
-                and "CUDAExecutionProvider" in ort.get_available_providers()
-            ):
-                providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
-            elif (
-                device_type[0:3] == "GPU"
-                and "ROCMExecutionProvider" in ort.get_available_providers()
-            ):
-                providers = ["ROCMExecutionProvider", "CPUExecutionProvider"]
-            else:
-                providers = ["CPUExecutionProvider"]
+            providers = self.get_optimal_providers()
 
         self.inner_session = ort.InferenceSession(
             str(self.__class__.download_models(*args, **kwargs)),
             sess_options=sess_opts,
             providers=providers,
         )
+
+    def get_optimal_providers(self) -> List[Tuple[str, Dict]]:
+        """Check if GPU acceleration is available and execute available modes according to
+        the priority defined in DEFAULT_GPU_PROVIDER_PRIORITY"""
+
+        """Default providers"""
+        providers: List[Tuple[str, Dict]] = [self.PROVIDER_CPU]
+        
+        """Check if GPU is available first"""
+        if ort.get_device().startswith("GPU"):
+            available_providers = ort.get_available_providers()
+            
+            """Check for available GPU providers in priority order"""
+            priority_providers = self.DEFAULT_GPU_PROVIDER_PRIORITY
+            selected_gpu_provider = None
+            
+            for provider_name, provider_options in priority_providers:
+                if provider_name in available_providers:
+                    selected_gpu_provider = provider_name
+                    providers.insert(0, (provider_name, provider_options))
+                    break
+            
+            """Warn if GPU detected but no compatible providers found"""
+            if selected_gpu_provider is None:
+                warnings.warn(
+                    f"GPU detected but no compatible providers found. Available providers: {available_providers}. Running in CPU mode only.",
+                    RuntimeWarning
+                )
+        
+        return providers
 
     def normalize(
         self,
