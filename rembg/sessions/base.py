@@ -12,11 +12,11 @@ class BaseSession:
     """This is a base class for managing a session with a machine learning model."""
 
     # Define provider constants
-    PROVIDER_TENSORRT = ("TensorrtExecutionProvider", {"trt_engine_cache_enable": True})
-    PROVIDER_CUDA = ("CUDAExecutionProvider", {})
-    PROVIDER_ROCM = ("ROCMExecutionProvider", {})
+    PROVIDER_TENSORRT: Tuple[str, Dict] = ("TensorrtExecutionProvider", {"trt_engine_cache_enable": True})
+    PROVIDER_CUDA: Tuple[str, Dict] = ("CUDAExecutionProvider", {})
+    PROVIDER_ROCM: Tuple[str, Dict] = ("ROCMExecutionProvider", {})
     # Define CPU provider
-    PROVIDER_CPU = ("CPUExecutionProvider", {})
+    PROVIDER_CPU: Tuple[str, Dict] = ("CPUExecutionProvider", {})
 
     # Define GPU provider priority
     DEFAULT_GPU_PROVIDER_PRIORITY = [
