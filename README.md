@@ -52,6 +52,23 @@ Rembg is a tool to remove images background.
 <table>
   <tr>
     <td align="center" vertical-align="center">
+      <a href="https://www.rembg.com/?utm_source=rembg&utm_medium=github_readme&utm_campaign=sponsorship" >
+        <img src="https://www.rembg.com/RemBG.com-logo.png" width="120px;" alt="RemBG API Logo" />
+      </a>
+    </td>
+    <td align="center" vertical-align="center">
+      <b>RemBG API</b>
+      <br />
+      <a href="https://www.rembg.com/?utm_source=rembg&utm_medium=github_readme&utm_campaign=sponsorship">https://www.rembg.com</a>
+      <br />
+      <p width="200px">
+      Premium background removal API – from $1/month
+        <br/>
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" vertical-align="center">
       <a href="https://withoutbg.com/?utm_source=rembg&utm_medium=github_readme&utm_campaign=sponsorship" >
         <img src="https://withoutbg.com/images/logo-social.png" width="120px;" alt="withoutBG API Logo" />
       </a>
