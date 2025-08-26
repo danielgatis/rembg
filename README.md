@@ -400,7 +400,7 @@ sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/rembg rembg-nv
 ```
 
 - Trick 1: Actually you can also make up a nvidia-cuda-cudnn-gpu image and install rembg[gpu, cli] in it.
-- Trick 2: Try param `-v /somewhereYouStoresModelFiles/:/root/.u2net` so to download/store model files out of docker images. You can even comment the line `RUN rembg d u2net` so when builing the image, it download will no models, so you can download the specific model you want even without the default u2net model.
+- Trick 2: Try param `-v /somewhereYouStoresModelFiles/:/root/.u2net` so to download/store model files out of docker images. You can even comment the line `RUN rembg d u2net` so when building the image, it download will no models, so you can download the specific model you want even without the default u2net model.
 
 ## Models
 
