@@ -83,7 +83,7 @@ setup(
         "Programming Language :: Python :: 3.13",
     ],
     keywords="remove, background, u2net",
-    python_requires=">=3.10, <3.14",
+    python_requires=">=3.10",
     packages=find_packages(),
     install_requires=install_requires,
     entry_points=entry_points,
