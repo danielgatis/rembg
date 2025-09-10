@@ -1,5 +1,7 @@
 # Rembg
 
+[![RepoMapr](https://img.shields.io/badge/RepoMapr-View_Interactive_Diagram-blue?style=flat&logo=github)](https://repomapr.com/danielgatis/rembg)
+
 [![Downloads](https://img.shields.io/pypi/dm/rembg.svg)](https://img.shields.io/pypi/dm/rembg.svg)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
 [![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
