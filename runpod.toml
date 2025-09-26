@@ -1,0 +1,13 @@
+# See https://www.runpod.io/docs/references/runpod-toml for reference
+# This file is used to configure the serverless deployment on RunPod.
+# You can specify the base image, container disk size, and other settings.
+# For more information, see the RunPod documentation.
+
+[build]
+# The image to use for the serverless worker.
+# This should be the same image that is built by the builder.sh script.
+image = "your-registry/rembg-serverless:latest"
+
+[serverless]
+# The size of the container disk in GB.
+container_disk_in_gb = 10
