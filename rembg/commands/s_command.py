@@ -197,12 +197,15 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
             except Exception:
                 pass
 
+        session = sessions.get(commons.model)
+        if session is None:
+            session = new_session(commons.model, **kwargs)
+            sessions[commons.model] = session
+
         return Response(
             remove(
                 content,
-                session=sessions.setdefault(
-                    commons.model, new_session(commons.model, **kwargs)
-                ),
+                session=session,
                 alpha_matting=commons.a,
                 alpha_matting_foreground_threshold=commons.af,
                 alpha_matting_background_threshold=commons.ab,
