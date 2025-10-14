@@ -40,6 +40,10 @@ def new_session(model_name: str = "u2net", *args, **kwargs) -> BaseSession:
 
     sess_opts = ort.SessionOptions()
 
+    # Workaround for birefnet not working with default graph optimization level
+    # https://github.com/microsoft/onnxruntime/issues/26261
+    sess_opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
+
     if "OMP_NUM_THREADS" in os.environ:
         threads = int(os.environ["OMP_NUM_THREADS"])
         sess_opts.inter_op_num_threads = threads
