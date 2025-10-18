@@ -5,7 +5,6 @@ import numpy as np
 import pooch
 from PIL import Image
 from PIL.Image import Image as PILImage
-from scipy.special import log_softmax
 
 from .base import BaseSession
 
@@ -80,9 +79,7 @@ class Unet2ClothSession(BaseSession):
             ),
         )
 
-        pred = ort_outs
-        pred = log_softmax(pred[0], 1)
-        pred = np.argmax(pred, axis=1, keepdims=True)
+        pred = np.argmax(ort_outs[0], axis=1, keepdims=True)
         pred = np.squeeze(pred, 0)
         pred = np.squeeze(pred, 0)
 
