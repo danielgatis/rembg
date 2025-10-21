@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="钱猎献" />
+    <title>一键抠图</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f5f7fb;
+        --bg-dark: #1f2933;
+        --card: rgba(255, 255, 255, 0.9);
+        --card-dark: rgba(31, 41, 51, 0.9);
+        --primary: #4f46e5;
+        --text: #1f2933;
+        --text-dark: #e5e7eb;
+        --muted: #6b7280;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: linear-gradient(160deg, var(--bg), #dbeafe);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: linear-gradient(160deg, var(--bg-dark), #111827);
+          color: var(--text-dark);
+        }
+      }
+
+      header {
+        max-width: 960px;
+        padding: 64px 24px 24px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 16px;
+        letter-spacing: 0.08em;
+      }
+
+      p.subtitle {
+        font-size: 1.15rem;
+        color: var(--muted);
+        margin: 0 auto 32px;
+        max-width: 520px;
+      }
+
+      .drop-area {
+        width: min(90vw, 640px);
+        min-height: 240px;
+        border: 2px dashed rgba(79, 70, 229, 0.4);
+        border-radius: 24px;
+        padding: 48px 24px;
+        background: var(--card);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        transition: transform 0.3s ease, border-color 0.3s ease,
+          box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .drop-area {
+          background: var(--card-dark);
+          border-color: rgba(129, 140, 248, 0.4);
+        }
+      }
+
+      .drop-area.dragover {
+        transform: translateY(-6px);
+        border-color: rgba(79, 70, 229, 0.8);
+        box-shadow: 0 18px 40px rgba(79, 70, 229, 0.2);
+      }
+
+      .drop-area svg {
+        width: 64px;
+        height: 64px;
+        fill: var(--primary);
+      }
+
+      .drop-area .hint {
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      .drop-area .tip {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .task-list {
+        margin: 40px 0 80px;
+        width: min(90vw, 720px);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .task-item {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 20px 24px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .task-item {
+          background: var(--card-dark);
+          box-shadow: 0 10px 30px rgba(17, 24, 39, 0.6);
+        }
+      }
+
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .task-name {
+        font-weight: 600;
+        word-break: break-all;
+      }
+
+      .task-status {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, 0.1);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        transition: width 0.2s ease;
+      }
+
+      .download-link {
+        align-self: flex-end;
+        background: var(--primary);
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .download-link.visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      footer {
+        margin: auto 0 24px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>一键抠图</h1>
+      <p class="subtitle">
+        将图片拖入页面任意位置，即可自动上传到抠图服务并返回透明背景图片。
+        支持批量拖拽，处理完成后自动下载结果。
+      </p>
+    </header>
+
+    <label class="drop-area" id="drop-area" for="file-input">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12 2a6 6 0 0 0-5.996 6.291A4.5 4.5 0 0 0 6.5 20h11a4.5 4.5 0 0 0 1.447-8.776A6.002 6.002 0 0 0 12 2Zm0 2a4 4 0 0 1 3.796 5.349 1 1 0 0 0 .665 1.297A2.5 2.5 0 0 1 17.5 18h-11a2.5 2.5 0 0 1-.619-4.922 1 1 0 0 0 .644-1.31A4 4 0 0 1 12 4Zm0 4a1 1 0 0 0-1 1v3H9l3 4 3-4h-2V9a1 1 0 0 0-1-1Z"
+        />
+      </svg>
+      <div class="hint">拖拽或点击选择图片</div>
+      <div class="tip">支持 JPG、PNG、WebP 等常见格式，批量处理自动下载</div>
+      <input id="file-input" type="file" accept="image/*" multiple />
+    </label>
+
+    <section class="task-list" id="task-list"></section>
+
+    <footer>如需更换接口地址，请在文件中修改 API_BASE。</footer>
+
+    <script>
+      // 自定义接口地址，可根据需要修改。
+      const API_BASE = "http://localhost:7000/api";
+      const ENDPOINT = API_BASE.replace(/\/$/, "") + "/remove";
+
+      const dropArea = document.getElementById("drop-area");
+      const fileInput = document.getElementById("file-input");
+      const taskList = document.getElementById("task-list");
+
+      const preventDefaults = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      };
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        document.addEventListener(eventName, preventDefaults, false);
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        document.addEventListener(
+          eventName,
+          () => dropArea.classList.add("dragover"),
+          false
+        );
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        document.addEventListener(
+          eventName,
+          (event) => {
+            const related = event.relatedTarget;
+            if (!(related instanceof Node) || !dropArea.contains(related)) {
+              dropArea.classList.remove("dragover");
+            }
+          },
+          false
+        );
+      });
+
+      document.addEventListener("drop", (event) => {
+        dropArea.classList.remove("dragover");
+        const files = event.dataTransfer?.files;
+        if (files && files.length) {
+          handleFiles(files);
+        }
+      });
+
+      dropArea.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files?.length) {
+          handleFiles(fileInput.files);
+          fileInput.value = "";
+        }
+      });
+
+      function handleFiles(fileList) {
+        [...fileList].forEach((file) => {
+          if (!file.type.startsWith("image/")) {
+            const task = createTaskItem(file);
+            handleError(task, "不支持的文件类型");
+            return;
+          }
+          processFile(file);
+        });
+      }
+
+      function createTaskItem(file) {
+        const item = document.createElement("article");
+        item.className = "task-item";
+
+        const header = document.createElement("div");
+        header.className = "task-header";
+
+        const name = document.createElement("div");
+        name.className = "task-name";
+        name.textContent = file.name;
+
+        const status = document.createElement("div");
+        status.className = "task-status";
+        status.textContent = "等待上传";
+
+        header.appendChild(name);
+        header.appendChild(status);
+
+        const progressBar = document.createElement("div");
+        progressBar.className = "progress-bar";
+        const progressFill = document.createElement("div");
+        progressFill.className = "progress-fill";
+        progressBar.appendChild(progressFill);
+
+        const downloadLink = document.createElement("a");
+        downloadLink.className = "download-link";
+        downloadLink.textContent = "下载结果";
+        downloadLink.href = "#";
+        downloadLink.download = `${file.name.replace(/\.[^.]+$/, "")}-removed.png`;
+
+        item.appendChild(header);
+        item.appendChild(progressBar);
+        item.appendChild(downloadLink);
+
+        taskList.prepend(item);
+
+        return { item, status, progressFill, downloadLink };
+      }
+
+      function updateProgress(progressFill, percent) {
+        progressFill.style.width = `${percent}%`;
+      }
+
+      function processFile(file) {
+        const task = createTaskItem(file);
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+
+        xhr.open("POST", ENDPOINT, true);
+        xhr.responseType = "blob";
+
+        xhr.upload.addEventListener("progress", (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 50);
+            updateProgress(task.progressFill, percent);
+            task.status.textContent = `上传中 ${percent}%`;
+          }
+        });
+
+        xhr.upload.addEventListener("load", () => {
+          updateProgress(task.progressFill, 50);
+          task.status.textContent = "处理中...";
+        });
+
+        xhr.addEventListener("progress", (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 50);
+            const totalPercent = 50 + percent;
+            updateProgress(task.progressFill, totalPercent);
+            task.status.textContent = `下载中 ${totalPercent}%`;
+          } else {
+            task.status.textContent = "处理中...";
+          }
+        });
+
+        xhr.addEventListener("load", () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const blob = xhr.response;
+            const downloadName = task.downloadLink.download;
+            const initiateDownload = () => triggerDownload(blob, downloadName);
+
+            task.downloadLink.addEventListener("click", (event) => {
+              event.preventDefault();
+              initiateDownload();
+            });
+
+            task.downloadLink.classList.add("visible");
+            task.status.textContent = "处理完成，正在下载";
+
+            initiateDownload();
+
+            setTimeout(() => {
+              task.status.textContent = "已完成";
+              updateProgress(task.progressFill, 100);
+            }, 200);
+          } else {
+            handleError(task, `处理失败：${xhr.status} ${xhr.statusText}`);
+          }
+        });
+
+        xhr.addEventListener("error", () => {
+          handleError(task, "网络异常，稍后再试");
+        });
+
+        xhr.addEventListener("abort", () => {
+          handleError(task, "上传已取消");
+        });
+
+        task.status.textContent = "准备上传";
+        xhr.send(formData);
+      }
+
+      function triggerDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        requestAnimationFrame(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        });
+      }
+
+      function handleError(task, message) {
+        task.status.textContent = message;
+        task.progressFill.style.background = "#ef4444";
+        task.progressFill.style.width = "100%";
+      }
+    </script>
+  </body>
+</html>
