@@ -37,13 +37,13 @@ jobs:
                   echo "" >> $GITHUB_STEP_SUMMARY
 
                   if [ -d "tests/failures" ] && [ "$(ls -A tests/failures)" ]; then
-                      echo "### ❌ Falhas Detectadas" >> $GITHUB_STEP_SUMMARY
+                      echo "### ❌ Failures Detected" >> $GITHUB_STEP_SUMMARY
                       echo "" >> $GITHUB_STEP_SUMMARY
 
-                      # Processa pares de imagens (actual e expected)
+                      # Process image pairs (actual and expected)
                       for actual_img in tests/failures/*.actual.png; do
                           if [ -f "$actual_img" ]; then
-                              # Extrai o nome base (ex: anime-girl-1.u2net)
+                              # Extract base name (e.g., anime-girl-1.u2net)
                               base_name=$(basename "$actual_img" .actual.png)
                               expected_img="tests/failures/${base_name}.expected.png"
 
@@ -51,9 +51,9 @@ jobs:
                                   echo "<details>" >> $GITHUB_STEP_SUMMARY
                                   echo "<summary>🔴 $base_name</summary>" >> $GITHUB_STEP_SUMMARY
                                   echo "" >> $GITHUB_STEP_SUMMARY
-                                  echo "| Esperado (Expected) | Atual (Actual) |" >> $GITHUB_STEP_SUMMARY
-                                  echo "|---------------------|----------------|" >> $GITHUB_STEP_SUMMARY
-                                  echo "| ![Expected](data:image/png;base64,$(base64 < "$expected_img")) | ![Actual](data:image/png;base64,$(base64 < "$actual_img")) |" >> $GITHUB_STEP_SUMMARY
+                                  echo "| Expected | Actual |" >> $GITHUB_STEP_SUMMARY
+                                  echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+                                  echo "| ![Expected](data:image/png;base64,$(base64 -w 0 < "$expected_img")) | ![Actual](data:image/png;base64,$(base64 -w 0 < "$actual_img")) |" >> $GITHUB_STEP_SUMMARY
                                   echo "" >> $GITHUB_STEP_SUMMARY
                                   echo "</details>" >> $GITHUB_STEP_SUMMARY
                                   echo "" >> $GITHUB_STEP_SUMMARY
@@ -61,7 +61,7 @@ jobs:
                           fi
                       done
                   else
-                      echo "### ✅ Todos os testes passaram!" >> $GITHUB_STEP_SUMMARY
+                      echo "### ✅ All tests passed!" >> $GITHUB_STEP_SUMMARY
                       echo "" >> $GITHUB_STEP_SUMMARY
-                      echo "Nenhuma diferença detectada nas imagens geradas." >> $GITHUB_STEP_SUMMARY
+                      echo "No differences detected in generated images." >> $GITHUB_STEP_SUMMARY
                   fi
