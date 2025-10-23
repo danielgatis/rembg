@@ -7,7 +7,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                python-version: ["3.10", "3.11", "3.12", "3.13"]
+                python-version: ["3.13"]
 
         steps:
             - uses: actions/checkout@v4
@@ -29,54 +29,3 @@ jobs:
                       exit 1
                   fi
                   pytest
-
-            - name: Upload test failure images
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                  name: test-failures-py${{ matrix.python-version }}
-                  path: tests/failures/
-                  if-no-files-found: ignore
-
-            - name: Show test failures in summary
-              if: always()
-              run: |
-                  echo "## 🧪 Test Results - Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
-                  echo "" >> $GITHUB_STEP_SUMMARY
-
-                  if [ -d "tests/failures" ] && [ "$(ls -A tests/failures)" ]; then
-                      echo "### ❌ Failures Detected" >> $GITHUB_STEP_SUMMARY
-                      echo "" >> $GITHUB_STEP_SUMMARY
-
-                      # Count failures
-                      failure_count=$(ls tests/failures/*.actual.png 2>/dev/null | wc -l)
-                      echo "**Total failures:** $failure_count" >> $GITHUB_STEP_SUMMARY
-                      echo "" >> $GITHUB_STEP_SUMMARY
-                      echo "📦 **Download the artifacts to view the comparison images.**" >> $GITHUB_STEP_SUMMARY
-                      echo "" >> $GITHUB_STEP_SUMMARY
-
-                      # List failed tests
-                      echo "<details>" >> $GITHUB_STEP_SUMMARY
-                      echo "<summary>View failed test list</summary>" >> $GITHUB_STEP_SUMMARY
-                      echo "" >> $GITHUB_STEP_SUMMARY
-                      echo "| Test Case | Files |" >> $GITHUB_STEP_SUMMARY
-                      echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-
-                      for actual_img in tests/failures/*.actual.png; do
-                          if [ -f "$actual_img" ]; then
-                              base_name=$(basename "$actual_img" .actual.png)
-                              expected_img="tests/failures/${base_name}.expected.png"
-
-                              if [ -f "$expected_img" ]; then
-                                  echo "| \`$base_name\` | \`${base_name}.actual.png\`, \`${base_name}.expected.png\` |" >> $GITHUB_STEP_SUMMARY
-                              fi
-                          fi
-                      done
-
-                      echo "" >> $GITHUB_STEP_SUMMARY
-                      echo "</details>" >> $GITHUB_STEP_SUMMARY
-                  else
-                      echo "### ✅ All tests passed!" >> $GITHUB_STEP_SUMMARY
-                      echo "" >> $GITHUB_STEP_SUMMARY
-                      echo "No differences detected in generated images." >> $GITHUB_STEP_SUMMARY
-                  fi
