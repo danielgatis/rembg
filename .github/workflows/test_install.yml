@@ -29,3 +29,39 @@ jobs:
                       exit 1
                   fi
                   pytest
+
+            - name: Show test failures in summary
+              if: always()
+              run: |
+                  echo "## 🧪 Test Results - Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+                  echo "" >> $GITHUB_STEP_SUMMARY
+
+                  if [ -d "tests/failures" ] && [ "$(ls -A tests/failures)" ]; then
+                      echo "### ❌ Falhas Detectadas" >> $GITHUB_STEP_SUMMARY
+                      echo "" >> $GITHUB_STEP_SUMMARY
+
+                      # Processa pares de imagens (actual e expected)
+                      for actual_img in tests/failures/*.actual.png; do
+                          if [ -f "$actual_img" ]; then
+                              # Extrai o nome base (ex: anime-girl-1.u2net)
+                              base_name=$(basename "$actual_img" .actual.png)
+                              expected_img="tests/failures/${base_name}.expected.png"
+
+                              if [ -f "$expected_img" ]; then
+                                  echo "<details>" >> $GITHUB_STEP_SUMMARY
+                                  echo "<summary>🔴 $base_name</summary>" >> $GITHUB_STEP_SUMMARY
+                                  echo "" >> $GITHUB_STEP_SUMMARY
+                                  echo "| Esperado (Expected) | Atual (Actual) |" >> $GITHUB_STEP_SUMMARY
+                                  echo "|---------------------|----------------|" >> $GITHUB_STEP_SUMMARY
+                                  echo "| ![Expected](data:image/png;base64,$(base64 < "$expected_img")) | ![Actual](data:image/png;base64,$(base64 < "$actual_img")) |" >> $GITHUB_STEP_SUMMARY
+                                  echo "" >> $GITHUB_STEP_SUMMARY
+                                  echo "</details>" >> $GITHUB_STEP_SUMMARY
+                                  echo "" >> $GITHUB_STEP_SUMMARY
+                              fi
+                          fi
+                      done
+                  else
+                      echo "### ✅ Todos os testes passaram!" >> $GITHUB_STEP_SUMMARY
+                      echo "" >> $GITHUB_STEP_SUMMARY
+                      echo "Nenhuma diferença detectada nas imagens geradas." >> $GITHUB_STEP_SUMMARY
+                  fi
