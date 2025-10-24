@@ -8,44 +8,7 @@
 [![Streamlit App](https://img.shields.io/badge/🎈%20Streamlit%20Community-Cloud-blue)](https://bgremoval.streamlit.app/)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/danielgatis/rembg/blob/main/rembg.ipynb)
 
-
 Rembg is a tool to remove images background.
-
-<p style="display: flex;align-items: center;justify-content: center;">
-  <img alt="example car-1" src="./examples/car-1.jpg" width="100" />
-  <img alt="example car-1.out" src="./examples/car-1.out.png" width="100" />
-  <img alt="example car-2" src="./examples/car-2.jpg" width="100" />
-  <img alt="example car-2.out" src="./examples/car-2.out.png" width="100" />
-  <img alt="example car-3" src="./examples/car-3.jpg" width="100" />
-  <img alt="example car-3.out" src="./examples/car-3.out.png" width="100" />
-</p>
-
-<p style="display: flex;align-items: center;justify-content: center;">
-  <img alt="example animal-1" src="./examples/animal-1.jpg" width="100" />
-  <img alt="example animal-1.out" src="./examples/animal-1.out.png" width="100" />
-  <img alt="example animal-2" src="./examples/animal-2.jpg" width="100" />
-  <img alt="example animal-2.out" src="./examples/animal-2.out.png" width="100" />
-  <img alt="example animal-3" src="./examples/animal-3.jpg" width="100" />
-  <img alt="example animal-3.out" src="./examples/animal-3.out.png" width="100" />
-</p>
-
-<p style="display: flex;align-items: center;justify-content: center;">
-  <img alt="example girl-1" src="./examples/girl-1.jpg" width="100" />
-  <img alt="example girl-1.out" src="./examples/girl-1.out.png" width="100" />
-  <img alt="example girl-2" src="./examples/girl-2.jpg" width="100" />
-  <img alt="example girl-2.out" src="./examples/girl-2.out.png" width="100" />
-  <img alt="example girl-3" src="./examples/girl-3.jpg" width="100" />
-  <img alt="example girl-3.out" src="./examples/girl-3.out.png" width="100" />
-</p>
-
-<p style="display: flex;align-items: center;justify-content: center;">
-  <img alt="example anime-girl-1" src="./examples/anime-girl-1.jpg" width="100" />
-  <img alt="example anime-girl-1.out" src="./examples/anime-girl-1.out.png" width="100" />
-  <img alt="example anime-girl-2" src="./examples/anime-girl-2.jpg" width="100" />
-  <img alt="example anime-girl-2.out" src="./examples/anime-girl-2.out.png" width="100" />
-  <img alt="example anime-girl-3" src="./examples/anime-girl-3.jpg" width="100" />
-  <img alt="example anime-girl-3.out" src="./examples/anime-girl-3.out.png" width="100" />
-</p>
 
 **If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
