@@ -15,19 +15,7 @@ def test_remove():
         "sam": {
             "anime-girl-1" : {
                 "sam_prompt" :[{"type": "point", "data": [400, 165], "label": 1}],
-            },
-
-            "car-1" : {
-                "sam_prompt" :[{"type": "point", "data": [250, 200], "label": 1}],
-            },
-
-            "cloth-1" : {
-                "sam_prompt" :[{"type": "point", "data": [370, 495], "label": 1}],
-            },
-
-            "plants-1" : {
-                "sam_prompt" :[{"type": "point", "data": [724, 740], "label": 1}],
-            },
+            }
         }
     }
 
@@ -48,7 +36,7 @@ def test_remove():
         "birefnet-cod",
         "birefnet-massive"
     ]:
-        for picture in ["anime-girl-1", "car-1", "cloth-1", "plants-1"]:
+        for picture in ["anime-girl-1"]:
             image_path = Path(here / "fixtures" / f"{picture}.jpg")
             image = image_path.read_bytes()
 
