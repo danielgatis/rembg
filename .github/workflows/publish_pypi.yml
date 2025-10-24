@@ -10,13 +10,21 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
             - uses: actions/setup-python@v5
+            - name: Install Poetry
+              uses: snok/install-poetry@v1
+              with:
+                  virtualenvs-create: true
+                  virtualenvs-in-project: true
             - name: Install dependencies
-              run: pip install .[cpu,cli,dev]
-            - name: Builds and uploads to PyPI
               run: |
-                  python3 setup.py sdist bdist_wheel
-                  python3 -m twine upload dist/*
+                  poetry self add "poetry-dynamic-versioning[plugin]"
+                  poetry install --with dev --extras "cpu cli"
+            - name: Build and publish to PyPI
+              run: |
+                  poetry build
+                  poetry publish
               env:
-                  TWINE_USERNAME: __token__
-                  TWINE_PASSWORD: ${{ secrets.PIPY_PASSWORD }}
+                  POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PIPY_PASSWORD }}
