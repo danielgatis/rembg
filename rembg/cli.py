@@ -1,16 +1,14 @@
 import click
 
-from . import _version
+from . import __version__
 from .commands import command_functions
 
 
 @click.group()
-@click.version_option(version=_version.get_versions()["version"])
-def _main() -> None:
+@click.version_option(version=__version__)
+def main() -> None:
     pass
 
 
 for command in command_functions:
-    _main.add_command(command)
-
-_main()
+    main.add_command(command)

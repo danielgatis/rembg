@@ -18,3 +18,8 @@ __pycache__/
 .tox
 .cache
 .mypy_cache
+
+# Poetry
+# For libraries, poetry.lock is often not committed
+# For applications, it should be committed
+poetry.lock

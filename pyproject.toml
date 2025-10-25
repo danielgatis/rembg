@@ -1,13 +1,89 @@
-[build-system]
-# These are the assumed default build requirements from pip:
-# https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
-requires = ["setuptools>=65.5.1", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.poetry]
+name = "rembg"
+version = "0.0.0"  # Managed by poetry-dynamic-versioning
+description = "Remove image background"
+authors = ["Daniel Gatis <danielgatis@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/danielgatis/rembg"
+repository = "https://github.com/danielgatis/rembg"
+keywords = ["remove", "background", "u2net"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+packages = [{include = "rembg"}]
 
-[versioneer]
-VCS = "git"
+[tool.poetry.dependencies]
+python = "^3.10"
+jsonschema = "^4.25.0"
+numpy = "^2.2.0"
+opencv-python-headless = "^4.12.0"
+pillow = "^11.3.0"
+pooch = "^1.8.0"
+pymatting = "^1.1.14"
+scikit-image = "^0.25.0"
+scipy = "^1.15.0"
+tqdm = "^4.67.0"
+
+# CPU backend (optional)
+onnxruntime = {version = "^1.23.0", optional = true}
+
+# GPU backend (optional) - only available on Linux/Windows, not on macOS
+onnxruntime-gpu = {version = "^1.23.0", optional = true, markers = "sys_platform != 'darwin'"}
+
+# ROCm backend (optional) - only available on Linux (latest is 1.22.x)
+onnxruntime-rocm = {version = "^1.22.0", optional = true, markers = "sys_platform == 'linux'"}
+
+# CLI dependencies (optional)
+aiohttp = {version = "^3.13.0", optional = true}
+asyncer = {version = "^0.0.10", optional = true}
+click = {version = "^8.3.0", optional = true}
+fastapi = {version = "^0.120.0", optional = true}
+filetype = {version = "^1.2.0", optional = true}
+gradio = {version = "^5.49.0", optional = true}
+python-multipart = {version = "^0.0.20", optional = true}
+uvicorn = {version = "^0.38.0", optional = true}
+watchdog = {version = "^6.0.0", optional = true}
+
+[tool.poetry.group.dev.dependencies]
+bandit = "^1.8.0"
+black = "^25.9.0"
+flake8 = "^7.3.0"
+imagehash = "^4.3.0"
+isort = "^7.0.0"
+mypy = "^1.18.0"
+pytest = "^8.4.0"
+
+[tool.poetry.extras]
+cpu = ["onnxruntime"]
+gpu = ["onnxruntime-gpu"]
+rocm = ["onnxruntime-rocm"]
+cli = ["aiohttp", "asyncer", "click", "fastapi", "filetype", "gradio", "python-multipart", "uvicorn", "watchdog"]
+
+[tool.poetry.scripts]
+rembg = "rembg.cli:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
 style = "pep440"
-versionfile_source = "rembg/_version.py"
-versionfile_build = "rembg/_version.py"
-tag_prefix = "v"
-parentdir_prefix = "rembg-"
+pattern = "^v(?P<base>\\d+\\.\\d+\\.\\d+)"
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["rembg/__init__.py"]

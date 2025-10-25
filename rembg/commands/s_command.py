@@ -12,7 +12,7 @@ from fastapi import Depends, FastAPI, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 
-from .._version import get_versions
+from .. import __version__
 from ..bg import remove
 from ..session_factory import new_session
 from ..sessions import sessions_names
@@ -76,7 +76,7 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
     app = FastAPI(
         title="Rembg",
         description="Rembg is a tool to remove images background. That is it.",
-        version=get_versions()["version"],
+        version=__version__,
         contact={
             "name": "Daniel Gatis",
             "url": "https://github.com/danielgatis",
