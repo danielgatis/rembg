@@ -299,6 +299,21 @@ for file in Path('path/to/folder').glob('*.png'):
             o.write(output)
 ```
 
+Using u2net custom TensorRT engine
+
+```python
+from rembg import new_session, remove
+import cv2
+
+input_path = 'input.png'
+output_path = 'output.png'
+
+input = cv2.imread(input_path)
+session = new_session("u2net_custom", model_path="path/to/model.trt", is_tensorrt=True)
+output = remove(input, session=session)
+cv2.imwrite(output_path, output)
+```
+
 To see a full list of examples on how to use rembg, go to the [examples](USAGE.md) page.
 
 ## Usage as a docker
