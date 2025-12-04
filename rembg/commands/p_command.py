@@ -185,8 +185,7 @@ def p_command(
             print(e)
 
     inputs = list(input.glob("**/*"))
-    if not watch:
-        inputs_tqdm = tqdm(inputs)
+    inputs_tqdm = inputs if watch else tqdm(inputs)
 
     for each_input in inputs_tqdm:
         if not each_input.is_dir():
