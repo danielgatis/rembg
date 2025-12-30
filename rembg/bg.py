@@ -15,9 +15,16 @@ from cv2 import (
 )
 from PIL import Image, ImageOps
 from PIL.Image import Image as PILImage
-from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
-from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
-from pymatting.util.util import stack_images
+
+# Make pymatting optional
+try:
+    from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf
+    from pymatting.foreground.estimate_foreground_ml import estimate_foreground_ml
+    from pymatting.util.util import stack_images
+    HAS_PYMATTING = True
+except ImportError:
+    HAS_PYMATTING = False
+
 from scipy.ndimage import binary_erosion
 
 from .session_factory import new_session
@@ -53,6 +60,9 @@ def alpha_matting_cutout(
     The function returns a PIL image representing the cutout of the foreground object
     from the original image.
     """
+    if not HAS_PYMATTING:
+        raise ImportError("pymatting is required for alpha matting but is not installed")
+    
     if img.mode == "RGBA" or img.mode == "CMYK":
         img = img.convert("RGB")
 
