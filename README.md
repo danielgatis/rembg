@@ -36,7 +36,7 @@ Rembg is a tool to remove images background.
 ## Requirements
 
 ```text
-python: >=3.10, <3.14
+python: >=3.11, <3.14
 ```
 
 ## Installation

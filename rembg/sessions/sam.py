@@ -2,15 +2,68 @@ import os
 from copy import deepcopy
 from typing import List
 
-import cv2
 import numpy as np
 import onnxruntime as ort
 import pooch
 from jsonschema import validate
 from PIL import Image
 from PIL.Image import Image as PILImage
+from scipy.ndimage import map_coordinates
 
 from .base import BaseSession
+
+
+def warp_affine(
+    image: np.ndarray, matrix: np.ndarray, output_shape: tuple
+) -> np.ndarray:
+    """
+    Apply affine transformation to an image (matching cv2.warpAffine behavior).
+
+    cv2.warpAffine maps source coordinates to destination coordinates:
+        dst(M @ [x, y, 1]^T) = src(x, y)
+
+    So to fill dst(x', y'), we compute the inverse:
+        src_coords = M^(-1) @ [x', y', 1]^T
+
+    Args:
+        image: Input image (H, W) or (H, W, C)
+        matrix: 2x3 affine transformation matrix
+        output_shape: (height, width) of output
+
+    Returns:
+        Transformed image
+    """
+    h, w = output_shape
+
+    # Build full 3x3 matrix and compute inverse
+    M_full = np.vstack([matrix, [0, 0, 1]])
+    M_inv = np.linalg.inv(M_full)[:2]
+
+    # Create output coordinate grid
+    cols = np.arange(w)
+    rows = np.arange(h)
+    x_coords, y_coords = np.meshgrid(cols, rows)
+
+    # Apply inverse transform to get source coordinates
+    src_x = M_inv[0, 0] * x_coords + M_inv[0, 1] * y_coords + M_inv[0, 2]
+    src_y = M_inv[1, 0] * x_coords + M_inv[1, 1] * y_coords + M_inv[1, 2]
+
+    if image.ndim == 2:
+        result = map_coordinates(
+            image.astype(np.float64), [src_y, src_x], order=1, mode="constant", cval=0
+        )
+    else:
+        result = np.zeros((h, w, image.shape[2]), dtype=np.float64)
+        for c in range(image.shape[2]):
+            result[:, :, c] = map_coordinates(
+                image[:, :, c].astype(np.float64),
+                [src_y, src_x],
+                order=1,
+                mode="constant",
+                cval=0,
+            )
+
+    return result.astype(image.dtype)
 
 
 def get_preprocess_shape(oldh: int, oldw: int, long_side_length: int):
@@ -60,11 +113,10 @@ def transform_masks(masks, original_size, transform_matrix):
         batch_masks = []
         for mask_id in range(masks.shape[1]):
             mask = masks[batch, mask_id]
-            mask = cv2.warpAffine(
+            mask = warp_affine(
                 mask,
                 transform_matrix[:2],
-                (original_size[1], original_size[0]),
-                flags=cv2.INTER_LINEAR,
+                (original_size[0], original_size[1]),
             )
             batch_masks.append(mask)
         output_masks.append(batch_masks)
@@ -177,11 +229,10 @@ class SamSession(BaseSession):
             ]
         )
 
-        cv_image = cv2.warpAffine(
+        cv_image = warp_affine(
             cv_image,
             transform_matrix[:2],
-            (input_size[1], input_size[0]),
-            flags=cv2.INTER_LINEAR,
+            (input_size[0], input_size[1]),
         )
 
         ## encoder

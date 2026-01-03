@@ -8,10 +8,15 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
+            - name: Install Poetry
+              uses: snok/install-poetry@v1
+              with:
+                  virtualenvs-create: true
+                  virtualenvs-in-project: true
             - name: Install dependencies
-              run: pip install .[cpu,cli,dev]
-            - run: mypy --install-types --non-interactive --ignore-missing-imports ./rembg
-            - run: bandit --recursive --skip B101,B104,B310,B311,B303,B110 --exclude ./rembg/_version.py ./rembg
-            - run: black --force-exclude rembg/_version.py --check --diff ./rembg
-            - run: flake8 ./rembg --count --ignore=B008,C901,E203,E266,E731,F401,F811,F841,W503,E501,E402 --show-source --statistics --exclude ./rembg/_version.py
-            - run: isort --check-only --profile black ./rembg
+              run: poetry install --with dev --extras "cpu cli"
+            - run: poetry run mypy --install-types --non-interactive --ignore-missing-imports ./rembg
+            - run: poetry run bandit --recursive --skip B101,B104,B310,B311,B303,B110 --exclude ./rembg/_version.py ./rembg
+            - run: poetry run black --force-exclude rembg/_version.py --check --diff ./rembg
+            - run: poetry run flake8 ./rembg --count --ignore=B008,C901,E203,E266,E731,F401,F811,F841,W503,E501,E402 --show-source --statistics --exclude ./rembg/_version.py
+            - run: poetry run isort --check-only --profile black ./rembg
