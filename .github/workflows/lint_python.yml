@@ -1,6 +1,10 @@
 name: Lint
 
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
 
 jobs:
     lint_python:
