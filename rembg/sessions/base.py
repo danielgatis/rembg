@@ -5,6 +5,7 @@ import numpy as np
 import onnxruntime as ort
 from PIL import Image
 from PIL.Image import Image as PILImage
+from .tensorrt_inference_session import TensorRTInferenceSession
 
 
 class BaseSession:
@@ -13,6 +14,8 @@ class BaseSession:
     def __init__(self, model_name: str, sess_opts: ort.SessionOptions, *args, **kwargs):
         """Initialize an instance of the BaseSession class."""
         self.model_name = model_name
+
+        self.is_tensorrt = kwargs.get("is_tensorrt", False)
 
         if "providers" in kwargs and isinstance(kwargs["providers"], list):
             providers = kwargs.pop("providers")
@@ -31,11 +34,15 @@ class BaseSession:
             else:
                 providers = ["CPUExecutionProvider"]
 
-        self.inner_session = ort.InferenceSession(
-            str(self.__class__.download_models(*args, **kwargs)),
-            sess_options=sess_opts,
-            providers=providers,
-        )
+        model_path = str(self.__class__.download_models(*args, **kwargs))
+        if (self.is_tensorrt):
+            self.inner_session = TensorRTInferenceSession(model_path)
+        else:
+            self.inner_session = ort.InferenceSession(
+                model_path,
+                sess_options=sess_opts,
+                providers=providers,
+            )
 
     def normalize(
         self,
