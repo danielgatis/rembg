@@ -4,7 +4,21 @@ from enum import Enum
 from typing import Any, List, Optional, Tuple, Union, cast
 
 import numpy as np
-import onnxruntime as ort
+
+try:
+    import onnxruntime as ort  # type: ignore[import-untyped]
+except ImportError:
+    print("No onnxruntime backend found.")
+    print("Please install rembg with CPU or GPU support:")
+    print()
+    print('    pip install "rembg[cpu]"  # for CPU')
+    print('    pip install "rembg[gpu]"  # for NVIDIA/CUDA GPU')
+    print()
+    print(
+        "For more information, see: https://github.com/danielgatis/rembg#installation"
+    )
+    sys.exit(1)
+
 from PIL import Image, ImageOps
 from PIL.Image import Image as PILImage
 from pymatting.alpha.estimate_alpha_cf import estimate_alpha_cf

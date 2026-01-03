@@ -41,23 +41,16 @@ python: >=3.11, <3.14
 
 ## Installation
 
-If you have `onnxruntime` already installed, just install `rembg`:
+Choose **one** of the following backends based on your hardware:
+
+### CPU support
 
 ```bash
-pip install rembg # for library
-pip install "rembg[cli]" # for library + cli
-```
-
-Otherwise, install `rembg` with explicit CPU/GPU support.
-
-### CPU support:
-
-```bash
-pip install rembg[cpu] # for library
+pip install "rembg[cpu]" # for library
 pip install "rembg[cpu,cli]" # for library + cli
 ```
 
-### GPU support (NVidia/Cuda):
+### GPU support (NVIDIA/CUDA)
 
 First of all, you need to check if your system supports the `onnxruntime-gpu`.
 
