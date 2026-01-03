@@ -13,16 +13,29 @@ jobs:
       - uses: actions/checkout@v4
       - shell: pwsh
         run: ./_build-exe.ps1
-      - name: Compile .ISS to .EXE Installer
+      - name: Compile CPU Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
-          path: _setup.iss
+          path: _setup-cpu.iss
           options: /O+
-      - name: Upload binaries to release
+      - name: Compile GPU Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: _setup-gpu.iss
+          options: /O+
+      - name: Upload CPU installer to release
         uses: svenstaro/upload-release-action@v2
         with:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
-            file: dist/rembg-cli-installer.exe
-            asset_name: rembg-cli-installer.exe
+            file: dist/rembg-cli-cpu-installer.exe
+            asset_name: rembg-cli-cpu-installer.exe
+            tag: ${{ github.ref }}
+            overwrite: true
+      - name: Upload GPU installer to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file: dist/rembg-cli-gpu-installer.exe
+            asset_name: rembg-cli-gpu-installer.exe
             tag: ${{ github.ref }}
             overwrite: true

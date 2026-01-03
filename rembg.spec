@@ -1,15 +1,27 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_data_files
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
 
 datas = []
 datas += collect_data_files('gradio_client')
 datas += collect_data_files('gradio')
-datas += collect_data_files('onnxruntime')
+datas += collect_data_files('safehttpx')
+datas += collect_data_files('groovy')
+
+binaries = []
+
+# Collect onnxruntime (works for both CPU and GPU versions)
+# The pip packages are named differently (onnxruntime vs onnxruntime-gpu)
+# but both install the Python module as 'onnxruntime'
+try:
+    datas += collect_data_files('onnxruntime')
+    binaries += collect_dynamic_libs('onnxruntime')
+except Exception:
+    pass
 
 a = Analysis(
     ['rembg.py'],
     pathex=[],
-    binaries=[],
+    binaries=binaries,
     datas=datas,
     hiddenimports=[],
     hookspath=[],

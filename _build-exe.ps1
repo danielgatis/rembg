@@ -3,14 +3,21 @@ if (-not (Get-Command poetry -ErrorAction SilentlyContinue)) {
     pip install poetry
 }
 
-# Install project dependencies with cli extras
-poetry install --extras "cli"
+# Install pyinstaller
+pip install pyinstaller
 
-# Install pyinstaller in the poetry environment
-poetry run pip install pyinstaller
-
-# Create PyInstaller spec file with specified data collections
-# poetry run pyi-makespec --collect-data=gradio_client --collect-data=gradio rembg.py
-
-# Run PyInstaller with the generated spec file
+# Build CPU version
+Write-Host "Building CPU version..." -ForegroundColor Cyan
+poetry install --extras "cli cpu"
 poetry run pyinstaller rembg.spec
+Rename-Item -Path "dist/rembg" -NewName "rembg-cpu"
+
+# Build GPU version
+Write-Host "Building GPU version..." -ForegroundColor Cyan
+poetry install --extras "cli gpu"
+poetry run pyinstaller rembg.spec --noconfirm
+Rename-Item -Path "dist/rembg" -NewName "rembg-gpu"
+
+Write-Host "Build complete!" -ForegroundColor Green
+Write-Host "CPU version: dist/rembg-cpu"
+Write-Host "GPU version: dist/rembg-gpu"

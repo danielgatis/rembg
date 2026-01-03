@@ -1,4 +1,4 @@
-#define MyAppName "Rembg"
+#define MyAppName "Rembg CPU"
 #define MyAppVersion "STABLE"
 #define MyAppPublisher "danielgatis"
 #define MyAppURL "https://github.com/danielgatis/rembg"
@@ -13,10 +13,10 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
-DefaultGroupName={#MyAppName}
+DefaultDirName={autopf}\Rembg
+DefaultGroupName=Rembg
 DisableProgramGroupPage=yes
-OutputBaseFilename=rembg-cli-installer
+OutputBaseFilename=rembg-cli-cpu-installer
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -27,14 +27,14 @@ ChangesEnvironment=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "{#SourcePath}dist\rembg\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourcePath}dist\rembg\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}dist\rembg-cpu\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourcePath}dist\rembg-cpu\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Tasks]
 Name: modifypath; Description: "Add to PATH variable"
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\Rembg"; Filename: "{app}\{#MyAppExeName}"
 
 [Code]
 const
