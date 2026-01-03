@@ -1,10 +1,7 @@
 *
 !rembg
-!setup.py
-!setup.cfg
-!requirements.txt
-!requirements-cpu.txt
-!requirements-gpu.txt
-!versioneer.py
+!pyproject.toml
+!poetry.lock
 !README.md
+!.git
 .env
