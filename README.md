@@ -353,18 +353,6 @@ The available models are:
 If You need more fine tuned models try this:
 <https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289>
 
-## Some video tutorials
-
-- <https://www.youtube.com/watch?v=3xqwpXjxyMQ>
-- <https://www.youtube.com/watch?v=dFKRGXdkGJU>
-- <https://www.youtube.com/watch?v=Ai-BS_T7yjE>
-- <https://www.youtube.com/watch?v=D7W-C0urVcQ>
-
-## References
-
-- <https://arxiv.org/pdf/2005.09007.pdf>
-- <https://github.com/NathanUA/U-2-Net>
-- <https://github.com/pymatting/pymatting>
 
 ## FAQ
 
