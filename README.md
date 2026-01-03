@@ -338,10 +338,6 @@ All models are automatically downloaded and saved to `~/.u2net/` on first use.
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
 - bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): A state-of-the-art background removal model by BRIA AI.
 
-### Training Your Own Model
-
-For fine-tuned models, see [this discussion](https://github.com/danielgatis/rembg/issues/193#issuecomment-1055534289).
-
 ## FAQ
 
 ### When will this library support Python version 3.xx?
