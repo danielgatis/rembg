@@ -287,7 +287,7 @@ For more examples, see the [examples](USAGE.md) page.
 Replace the `rembg` command with `docker run danielgatis/rembg`:
 
 ```shell
-docker run -v path/to/input:/rembg danielgatis/rembg i input.png path/to/output/output.png
+docker run -v .:/data danielgatis/rembg i /data/input.png /data/output.png
 ```
 
 ### NVIDIA CUDA GPU Acceleration
@@ -307,7 +307,7 @@ docker build -t rembg-nvidia-cuda-cudnn-gpu -f Dockerfile_nvidia_cuda_cudnn_gpu 
 **Run the container:**
 
 ```shell
-sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/rembg rembg-nvidia-cuda-cudnn-gpu i -m birefnet-general input.png output.png
+sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/data rembg-nvidia-cuda-cudnn-gpu i -m birefnet-general /data/input.png /data/output.png
 ```
 
 **Tips:**
