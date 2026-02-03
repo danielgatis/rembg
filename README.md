@@ -1,18 +1,25 @@
-# Rembg
-
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://img.shields.io/badge/License-MIT-blue.svg)
-[![Hugging Face Spaces](https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/KenjieDec/RemBG)
-[![Streamlit App](https://img.shields.io/badge/🎈%20Streamlit%20Community-Cloud-blue)](https://bgremoval.streamlit.app/)
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/danielgatis/rembg/blob/main/rembg.ipynb)
-[![RepoMapr](https://img.shields.io/badge/RepoMapr-View_Interactive_Diagram-blue?style=flat&logo=github)](https://repomapr.com/danielgatis/rembg)
-
 <p align="center">
   <img src="logo.png" alt="Rembg Logo" width="600" />
 </p>
 
-Rembg is a tool to remove image backgrounds. It can be used as a CLI, Python library, HTTP server, or Docker container.
+<div align="center">
+  <p align="center">Rembg is a tool to remove image backgrounds. It can be used as a CLI, Python library, HTTP server, or Docker container.</p>
+  <div style="display: flex; flex-direction: row; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+    <a href="https://img.shields.io/badge/License-MIT-blue.svg"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
+    <a href="https://huggingface.co/spaces/KenjieDec/RemBG"><img src="https://img.shields.io/badge/🤗%20Hugging%20Face-Spaces-blue" alt="Hugging Face Spaces" /></a>
+    <a href="https://bgremoval.streamlit.app/"><img src="https://img.shields.io/badge/🎈%20Streamlit%20Community-Cloud-blue" alt="Streamlit App" /></a>
+    <a href="https://colab.research.google.com/github/danielgatis/rembg/blob/main/rembg.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /></a>
+    <a href="https://repomapr.com/danielgatis/rembg"><img src="https://img.shields.io/badge/RepoMapr-View_Interactive_Diagram-blue?style=flat&logo=github" alt="RepoMapr" /></a>
+  </div>
+</div>
 
-**If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
+<br/>
+
+<p align="center">
+    <a href="https://trendshift.io/repositories/2846" target="_blank">
+        <img src="https://trendshift.io/api/badge/repositories/2846" alt="danielgatis%2Frembg | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/>
+    </a>
+</p>
 
 ## Sponsors
 
@@ -34,6 +41,8 @@ Rembg is a tool to remove image backgrounds. It can be used as a CLI, Python lib
     </td>
   </tr>
 </table>
+
+**If this project has helped you, please consider making a [donation](https://www.buymeacoffee.com/danielgatis).**
 
 ## Requirements
 
