@@ -347,6 +347,22 @@ All models are automatically downloaded and saved to `~/.u2net/` on first use.
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
 - bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): A state-of-the-art background removal model by BRIA AI.
 
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `U2NET_HOME` | Path to the directory where models are stored. Defaults to `~/.u2net`. |
+| `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
+| `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
+
+### Using custom model files
+
+If you need to use a modified version of a model (e.g. converted to a different ONNX IR version for compatibility with an older CUDA toolkit), you can prevent rembg from overwriting it:
+
+1. Set `MODEL_CHECKSUM_DISABLED=1`
+2. Place your custom `.onnx` file in the models directory (`~/.u2net/` by default) with the expected filename (e.g. `u2net.onnx`)
+3. Rembg will detect the file exists and use it without re-downloading
+
 ## FAQ
 
 ### When will this library support Python version 3.xx?
