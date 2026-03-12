@@ -351,7 +351,8 @@ All models are automatically downloaded and saved to `~/.u2net/` on first use.
 
 | Variable | Description |
 |----------|-------------|
-| `U2NET_HOME` | Path to the directory where models are stored. Defaults to `~/.u2net`. |
+| `U2NET_HOME` | Path to the directory where models are stored. Defaults to `$XDG_DATA_HOME/.u2net` (or `~/.u2net` if `XDG_DATA_HOME` is not set). |
+| `XDG_DATA_HOME` | Base data directory used when `U2NET_HOME` is not set. Defaults to `~`. |
 | `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
 | `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
 
