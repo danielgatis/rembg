@@ -279,7 +279,12 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
 
             if cmd_args:
                 kwargs.update(json.loads(cmd_args))
-            kwargs["session"] = new_session(model, **kwargs)
+
+            session = sessions.get(model)
+            if session is None:
+                session = new_session(model, **kwargs)
+                sessions[model] = session
+            kwargs["session"] = session
 
             with open(input_path, "rb") as i:
                 with open(output_path, "wb") as o:
