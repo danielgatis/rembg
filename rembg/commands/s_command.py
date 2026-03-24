@@ -55,7 +55,14 @@ from ..sessions.base import BaseSession
     show_default=True,
     help="number of worker threads",
 )
-def s_command(port: int, host: str, log_level: str, threads: int) -> None:
+@click.option(
+    "--no-ui",
+    is_flag=True,
+    default=False,
+    show_default=True,
+    help="disable the Gradio UI (reduces idle CPU usage)",
+)
+def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -> None:
     """
     Command-line interface for running the FastAPI web server.
 
@@ -323,8 +330,11 @@ def s_command(port: int, host: str, log_level: str, threads: int) -> None:
     print(
         f"To access the API documentation, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}/api"
     )
-    print(
-        f"To access the UI, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}"
-    )
+    if not no_ui:
+        print(
+            f"To access the UI, go to http://{'localhost' if host == '0.0.0.0' else host}:{port}"
+        )
 
-    uvicorn.run(gr_app(app), host=host, port=port, log_level=log_level)
+    uvicorn.run(
+        app if no_ui else gr_app(app), host=host, port=port, log_level=log_level
+    )

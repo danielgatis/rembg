@@ -184,6 +184,12 @@ rembg s --host 0.0.0.0 --port 7000 --log_level info
 
 For complete API documentation, visit: `http://localhost:7000/api`
 
+**Disable the Gradio UI (reduces idle CPU usage):**
+
+```shell
+rembg s --no-ui
+```
+
 **Remove background from an image URL:**
 
 ```shell
