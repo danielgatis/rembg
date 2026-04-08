@@ -265,9 +265,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
         if not parsed.hostname:
             raise ValueError("Invalid URL: missing hostname.")
         if _is_private_ip(parsed.hostname):
-            raise ValueError(
-                "Requests to private/internal addresses are not allowed."
-            )
+            raise ValueError("Requests to private/internal addresses are not allowed.")
 
     @app.get(
         path="/api/remove",
