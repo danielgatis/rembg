@@ -23,3 +23,6 @@ __pycache__/
 # For libraries, poetry.lock is often not committed
 # For applications, it should be committed
 poetry.lock
+
+# Claude Code
+.claude/
