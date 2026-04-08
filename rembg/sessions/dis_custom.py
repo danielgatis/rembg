@@ -74,7 +74,13 @@ class DisCustomSession(BaseSession):
         if model_path is None:
             raise ValueError("model_path is required")
 
-        return os.path.abspath(os.path.expanduser(model_path))
+        abs_path = os.path.abspath(os.path.expanduser(model_path))
+        allowed_dir = os.path.abspath(os.path.expanduser(cls.u2net_home()))
+        if not abs_path.startswith(allowed_dir + os.sep) and abs_path != allowed_dir:
+            raise ValueError(
+                f"model_path must be within the models directory: {allowed_dir}"
+            )
+        return abs_path
 
     @classmethod
     def name(cls, *args, **kwargs):
