@@ -1,14 +1,17 @@
+import ipaddress
 import json
 import os
+import socket
 import webbrowser
 from typing import Optional, Tuple, cast
+from urllib.parse import urlparse
 
 import aiohttp
 import click
 import gradio as gr
 import uvicorn
 from asyncer import asyncify
-from fastapi import Depends, FastAPI, File, Form, Query
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import Response
 
@@ -99,7 +102,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
 
     app.add_middleware(
         CORSMiddleware,
-        allow_credentials=True,
+        allow_credentials=False,
         allow_origins=["*"],
         allow_methods=["*"],
         allow_headers=["*"],
@@ -238,6 +241,34 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
 
             RunVar("_default_thread_limiter").set(CapacityLimiter(threads))
 
+    def _is_private_ip(host: str) -> bool:
+        try:
+            resolved = socket.getaddrinfo(host, None)
+            for item in resolved:
+                addr = item[4][0]
+                ip = ipaddress.ip_address(addr)
+                if (
+                    ip.is_private
+                    or ip.is_loopback
+                    or ip.is_link_local
+                    or ip.is_reserved
+                ):
+                    return True
+        except Exception:
+            return True
+        return False
+
+    def _validate_url(url: str) -> None:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https"):
+            raise ValueError("Only http and https URLs are allowed.")
+        if not parsed.hostname:
+            raise ValueError("Invalid URL: missing hostname.")
+        if _is_private_ip(parsed.hostname):
+            raise ValueError(
+                "Requests to private/internal addresses are not allowed."
+            )
+
     @app.get(
         path="/api/remove",
         tags=["Background Removal"],
@@ -250,6 +281,11 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
         ),
         commons: CommonQueryParams = Depends(),
     ):
+        try:
+            _validate_url(url)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 file = await response.read()
