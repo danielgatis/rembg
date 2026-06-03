@@ -1,4 +1,5 @@
 import json
+import pathlib
 import sys
 from typing import IO
 
@@ -104,5 +105,12 @@ def i_command(model: str, extras: str, input: IO, output: IO, **kwargs) -> None:
         kwargs.update(json.loads(extras))
     except Exception:
         pass
+
+    if output is None:
+        input_name = getattr(input, "name", "")
+        if input_name and input_name != "<stdin>" and sys.stdout.isatty():
+            output = pathlib.Path(input_name).with_suffix(".out.png").open("wb")
+        else:
+            output = click.get_binary_stream("stdout")
 
     output.write(remove(input.read(), session=new_session(model, **kwargs), **kwargs))

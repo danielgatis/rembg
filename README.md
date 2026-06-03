@@ -128,6 +128,15 @@ curl -s http://input.png | rembg i > output.png
 rembg i path/to/input.png path/to/output.png
 ```
 
+**Omit the output path** (writes `<input_stem>.out.png` next to the input):
+
+```shell
+rembg i path/to/input.png
+# → path/to/input.out.png
+```
+
+If `stdout` is redirected (e.g. `rembg i input.png > out.png`), the output is written to `stdout` instead.
+
 **Specify a model:**
 
 ```shell
