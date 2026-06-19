@@ -5,7 +5,6 @@ import onnxruntime as ort
 
 from .sessions import sessions_class
 from .sessions.base import BaseSession
-from .sessions.u2net import U2netSession
 
 
 def new_session(model_name: str = "u2net", *args, sess_opts: Optional[ort.SessionOptions] = None, **kwargs) -> BaseSession:
