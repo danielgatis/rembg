@@ -7,7 +7,12 @@ from .sessions import sessions_class
 from .sessions.base import BaseSession
 
 
-def new_session(model_name: str = "u2net", *args, sess_opts: Optional[ort.SessionOptions] = None, **kwargs) -> BaseSession:
+def new_session(
+    model_name: str = "u2net",
+    *args,
+    sess_opts: Optional[ort.SessionOptions] = None,
+    **kwargs
+) -> BaseSession:
     """
     Create a new session object based on the specified model name.
 
