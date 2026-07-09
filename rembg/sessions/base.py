@@ -28,6 +28,8 @@ class BaseSession:
                 and "ROCMExecutionProvider" in ort.get_available_providers()
             ):
                 providers = ["ROCMExecutionProvider", "CPUExecutionProvider"]
+            elif "OpenVINOExecutionProvider" in ort.get_available_providers():
+                providers = ["OpenVINOExecutionProvider", "CPUExecutionProvider"]
             else:
                 providers = ["CPUExecutionProvider"]
 
