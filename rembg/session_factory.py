@@ -11,7 +11,7 @@ def new_session(
     model_name: str = "u2net",
     *args,
     sess_opts: Optional[ort.SessionOptions] = None,
-    **kwargs
+    **kwargs,
 ) -> BaseSession:
     """
     Create a new session object based on the specified model name.
