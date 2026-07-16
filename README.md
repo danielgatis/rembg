@@ -27,7 +27,7 @@
  <tr>
     <td align="center" vertical-align="center">
       <a href="https://photoroom.com/api/remove-background?utm_source=rembg&utm_medium=github_webpage&utm_campaign=sponsor" >
-        <img src="https://font-cdn.photoroom.com/media/api-logo.png" width="120px;" alt="Unsplash" />
+        <img src="https://www.photoroom.com/favicons/apple-touch-icon.png" width="120px;" alt="PhotoRoom" />
       </a>
     </td>
     <td align="center" vertical-align="center">
