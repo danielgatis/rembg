@@ -1,10 +1,9 @@
 import ipaddress
 import json
-import os
 import socket
 import webbrowser
 from typing import Optional, Tuple, cast
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import aiohttp
 import click
@@ -285,9 +284,27 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             raise HTTPException(status_code=400, detail=str(e))
 
         async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                file = await response.read()
-                return await asyncify(im_without_bg)(file, commons)
+            current_url = url
+            for _ in range(5):
+                async with session.get(current_url, allow_redirects=False) as response:
+                    if response.status in (301, 302, 303, 307, 308):
+                        location = response.headers.get("Location")
+                        if not location:
+                            raise HTTPException(
+                                status_code=400,
+                                detail="Redirect without Location header.",
+                            )
+                        current_url = urljoin(current_url, location)
+                        try:
+                            _validate_url(current_url)
+                        except ValueError as e:
+                            raise HTTPException(status_code=400, detail=str(e))
+                        continue
+
+                    file = await response.read()
+                    return await asyncify(im_without_bg)(file, commons)
+
+            raise HTTPException(status_code=400, detail="Too many redirects.")
 
     @app.post(
         path="/api/remove",
@@ -305,8 +322,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     def gr_app(app):
-        def inference(input_path, model, *args):
-            output_path = "output.png"
+        def inference(input_image, model, *args):
             a, af, ab, ae, om, ppm, cmd_args = args
 
             kwargs = {
@@ -327,17 +343,12 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 sessions[model] = session
             kwargs["session"] = session
 
-            with open(input_path, "rb") as i:
-                with open(output_path, "wb") as o:
-                    input = i.read()
-                    output = remove(input, **kwargs)
-                    o.write(output)
-            return os.path.join(output_path)
+            return remove(input_image, **kwargs)
 
         interface = gr.Interface(
             inference,
             [
-                gr.components.Image(type="filepath", label="Input"),
+                gr.components.Image(type="pil", label="Input"),
                 gr.components.Dropdown(sessions_names, value="u2net", label="Models"),
                 gr.components.Checkbox(value=True, label="Alpha matting"),
                 gr.components.Slider(
@@ -353,7 +364,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 gr.components.Checkbox(value=True, label="Post process mask"),
                 gr.components.Textbox(label="Arguments"),
             ],
-            gr.components.Image(type="filepath", label="Output"),
+            gr.components.Image(type="pil", label="Output"),
             concurrency_limit=3,
             analytics_enabled=False,
         )

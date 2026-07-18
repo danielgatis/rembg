@@ -5,6 +5,9 @@ on:
         tags:
             - "v*.*.*"
 
+permissions:
+    contents: read
+
 jobs:
     publish_pypi:
         runs-on: ubuntu-latest

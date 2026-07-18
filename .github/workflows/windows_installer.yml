@@ -4,6 +4,10 @@ on:
     push:
         tags:
             - "v*.*.*"
+
+permissions:
+    contents: write
+
 jobs:
   windows_installer:
     name: Build the Inno Setup Installer
