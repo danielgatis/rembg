@@ -167,6 +167,21 @@ rembg i -m sam -x '{ "sam_prompt": [{"type": "point", "data": [724, 740], "label
 rembg i -m u2net_custom -x '{"model_path": "~/.u2net/u2net.onnx"}' path/to/input.png path/to/output.png
 ```
 
+**Use the withoutBG cloud API:**
+
+[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). [Sample results](https://withoutbg.com/pro-model/results?ref=rembg).
+
+```shell
+export WITHOUTBG_API_KEY=sk_...
+rembg i -m withoutbg path/to/input.png path/to/output.png
+```
+
+Or pass the key via extras:
+
+```shell
+rembg i -m withoutbg -x '{"api_key":"sk_..."}' path/to/input.png path/to/output.png
+```
+
 ### rembg `p`
 
 Used for batch processing entire folders.
@@ -302,6 +317,22 @@ for file in Path('path/to/folder').glob('*.png'):
             o.write(output)
 ```
 
+**withoutBG cloud API:**
+
+[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). [Sample results](https://withoutbg.com/pro-model/results?ref=rembg).
+
+```python
+from rembg import remove, new_session
+
+session = new_session("withoutbg", api_key="sk_...")
+# or set WITHOUTBG_API_KEY and omit api_key=
+
+with open('input.png', 'rb') as i:
+    with open('output.png', 'wb') as o:
+        output = remove(i.read(), session=session)
+        o.write(output)
+```
+
 For more examples, see the [examples](USAGE.md) page.
 
 ## Usage with Docker
@@ -341,7 +372,7 @@ sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/data rembg-nvi
 
 ## Models
 
-All models are automatically downloaded and saved to `~/.u2net/` on first use.
+Local ONNX models are automatically downloaded and saved to `~/.u2net/` on first use. The `withoutbg` model is a cloud API backend and does not download a local model.
 
 ### Available Models
 
@@ -361,6 +392,7 @@ All models are automatically downloaded and saved to `~/.u2net/` on first use.
 - birefnet-cod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-COD-epoch_125.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for concealed object detection (COD).
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
 - bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): A state-of-the-art background removal model by BRIA AI.
+- withoutbg ([API](https://withoutbg.com/?ref=rembg), [sample results](https://withoutbg.com/pro-model/results?ref=rembg)): Cloud API backend. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). Pass `api_key` via `-x` / `new_session(...)`, or set `WITHOUTBG_API_KEY`. Images are sent to withoutBG's servers; max upload size is 20 MB.
 
 ## Environment Variables
 
@@ -370,6 +402,7 @@ All models are automatically downloaded and saved to `~/.u2net/` on first use.
 | `XDG_DATA_HOME` | Base data directory used when `U2NET_HOME` is not set. Defaults to `~`. |
 | `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
 | `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
+| `WITHOUTBG_API_KEY` | API key for the `withoutbg` cloud session. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). |
 
 ### Using custom model files
 
