@@ -76,10 +76,14 @@ class WithoutBgSession(BaseSession):
 
         boundary = f"----rembg{uuid.uuid4().hex}"
         body = (
-            f"--{boundary}\r\n"
-            f'Content-Disposition: form-data; name="file"; filename="image.png"\r\n'
-            f"Content-Type: image/png\r\n\r\n"
-        ).encode("utf-8") + image_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+            (
+                f"--{boundary}\r\n"
+                f'Content-Disposition: form-data; name="file"; filename="image.png"\r\n'
+                f"Content-Type: image/png\r\n\r\n"
+            ).encode("utf-8")
+            + image_bytes
+            + f"\r\n--{boundary}--\r\n".encode("utf-8")
+        )
 
         req = request.Request(
             API_URL,
@@ -102,9 +106,7 @@ class WithoutBgSession(BaseSession):
                 detail = json.loads(detail).get("detail", detail)
             except (json.JSONDecodeError, AttributeError):
                 pass
-            raise RuntimeError(
-                f"withoutbg API error ({e.code}): {detail}"
-            ) from e
+            raise RuntimeError(f"withoutbg API error ({e.code}): {detail}") from e
         except error.URLError as e:
             raise RuntimeError(f"withoutbg API request failed: {e.reason}") from e
 
