@@ -13,6 +13,18 @@ from .base import BaseSession
 API_URL = "https://api.withoutbg.com/v1.0/alpha-channel"
 DEFAULT_TIMEOUT = 60
 
+try:
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        _VERSION = version("rembg")
+    except PackageNotFoundError:
+        _VERSION = "0.0.0"
+except ImportError:
+    _VERSION = "0.0.0"
+
+USER_AGENT = f"rembg/{_VERSION}"
+
 
 class WithoutBgSession(BaseSession):
     """Session that removes backgrounds via the withoutBG cloud API."""
@@ -33,13 +45,14 @@ class WithoutBgSession(BaseSession):
             ValueError: If no API key is provided.
         """
         self.model_name = model_name
-        self.api_key = kwargs.get("api_key") or os.getenv("WITHOUTBG_API_KEY")
-        if not self.api_key:
+        api_key = kwargs.get("api_key") or os.getenv("WITHOUTBG_API_KEY")
+        if not isinstance(api_key, str) or not api_key:
             raise ValueError(
                 "withoutbg requires an API key. Pass api_key=... to new_session() "
                 "or set the WITHOUTBG_API_KEY environment variable. "
                 "Get 50 free credits at https://withoutbg.com/signup?ref=rembg"
             )
+        self.api_key: str = api_key
         self.timeout = kwargs.get("timeout", DEFAULT_TIMEOUT)
 
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
@@ -74,6 +87,7 @@ class WithoutBgSession(BaseSession):
             method="POST",
             headers={
                 "X-API-Key": self.api_key,
+                "User-Agent": USER_AGENT,
                 "Content-Type": f"multipart/form-data; boundary={boundary}",
                 "Content-Length": str(len(body)),
             },
