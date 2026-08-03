@@ -26,7 +26,6 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
-            type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -50,7 +49,9 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
+          # mode=max records build args in the provenance attestation.
+          # Safe while the Dockerfile declares no ARG; revisit if one is added.
           provenance: mode=max
           sbom: true
           tags: ${{ steps.meta.outputs.tags }}
