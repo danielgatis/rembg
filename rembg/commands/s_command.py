@@ -71,7 +71,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
     This function starts the FastAPI web server with the specified port and log level.
     If the number of worker threads is specified, it sets the thread limiter accordingly.
     """
-    sessions: dict[str, BaseSession] = {}
+    sessions: dict[tuple, BaseSession] = {}
     tags_metadata = [
         {
             "name": "Background Removal",
@@ -206,10 +206,13 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             except Exception:
                 pass
 
-        session = sessions.get(commons.model)
+        # Extras are part of the key: a session built with one caller's api_key
+        # or model_path must not be handed to a request that passed another.
+        cache_key = (commons.model, json.dumps(kwargs, sort_keys=True, default=str))
+        session = sessions.get(cache_key)
         if session is None:
             session = new_session(commons.model, **kwargs)
-            sessions[commons.model] = session
+            sessions[cache_key] = session
 
         return Response(
             remove(
@@ -396,13 +399,18 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 "post_process_mask": ppm,
             }
 
+            extras = {}
             if cmd_args:
-                kwargs.update(json.loads(cmd_args))
+                extras = json.loads(cmd_args)
+                kwargs.update(extras)
 
-            session = sessions.get(model)
+            # Extras are part of the key: a session built with one api_key or
+            # model_path must not be reused for a request that passed another.
+            cache_key = (model, json.dumps(extras, sort_keys=True, default=str))
+            session = sessions.get(cache_key)
             if session is None:
                 session = new_session(model, **kwargs)
-                sessions[model] = session
+                sessions[cache_key] = session
             kwargs["session"] = session
 
             return remove(input_image, **kwargs)

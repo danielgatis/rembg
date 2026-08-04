@@ -70,6 +70,33 @@ class BaseSession:
         raise NotImplementedError
 
     @classmethod
+    def is_local(cls, *args, **kwargs) -> bool:
+        """Whether inference runs on this machine.
+
+        Return False for sessions that send the image to a remote service, so
+        callers can tell the user their data leaves the machine.
+        """
+        return True
+
+    @classmethod
+    def requires_credentials(cls, *args, **kwargs) -> bool:
+        """Whether constructing this session needs a credential.
+
+        Sessions that return True cannot be instantiated from a bare model name,
+        so interfaces that build sessions on the user's behalf should skip them
+        rather than fail at construction time.
+        """
+        return False
+
+    @classmethod
+    def has_usage_cost(cls, *args, **kwargs) -> bool:
+        """Whether each prediction bills the user.
+
+        Batch entry points should warn before spending on a large run.
+        """
+        return False
+
+    @classmethod
     def checksum_disabled(cls, *args, **kwargs):
         return os.getenv("MODEL_CHECKSUM_DISABLED", None) is not None
 

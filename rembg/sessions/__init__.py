@@ -84,3 +84,16 @@ sessions[BenCustomSession.name()] = BenCustomSession
 
 sessions_names = list(sessions.keys())
 sessions_class = list(sessions.values())
+
+# Sessions that can be constructed from a model name alone, with no credential.
+# Interfaces that build a session on the user's behalf (the web UI, the HTTP
+# endpoint) should offer these rather than every registered name.
+sessions_names_no_credentials = [
+    name for name, cls in sessions.items() if not cls.requires_credentials()
+]
+
+# Sessions backed by a downloadable local model file. `rembg d` iterates these,
+# so remote backends do not show up as a download that does nothing.
+sessions_names_downloadable = [
+    name for name, cls in sessions.items() if cls.is_local()
+]
