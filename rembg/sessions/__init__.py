@@ -94,6 +94,4 @@ sessions_names_no_credentials = [
 
 # Sessions backed by a downloadable local model file. `rembg d` iterates these,
 # so remote backends do not show up as a download that does nothing.
-sessions_names_downloadable = [
-    name for name, cls in sessions.items() if cls.is_local()
-]
+sessions_names_downloadable = [name for name, cls in sessions.items() if cls.is_local()]
