@@ -12,6 +12,7 @@ from .base import BaseSession
 
 API_URL = "https://api.withoutbg.com/v1.0/alpha-channel"
 DEFAULT_TIMEOUT = 60
+MAX_UPLOAD_BYTES = 20 * 1024 * 1024
 
 try:
     from importlib.metadata import PackageNotFoundError, version
@@ -68,11 +69,19 @@ class WithoutBgSession(BaseSession):
             List[PILImage]: A single-item list with the L-mode alpha mask.
 
         Raises:
+            ValueError: If the PNG-encoded image exceeds the 20 MB upload limit.
             RuntimeError: If the API returns a non-200 response.
         """
         buf = io.BytesIO()
         img.save(buf, format="PNG")
         image_bytes = buf.getvalue()
+
+        if len(image_bytes) > MAX_UPLOAD_BYTES:
+            raise ValueError(
+                f"withoutbg upload exceeds the {MAX_UPLOAD_BYTES // (1024 * 1024)} MB limit "
+                f"({len(image_bytes)} bytes after PNG encode). "
+                "Resize or compress the image and try again."
+            )
 
         boundary = f"----rembg{uuid.uuid4().hex}"
         body = (
@@ -115,6 +124,21 @@ class WithoutBgSession(BaseSession):
             mask = mask.resize(img.size, Image.Resampling.LANCZOS)
 
         return [mask]
+
+    @classmethod
+    def is_local(cls, *args, **kwargs) -> bool:
+        """Inference runs on withoutBG's servers, not this machine."""
+        return False
+
+    @classmethod
+    def requires_credentials(cls, *args, **kwargs) -> bool:
+        """Construction needs an API key (api_key= or WITHOUTBG_API_KEY)."""
+        return True
+
+    @classmethod
+    def has_usage_cost(cls, *args, **kwargs) -> bool:
+        """Each prediction bills against the withoutBG API key."""
+        return True
 
     @classmethod
     def download_models(cls, *args, **kwargs):

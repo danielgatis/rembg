@@ -6,7 +6,7 @@ from urllib import error
 import pytest
 from PIL import Image
 
-from rembg.sessions.withoutbg import WithoutBgSession
+from rembg.sessions.withoutbg import MAX_UPLOAD_BYTES, WithoutBgSession
 
 
 def _png_bytes(mode: str, size=(32, 24), color=0):
@@ -38,6 +38,30 @@ def test_name_and_download_models():
     assert WithoutBgSession.download_models() == ""
 
 
+def test_capability_flags():
+    assert WithoutBgSession.is_local() is False
+    assert WithoutBgSession.requires_credentials() is True
+    assert WithoutBgSession.has_usage_cost() is True
+
+
+def test_predict_rejects_oversized_upload(monkeypatch):
+    monkeypatch.setenv("WITHOUTBG_API_KEY", "sk_test")
+    session = WithoutBgSession("withoutbg", None)
+    img = Image.new("RGB", (10, 10), (0, 0, 0))
+
+    with patch.object(
+        img,
+        "save",
+        side_effect=lambda buf, *args, **kwargs: buf.write(
+            b"x" * (MAX_UPLOAD_BYTES + 1)
+        ),
+    ):
+        with patch("rembg.sessions.withoutbg.request.urlopen") as mock_urlopen:
+            with pytest.raises(ValueError, match="20 MB limit"):
+                session.predict(img)
+            mock_urlopen.assert_not_called()
+
+
 def test_predict_returns_mask_matching_input_size(monkeypatch):
     monkeypatch.setenv("WITHOUTBG_API_KEY", "sk_test")
     session = WithoutBgSession("withoutbg", None)
@@ -51,7 +75,9 @@ def test_predict_returns_mask_matching_input_size(monkeypatch):
     mock_resp.__enter__.return_value = mock_resp
     mock_resp.__exit__.return_value = False
 
-    with patch("rembg.sessions.withoutbg.request.urlopen", return_value=mock_resp) as mock_urlopen:
+    with patch(
+        "rembg.sessions.withoutbg.request.urlopen", return_value=mock_resp
+    ) as mock_urlopen:
         masks = session.predict(img)
 
     assert len(masks) == 1
