@@ -28,7 +28,7 @@ from scipy.ndimage import binary_erosion, gaussian_filter
 from skimage.morphology import disk, opening
 
 from .session_factory import new_session
-from .sessions import sessions, sessions_names
+from .sessions import sessions, sessions_names, sessions_names_downloadable
 from .sessions.base import BaseSession
 
 ort.set_default_logger_severity(3)
@@ -208,13 +208,15 @@ def download_models(models: tuple[str, ...]) -> None:
     """
     if len(models) == 0:
         print("No models specified, downloading all models")
-        models = tuple(sessions_names)
+        models = tuple(sessions_names_downloadable)
 
     for model in models:
         session = sessions.get(model)
         if session is None:
             print(f"Error: no model found: {model}")
             sys.exit(1)
+        elif not session.is_local():
+            print(f"Skipping {model}: remote backend, nothing to download")
         else:
             print(f"Downloading model: {model}")
             try:
