@@ -55,6 +55,10 @@ class DisSession(BaseSession):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx",
             (
@@ -63,11 +67,11 @@ class DisSession(BaseSession):
                 else "md5:fc16ebd8b0c10d971d3513d564d01e29"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

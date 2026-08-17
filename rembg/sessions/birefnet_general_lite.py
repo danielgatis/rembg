@@ -23,6 +23,10 @@ class BiRefNetSessionGeneralLite(BiRefNetSessionGeneral):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx",
             (
@@ -31,11 +35,11 @@ class BiRefNetSessionGeneralLite(BiRefNetSessionGeneral):
                 else "md5:4fab47adc4ff364be1713e97b7e66334"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

@@ -59,6 +59,10 @@ class BriaRmBgSession(BaseSession):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx",
             (
@@ -67,11 +71,11 @@ class BriaRmBgSession(BaseSession):
                 else "sha256:5b486f08200f513f460da46dd701db5fbb47d79b4be4b708a19444bcd4e79958"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

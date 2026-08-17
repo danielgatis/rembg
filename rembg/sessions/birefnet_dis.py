@@ -23,6 +23,10 @@ class BiRefNetSessionDIS(BiRefNetSessionGeneral):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-DIS-epoch_590.onnx",
             (
@@ -31,11 +35,11 @@ class BiRefNetSessionDIS(BiRefNetSessionGeneral):
                 else "md5:2d4d44102b446f33a4ebb2e56c051f2b"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

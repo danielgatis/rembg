@@ -23,6 +23,10 @@ class BiRefNetSessionHRSOD(BiRefNetSessionGeneral):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name(*args, **kwargs)}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-HRSOD_DHU-epoch_115.onnx",
             (
@@ -31,11 +35,11 @@ class BiRefNetSessionHRSOD(BiRefNetSessionGeneral):
                 else "md5:c017ade5de8a50ff0fd74d790d268dda"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

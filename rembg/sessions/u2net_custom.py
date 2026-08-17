@@ -1,9 +1,7 @@
-import os
 from typing import List
 
 import numpy as np
 import onnxruntime as ort
-import pooch
 from PIL import Image
 from PIL.Image import Image as PILImage
 
@@ -76,17 +74,7 @@ class U2netCustomSession(BaseSession):
         Returns:
             str: The absolute path to the model files.
         """
-        model_path = kwargs.get("model_path")
-        if model_path is None:
-            raise ValueError("model_path is required")
-
-        abs_path = os.path.abspath(os.path.expanduser(model_path))
-        allowed_dir = os.path.abspath(os.path.expanduser(cls.u2net_home()))
-        if not abs_path.startswith(allowed_dir + os.sep) and abs_path != allowed_dir:
-            raise ValueError(
-                f"model_path must be within the models directory: {allowed_dir}"
-            )
-        return abs_path
+        return cls.validate_model_path(*args, **kwargs)
 
     @classmethod
     def name(cls, *args, **kwargs):

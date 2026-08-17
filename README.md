@@ -93,12 +93,14 @@ pip install "rembg[rocm,cli]" # for library + cli
 
 After installation, you can use rembg by typing `rembg` in your terminal.
 
-The `rembg` command has 4 subcommands, one for each input type:
+The `rembg` command has these subcommands:
 
 - `i` - single files
 - `p` - folders (batch processing)
 - `s` - HTTP server
 - `b` - RGB24 pixel binary stream
+- `d` - download models ahead of time
+- `m` - migrate models from the legacy `~/.u2net` directory
 
 You can get help about the main command using:
 
@@ -492,19 +494,48 @@ Local ONNX models are automatically downloaded and saved to `~/.u2net/` on first
 
 | Variable | Description |
 |----------|-------------|
-| `U2NET_HOME` | Path to the directory where models are stored. Defaults to `$XDG_DATA_HOME/.u2net` (or `~/.u2net` if `XDG_DATA_HOME` is not set). |
-| `XDG_DATA_HOME` | Base data directory used when `U2NET_HOME` is not set. Defaults to `~`. |
+| `REMBG_HOME` | Path to the directory where models are stored. Defaults to `$XDG_DATA_HOME/rembg` (or `~/.rembg` if `XDG_DATA_HOME` is not set). |
+| `XDG_DATA_HOME` | Base data directory used when `REMBG_HOME` is not set. |
+| `U2NET_HOME` | Deprecated. Still honored, and still takes precedence over `REMBG_HOME` when set, so existing setups keep working. Prefer `REMBG_HOME`. |
 | `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
 | `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
 | `WITHOUTBG_API_KEY` | API key for the `withoutbg` cloud session. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). |
+
+### Where models are stored
+
+Each model gets its own directory under `~/.rembg/models/`:
+
+```
+~/.rembg/models/u2net/u2net.onnx
+~/.rembg/models/birefnet-general/birefnet-general.onnx
+~/.rembg/models/sam/sam_vit_b_01ec64.encoder.onnx
+~/.rembg/models/sam/sam_vit_b_01ec64.decoder.onnx
+```
+
+Earlier versions put every model straight into `~/.u2net/`, regardless of its
+architecture. That directory is still read, so upgrading never re-downloads a
+model you already have. New downloads go to the layout above.
+
+To move existing downloads across:
+
+```shell
+rembg m --dry-run     # show what would move
+rembg m               # copy into the new layout, leaving the originals alone
+```
+
+The originals are kept unless you pass `--delete-source`, so a partial run can
+never lose a multi-gigabyte download. Interrupted downloads leave `tmp*` files
+behind; `--clean-orphans` removes those.
 
 ### Using custom model files
 
 If you need to use a modified version of a model (e.g. converted to a different ONNX IR version for compatibility with an older CUDA toolkit), you can prevent rembg from overwriting it:
 
 1. Set `MODEL_CHECKSUM_DISABLED=1`
-2. Place your custom `.onnx` file in the models directory (`~/.u2net/` by default) with the expected filename (e.g. `u2net.onnx`)
+2. Place your custom `.onnx` file in that model's directory (e.g. `~/.rembg/models/u2net/u2net.onnx`) with the expected filename
 3. Rembg will detect the file exists and use it without re-downloading
+
+Paths passed as `model_path` must sit inside `~/.rembg` or the legacy `~/.u2net`; anything else is rejected.
 
 ## FAQ
 

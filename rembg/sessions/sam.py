@@ -320,11 +320,29 @@ class SamSession(BaseSession):
             fname_encoder = f"{model_name}.encoder.quant.onnx"
             fname_decoder = f"{model_name}.decoder.quant.onnx"
 
+        existing_encoder = cls.resolve_existing(fname_encoder, *args, **kwargs)
+        existing_decoder = cls.resolve_existing(fname_decoder, *args, **kwargs)
+
+        # The large encoder loads `encoder_data.bin` as a sidecar from its own
+        # directory, so encoder and blob have to stay together. Only reuse a
+        # previous download when the whole set is present in one place.
+        if existing_encoder is not None and existing_decoder is not None:
+            base = os.path.dirname(existing_encoder)
+            needs_blob = fname_encoder == "sam_vit_h_4b8939.encoder.onnx"
+            blob_ok = not needs_blob or os.path.exists(
+                os.path.join(base, "sam_vit_h_4b8939.encoder_data.bin")
+            )
+
+            if os.path.dirname(existing_decoder) == base and blob_ok:
+                return (existing_encoder, existing_decoder)
+
+        target = cls.model_dir(*args, **kwargs)
+
         pooch.retrieve(
             f"https://github.com/danielgatis/rembg/releases/download/v0.0.0/{fname_encoder}",
             None,
             fname=fname_encoder,
-            path=cls.u2net_home(*args, **kwargs),
+            path=target,
             progressbar=True,
         )
 
@@ -332,14 +350,12 @@ class SamSession(BaseSession):
             f"https://github.com/danielgatis/rembg/releases/download/v0.0.0/{fname_decoder}",
             None,
             fname=fname_decoder,
-            path=cls.u2net_home(*args, **kwargs),
+            path=target,
             progressbar=True,
         )
 
         if fname_encoder == "sam_vit_h_4b8939.encoder.onnx" and not os.path.exists(
-            os.path.join(
-                cls.u2net_home(*args, **kwargs), "sam_vit_h_4b8939.encoder_data.bin"
-            )
+            os.path.join(target, "sam_vit_h_4b8939.encoder_data.bin")
         ):
             content = bytearray()
 
@@ -348,29 +364,26 @@ class SamSession(BaseSession):
                     f"https://github.com/danielgatis/rembg/releases/download/v0.0.0/sam_vit_h_4b8939.encoder_data.{i}.bin",
                     None,
                     fname=f"sam_vit_h_4b8939.encoder_data.{i}.bin",
-                    path=cls.u2net_home(*args, **kwargs),
+                    path=target,
                     progressbar=True,
                 )
 
                 fbin = os.path.join(
-                    cls.u2net_home(*args, **kwargs),
+                    target,
                     f"sam_vit_h_4b8939.encoder_data.{i}.bin",
                 )
                 content.extend(open(fbin, "rb").read())
                 os.remove(fbin)
 
             with open(
-                os.path.join(
-                    cls.u2net_home(*args, **kwargs),
-                    "sam_vit_h_4b8939.encoder_data.bin",
-                ),
+                os.path.join(target, "sam_vit_h_4b8939.encoder_data.bin"),
                 "wb",
             ) as fp:
                 fp.write(content)
 
         return (
-            os.path.join(cls.u2net_home(*args, **kwargs), fname_encoder),
-            os.path.join(cls.u2net_home(*args, **kwargs), fname_decoder),
+            os.path.join(target, fname_encoder),
+            os.path.join(target, fname_decoder),
         )
 
     @classmethod

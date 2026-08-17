@@ -61,6 +61,10 @@ class SiluetaSession(BaseSession):
             str: The path to the downloaded model file.
         """
         fname = f"{cls.name()}.onnx"
+        existing = cls.resolve_existing(fname, *args, **kwargs)
+        if existing is not None:
+            return existing
+
         pooch.retrieve(
             "https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx",
             (
@@ -69,11 +73,11 @@ class SiluetaSession(BaseSession):
                 else "md5:55e59e0d8062d2f5d013f4725ee84782"
             ),
             fname=fname,
-            path=cls.u2net_home(*args, **kwargs),
+            path=cls.model_dir(*args, **kwargs),
             progressbar=True,
         )
 
-        return os.path.join(cls.u2net_home(*args, **kwargs), fname)
+        return os.path.join(cls.model_dir(*args, **kwargs), fname)
 
     @classmethod
     def name(cls, *args, **kwargs):

@@ -46,7 +46,7 @@ class BaseSession:
         std: Tuple[float, float, float],
         size: Tuple[int, int],
         *args,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, np.ndarray]:
         im = img.convert("RGB").resize(size, Image.Resampling.LANCZOS)
 
@@ -101,11 +101,94 @@ class BaseSession:
         return os.getenv("MODEL_CHECKSUM_DISABLED", None) is not None
 
     @classmethod
-    def u2net_home(cls, *args, **kwargs):
+    def legacy_home(cls, *args, **kwargs):
+        """The pre-0.0.0 flat model directory, kept for reading only.
+
+        Models used to live directly in `~/.u2net`, whatever their architecture.
+        Nothing is written here anymore, but existing downloads are still found
+        so upgrading does not force a re-download.
+        """
         return os.path.expanduser(
             os.getenv(
                 "U2NET_HOME", os.path.join(os.getenv("XDG_DATA_HOME", "~"), ".u2net")
             )
+        )
+
+    @classmethod
+    def rembg_home(cls, *args, **kwargs):
+        """Root directory for rembg data.
+
+        `U2NET_HOME` still wins when set, so anyone who already points it at a
+        shared or pre-seeded directory keeps working.
+        """
+        if os.getenv("U2NET_HOME"):
+            return cls.legacy_home(*args, **kwargs)
+
+        xdg = os.getenv("XDG_DATA_HOME")
+        default = os.path.join(xdg, "rembg") if xdg else os.path.join("~", ".rembg")
+
+        return os.path.expanduser(os.getenv("REMBG_HOME", default))
+
+    @classmethod
+    def u2net_home(cls, *args, **kwargs):
+        """Deprecated alias for `rembg_home`.
+
+        Kept because third-party code calls it. New code should use
+        `rembg_home` for the root or `model_dir` for a model's own directory.
+        """
+        return cls.rembg_home(*args, **kwargs)
+
+    @classmethod
+    def model_dir(cls, *args, **kwargs):
+        """Directory holding this model's files: `<home>/models/<name>`."""
+        return os.path.join(
+            cls.rembg_home(*args, **kwargs), "models", cls.name(*args, **kwargs)
+        )
+
+    @classmethod
+    def resolve_existing(cls, fname, *args, **kwargs):
+        """Return an already-downloaded copy of `fname`, or None.
+
+        Looks in the per-model directory first, then in the old flat layout, so
+        a model downloaded by an earlier version is reused instead of fetched
+        again.
+        """
+        candidates = [
+            os.path.join(cls.model_dir(*args, **kwargs), fname),
+            os.path.join(cls.legacy_home(*args, **kwargs), fname),
+        ]
+
+        for path in candidates:
+            if os.path.exists(path):
+                return path
+
+        return None
+
+    @classmethod
+    def validate_model_path(cls, *args, **kwargs):
+        """Resolve the caller's `model_path`, refusing anything outside the
+        model directories.
+
+        Both the current root and the legacy one are accepted, so a custom model
+        that was placed under `~/.u2net` keeps loading after the move.
+        """
+        model_path = kwargs.get("model_path")
+        if model_path is None:
+            raise ValueError("model_path is required")
+
+        abs_path = os.path.abspath(os.path.expanduser(model_path))
+
+        allowed = [
+            os.path.abspath(cls.rembg_home(*args, **kwargs)),
+            os.path.abspath(cls.legacy_home(*args, **kwargs)),
+        ]
+
+        for root in allowed:
+            if abs_path == root or abs_path.startswith(root + os.sep):
+                return abs_path
+
+        raise ValueError(
+            f"model_path must be within the models directory: {allowed[0]}"
         )
 
     @classmethod
