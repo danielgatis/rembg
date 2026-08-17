@@ -155,6 +155,14 @@ rembg i -om path/to/input.png path/to/output.png
 rembg i -a path/to/input.png path/to/output.png
 ```
 
+**Remove color fringing from soft edges:**
+
+```shell
+rembg i -dc path/to/input.png path/to/output.png
+```
+
+See [Color decontamination](#color-decontamination) for what this does.
+
 **Pass extra parameters (SAM example):**
 
 ```shell
@@ -334,6 +342,92 @@ with open('input.png', 'rb') as i:
 ```
 
 For more examples, see the [examples](USAGE.md) page.
+
+## Choosing an edge mode
+
+Rembg has three ways to turn a mask into a cutout. They differ only in how they
+treat the *soft* pixels along an edge — hair, fur, fabric, motion blur.
+
+| Mode | Flag | Fixes edge color | Refines the mask | Cost |
+| --- | --- | --- | --- | --- |
+| Naive | *(default)* | No | No | Free |
+| Decontaminate | `-dc` | Yes | No | Negligible |
+| Alpha matting | `-a` | Yes | Yes | Slow |
+
+They are alternatives, not layers — `-a` already decontaminates internally, so
+passing both changes nothing. Pick one:
+
+**Use the default (naive)** when the subject has hard edges — products, cars,
+logos, screenshots — or when the background was already close in color to the
+subject. There is nothing to correct, so the extra work buys nothing.
+
+**Use `-dc`** when the cutout has a colored halo: the subject was shot against
+a strongly colored background (green grass, blue sky, a painted wall) and that
+color survives as a rim around hair or fine detail. This is the common case,
+and it is cheap enough to leave on for a whole batch.
+
+**Use `-a`** when the *shape* of the mask is wrong, not just its color — the
+model cut through strands of hair, or left a hard stair-stepped edge where the
+subject is genuinely soft. This is the only mode that re-estimates coverage,
+and it is much slower than the others. Its solver can also fail to converge on
+some images; rembg falls back to a decontaminated cutout when that happens.
+
+### Which model to pair it with
+
+The newer models (`birefnet-*`, `isnet-general-use`, `bria-rmbg`) already
+produce a soft, well-shaped alpha, so their masks rarely need `-a` — reach for
+`-dc` first and only try `-a` if the edge shape itself is wrong.
+
+The older models (`u2net`, `u2netp`, `silueta`) tend to produce firmer, blockier
+edges. They benefit most from `-a` on hair-heavy portraits, and are also where
+its solver is most likely to struggle.
+
+For portraits specifically, `birefnet-portrait` with `-dc` is a good starting
+point. If you are batch-processing and cannot inspect each result, prefer `-dc`
+over `-a`: it is faster and cannot fail.
+
+> Note: `-ppm` (post-process mask) thresholds the mask into a fully binary one,
+> which leaves no partially transparent pixels at all. Combining it with `-dc`
+> is pointless — there is nothing left to correct. Use one or the other.
+
+## Color decontamination
+
+On a soft edge — hair, fur, motion blur — a pixel is not purely foreground or
+purely background. The camera captured a blend of the two:
+
+```
+captured = alpha * foreground + (1 - alpha) * background
+```
+
+Making that pixel semi-transparent does not undo the blend, so the background
+color stays mixed into it and shows up as a colored halo around fine detail.
+A subject shot against green grass keeps a green rim; against a blue wall, a
+blue one. This is the same operation Photoshop calls *Decontaminate Colors*
+and Nuke calls *decontamination*.
+
+Rembg can estimate the true foreground color and write that instead. This is
+opt-in:
+
+```python
+from rembg import remove
+
+output = remove(input, decontaminate=True)
+```
+
+```shell
+rembg i -dc path/to/input.png path/to/output.png   # single file
+rembg p -dc path/to/input path/to/output           # folder
+```
+
+```shell
+curl -s "http://localhost:7000/api/remove?url=...&dc=true" > output.png
+```
+
+Notes:
+
+- It only changes color, never coverage — the alpha channel is untouched.
+- The cost is negligible next to model inference, which dominates runtime.
+- `--alpha-matting` already does this internally, so the flag is ignored there.
 
 ## Usage with Docker
 

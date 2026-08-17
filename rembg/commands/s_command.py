@@ -133,6 +133,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             ),
             om: bool = Query(default=False, description="Only Mask"),
             ppm: bool = Query(default=False, description="Post Process Mask"),
+            dc: bool = Query(default=False, description="Decontaminate Edges"),
             bgc: Optional[str] = Query(default=None, description="Background Color"),
             extras: Optional[str] = Query(
                 default=None, description="Extra parameters as JSON"
@@ -145,6 +146,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             self.ae = ae
             self.om = om
             self.ppm = ppm
+            self.dc = dc
             self.extras = extras
             self.bgc = (
                 cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
@@ -178,6 +180,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             ),
             om: bool = Form(default=False, description="Only Mask"),
             ppm: bool = Form(default=False, description="Post Process Mask"),
+            dc: bool = Form(default=False, description="Decontaminate Edges"),
             bgc: Optional[str] = Query(default=None, description="Background Color"),
             extras: Optional[str] = Query(
                 default=None, description="Extra parameters as JSON"
@@ -190,6 +193,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             self.ae = ae
             self.om = om
             self.ppm = ppm
+            self.dc = dc
             self.extras = extras
             self.bgc = (
                 cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
@@ -224,6 +228,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 alpha_matting_erode_size=commons.ae,
                 only_mask=commons.om,
                 post_process_mask=commons.ppm,
+                decontaminate=commons.dc,
                 bgcolor=commons.bgc,
                 **kwargs,
             ),
@@ -388,7 +393,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
 
     def gr_app(app):
         def inference(input_image, model, *args):
-            a, af, ab, ae, om, ppm, cmd_args = args
+            a, af, ab, ae, om, ppm, dc, cmd_args = args
 
             kwargs = {
                 "alpha_matting": a,
@@ -397,6 +402,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 "alpha_matting_erode_size": ae,
                 "only_mask": om,
                 "post_process_mask": ppm,
+                "decontaminate": dc,
             }
 
             extras = {}
@@ -432,6 +438,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 ),
                 gr.components.Checkbox(value=False, label="Only mask"),
                 gr.components.Checkbox(value=True, label="Post process mask"),
+                gr.components.Checkbox(value=False, label="Decontaminate edges"),
                 gr.components.Textbox(label="Arguments"),
             ],
             gr.components.Image(type="pil", label="Output"),

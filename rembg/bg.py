@@ -111,6 +111,37 @@ def naive_cutout(img: PILImage, mask: PILImage) -> PILImage:
     return cutout
 
 
+def decontaminate_cutout(img: PILImage, mask: PILImage) -> PILImage:
+    """
+    Estimate the true foreground color and apply the mask as alpha.
+
+    Unlike naive_cutout, this recovers the unblended foreground color for
+    semi-transparent pixels. A pixel on a soft edge was captured as a mix of
+    the foreground and the background behind it, so simply making it
+    transparent leaves the background color behind as fringing, which is most
+    visible around fine details such as hair.
+
+    Args:
+        img (PILImage): The image to be modified.
+        mask (PILImage): The mask to be applied as alpha.
+
+    Returns:
+        PILImage: The cutout with the background color fringing removed.
+    """
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+
+    img_normalized = np.asarray(img) / 255.0
+    alpha = np.asarray(mask.convert("L")) / 255.0
+
+    foreground = estimate_foreground_ml(img_normalized, alpha)
+    cutout = stack_images(foreground, alpha)
+
+    cutout = np.clip(cutout * 255, 0, 255).astype(np.uint8)
+
+    return Image.fromarray(cutout)
+
+
 def putalpha_cutout(img: PILImage, mask: PILImage) -> PILImage:
     """
     Apply the specified mask to the image as an alpha cutout.
@@ -234,6 +265,7 @@ def remove(
     session: Optional[BaseSession] = None,
     only_mask: bool = False,
     post_process_mask: bool = False,
+    decontaminate: bool = False,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
     force_return_bytes: bool = False,
     *args: Optional[Any],
@@ -253,6 +285,7 @@ def remove(
         session (Optional[BaseSession], optional): A session object for the 'u2net' model. Defaults to None.
         only_mask (bool, optional): Flag indicating whether to return only the binary masks. Defaults to False.
         post_process_mask (bool, optional): Flag indicating whether to post-process the masks. Defaults to False.
+        decontaminate (bool, optional): Flag indicating whether to remove the background color fringing left on soft edges. Ignored when alpha_matting is on. Defaults to False.
         bgcolor (Optional[Tuple[int, int, int, int]], optional): Background color for the cutout image. Defaults to None.
         force_return_bytes (bool, optional): Flag indicating whether to return the cutout image as bytes. Defaults to False.
         *args (Optional[Any]): Additional positional arguments.
@@ -305,13 +338,17 @@ def remove(
                     alpha_matting_erode_size,
                 )
             except ValueError:
+                # Alpha matting already unmixes the foreground color, so fall
+                # back to the decontaminated cutout to keep the edges usable.
                 if putalpha:
                     cutout = putalpha_cutout(img, mask)
                 else:
-                    cutout = naive_cutout(img, mask)
+                    cutout = decontaminate_cutout(img, mask)
         else:
             if putalpha:
                 cutout = putalpha_cutout(img, mask)
+            elif decontaminate:
+                cutout = decontaminate_cutout(img, mask)
             else:
                 cutout = naive_cutout(img, mask)
 

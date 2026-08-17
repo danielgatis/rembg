@@ -138,6 +138,13 @@ def _confirm_usage_cost(
     help="post process the mask",
 )
 @click.option(
+    "-dc",
+    "--decontaminate",
+    is_flag=True,
+    show_default=True,
+    help="remove the background color fringing left on soft edges",
+)
+@click.option(
     "-w",
     "--watch",
     default=False,
