@@ -355,6 +355,7 @@ treat the *soft* pixels along an edge — hair, fur, fabric, motion blur.
 | Naive | *(default)* | No | No | Free |
 | Decontaminate | `-dc` | Yes | No | Negligible |
 | Alpha matting | `-a` | Yes | Yes | Slow |
+| ViTMatte | `-vm` | Yes | Yes | Slow, extra download |
 
 They are alternatives, not layers — `-a` already decontaminates internally, so
 passing both changes nothing. Pick one:
@@ -370,9 +371,23 @@ and it is cheap enough to leave on for a whole batch.
 
 **Use `-a`** when the *shape* of the mask is wrong, not just its color — the
 model cut through strands of hair, or left a hard stair-stepped edge where the
-subject is genuinely soft. This is the only mode that re-estimates coverage,
-and it is much slower than the others. Its solver can also fail to converge on
-some images; rembg falls back to a decontaminated cutout when that happens.
+subject is genuinely soft. It re-estimates coverage with a closed-form solver,
+and it is much slower than `-dc`. That solver can fail to converge on some
+images; rembg falls back to a decontaminated cutout when that happens.
+
+**Use `-vm`** for the same problem as `-a`, when you want the fine detail back.
+ViTMatte predicts the alpha with a network instead of solving for it, so it
+recovers more of the wispy strands `-a` tends to clip, and it cannot fail to
+converge. It costs an extra ~110 MB download on first use and runs slower than
+`-a`. Pick a different checkpoint with
+`-x '{"vitmatte_model": "base-distinctions-646"}'`:
+
+| Checkpoint | Download | Notes |
+| --- | --- | --- |
+| `small-distinctions-646` | ~110 MB | The default. Best quality per byte. |
+| `small-composition-1k` | ~110 MB | Trained on synthetic composites. |
+| `base-distinctions-646` | ~380 MB | Slightly more detail, ~2.5x the runtime. |
+| `base-composition-1k` | ~380 MB | Larger, synthetic training set. |
 
 ### Which model to pair it with
 
@@ -386,8 +401,9 @@ edges. They benefit most from `-a` on hair-heavy portraits, and are also where
 its solver is most likely to struggle.
 
 For portraits specifically, `birefnet-portrait` with `-dc` is a good starting
-point. If you are batch-processing and cannot inspect each result, prefer `-dc`
-over `-a`: it is faster and cannot fail.
+point, and `-vm` when the hair detail matters more than the runtime. If you are
+batch-processing and cannot inspect each result, prefer `-dc` over `-a`: it is
+faster and cannot fail.
 
 > Note: `-ppm` (post-process mask) thresholds the mask into a fully binary one,
 > which leaves no partially transparent pixels at all. Combining it with `-dc`

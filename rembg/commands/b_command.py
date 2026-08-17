@@ -72,6 +72,13 @@ from ..sessions import sessions_names
     help="post process the mask",
 )
 @click.option(
+    "-vm",
+    "--vitmatte",
+    is_flag=True,
+    show_default=True,
+    help="refine the edges with ViTMatte, recovering more fine detail than -a",
+)
+@click.option(
     "-bgc",
     "--bgcolor",
     default=(0, 0, 0, 0),

@@ -27,6 +27,7 @@ from pymatting.util.util import stack_images
 from scipy.ndimage import binary_erosion, gaussian_filter
 from skimage.morphology import disk, opening
 
+from .matting import vitmatte_alpha
 from .session_factory import new_session
 from .sessions import sessions, sessions_names, sessions_names_downloadable
 from .sessions.base import BaseSession
@@ -266,6 +267,8 @@ def remove(
     only_mask: bool = False,
     post_process_mask: bool = False,
     decontaminate: bool = False,
+    vitmatte: bool = False,
+    vitmatte_model: Optional[str] = None,
     bgcolor: Optional[Tuple[int, int, int, int]] = None,
     force_return_bytes: bool = False,
     *args: Optional[Any],
@@ -286,6 +289,8 @@ def remove(
         only_mask (bool, optional): Flag indicating whether to return only the binary masks. Defaults to False.
         post_process_mask (bool, optional): Flag indicating whether to post-process the masks. Defaults to False.
         decontaminate (bool, optional): Flag indicating whether to remove the background color fringing left on soft edges. Ignored when alpha_matting is on. Defaults to False.
+        vitmatte (bool, optional): Flag indicating whether to refine the mask with ViTMatte, which recovers more soft edge detail than alpha matting. Takes precedence over alpha_matting. Defaults to False.
+        vitmatte_model (Optional[str], optional): Which ViTMatte checkpoint to use: small-distinctions-646 (default), small-composition-1k, base-distinctions-646, or base-composition-1k. Defaults to None.
         bgcolor (Optional[Tuple[int, int, int, int]], optional): Background color for the cutout image. Defaults to None.
         force_return_bytes (bool, optional): Flag indicating whether to return the cutout image as bytes. Defaults to False.
         *args (Optional[Any]): Additional positional arguments.
@@ -327,6 +332,24 @@ def remove(
 
         if only_mask:
             cutout = mask
+
+        elif vitmatte:
+            # ViTMatte predicts coverage but not colour, so the refined alpha
+            # still goes through the same foreground estimation `-dc` uses.
+            # Without it the recovered strands keep the old background colour.
+            refined = vitmatte_alpha(
+                img,
+                mask,
+                variant=vitmatte_model,
+                foreground_threshold=alpha_matting_foreground_threshold,
+                background_threshold=alpha_matting_background_threshold,
+                erode_size=alpha_matting_erode_size,
+            )
+
+            if putalpha:
+                cutout = putalpha_cutout(img, refined)
+            else:
+                cutout = decontaminate_cutout(img, refined)
 
         elif alpha_matting:
             try:
