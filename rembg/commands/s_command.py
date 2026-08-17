@@ -113,7 +113,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             model: str = Query(
                 description="Model to use when processing image",
                 regex=r"(" + "|".join(sessions_names) + ")",
-                default="u2net",
+                default="bria-rmbg",
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
             af: int = Query(
@@ -160,7 +160,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             model: str = Form(
                 description="Model to use when processing image",
                 regex=r"(" + "|".join(sessions_names) + ")",
-                default="u2net",
+                default="bria-rmbg",
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
             af: int = Form(
@@ -425,7 +425,9 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             inference,
             [
                 gr.components.Image(type="pil", label="Input"),
-                gr.components.Dropdown(sessions_names, value="u2net", label="Models"),
+                gr.components.Dropdown(
+                    sessions_names, value="bria-rmbg", label="Models"
+                ),
                 gr.components.Checkbox(value=True, label="Alpha matting"),
                 gr.components.Slider(
                     value=240, minimum=0, maximum=255, label="Foreground threshold"

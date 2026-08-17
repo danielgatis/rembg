@@ -86,7 +86,7 @@ def _confirm_usage_cost(
 @click.option(
     "-m",
     "--model",
-    default="u2net",
+    default="bria-rmbg",
     type=click.Choice(sessions_names),
     show_default=True,
     show_choices=True,

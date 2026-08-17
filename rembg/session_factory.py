@@ -8,7 +8,7 @@ from .sessions.base import BaseSession
 
 
 def new_session(
-    model_name: str = "u2net",
+    model_name: str = "bria-rmbg",
     *args,
     sess_opts: Optional[ort.SessionOptions] = None,
     **kwargs,

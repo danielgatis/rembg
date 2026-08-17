@@ -16,7 +16,7 @@ input = Image.open(input_path)
 
 ### Without additional arguments
 
-This defaults to the `u2net` model.
+This defaults to the `bria-rmbg` model.
 
 ```python
 output = remove(input)

@@ -274,7 +274,7 @@ def remove(
     """
     Remove the background from an input image.
 
-    This function takes in various parameters and returns a modified version of the input image with the background removed. The function can handle input data in the form of bytes, a PIL image, or a numpy array. The function first checks the type of the input data and converts it to a PIL image if necessary. It then fixes the orientation of the image and proceeds to perform background removal using the 'u2net' model. The result is a list of binary masks representing the foreground objects in the image. These masks are post-processed and combined to create a final cutout image. If a background color is provided, it is applied to the cutout image. The function returns the resulting cutout image in the format specified by the input 'return_type' parameter or as python bytes if force_return_bytes is true.
+    This function takes in various parameters and returns a modified version of the input image with the background removed. The function can handle input data in the form of bytes, a PIL image, or a numpy array. The function first checks the type of the input data and converts it to a PIL image if necessary. It then fixes the orientation of the image and proceeds to perform background removal using the 'bria-rmbg' model. The result is a list of binary masks representing the foreground objects in the image. These masks are post-processed and combined to create a final cutout image. If a background color is provided, it is applied to the cutout image. The function returns the resulting cutout image in the format specified by the input 'return_type' parameter or as python bytes if force_return_bytes is true.
 
     Parameters:
         data (Union[bytes, PILImage, np.ndarray]): The input image data.
@@ -282,7 +282,7 @@ def remove(
         alpha_matting_foreground_threshold (int, optional): Foreground threshold for alpha matting. Defaults to 240.
         alpha_matting_background_threshold (int, optional): Background threshold for alpha matting. Defaults to 10.
         alpha_matting_erode_size (int, optional): Erosion size for alpha matting. Defaults to 10.
-        session (Optional[BaseSession], optional): A session object for the 'u2net' model. Defaults to None.
+        session (Optional[BaseSession], optional): A session object for the 'bria-rmbg' model. Defaults to None.
         only_mask (bool, optional): Flag indicating whether to return only the binary masks. Defaults to False.
         post_process_mask (bool, optional): Flag indicating whether to post-process the masks. Defaults to False.
         decontaminate (bool, optional): Flag indicating whether to remove the background color fringing left on soft edges. Ignored when alpha_matting is on. Defaults to False.
@@ -316,7 +316,7 @@ def remove(
     img = fix_image_orientation(img)
 
     if session is None:
-        session = new_session("u2net", *args, **kwargs)
+        session = new_session("bria-rmbg", *args, **kwargs)
 
     masks = session.predict(img, *args, **kwargs)
     cutouts = []
