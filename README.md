@@ -376,9 +376,10 @@ some images; rembg falls back to a decontaminated cutout when that happens.
 
 ### Which model to pair it with
 
-The newer models (`birefnet-*`, `isnet-general-use`, `bria-rmbg`) already
+The newer models (`bria-rmbg`, `birefnet-*`, `isnet-general-use`) already
 produce a soft, well-shaped alpha, so their masks rarely need `-a` — reach for
-`-dc` first and only try `-a` if the edge shape itself is wrong.
+`-dc` first and only try `-a` if the edge shape itself is wrong. `bria-rmbg` is
+the default, so this is the advice that applies unless you pass `-m`.
 
 The older models (`u2net`, `u2netp`, `silueta`) tend to produce firmer, blockier
 edges. They benefit most from `-a` on hair-heavy portraits, and are also where
@@ -464,11 +465,11 @@ sudo docker run --rm -it --gpus all -v /dev/dri:/dev/dri -v $PWD:/data rembg-nvi
 **Tips:**
 
 - You can create your own NVIDIA CUDA image and install `rembg[gpu,cli]` in it.
-- Use `-v /path/to/models/:/root/.u2net` to store model files outside the container, avoiding re-downloads.
+- Use `-v /path/to/models/:/root/.rembg` to store model files outside the container, avoiding re-downloads.
 
 ## Models
 
-Local ONNX models are automatically downloaded and saved to `~/.u2net/` on first use. The `withoutbg` model is a cloud API backend and does not download a local model.
+Local ONNX models are automatically downloaded on first use and saved under `~/.rembg/models/` (see [Where models are stored](#where-models-are-stored)). The `withoutbg` model is a cloud API backend and does not download a local model.
 
 ### Available Models
 
@@ -487,7 +488,7 @@ Local ONNX models are automatically downloaded and saved to `~/.u2net/` on first
 - birefnet-hrsod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-HRSOD_DHU-epoch_115.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for high-resolution salient object detection (HRSOD).
 - birefnet-cod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-COD-epoch_125.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for concealed object detection (COD).
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
-- bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): A state-of-the-art background removal model by BRIA AI.
+- bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): **The default.** A state-of-the-art background removal model by BRIA AI. At ~1.02 GB it is the largest local model here and runs at 1024x1024, so it is slower than u2net; pass `-m u2net` for a smaller, faster model with blockier edges. Note that RMBG-2.0 is released under a [BRIA license](https://huggingface.co/briaai/RMBG-2.0) that requires a paid agreement for commercial use. Model weights carry their own licenses, independent of rembg's MIT license — check the linked source before using any model commercially.
 - withoutbg ([API](https://withoutbg.com/?ref=rembg), [sample results](https://withoutbg.com/pro-model/results?ref=rembg)): Cloud API backend. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). Pass `api_key` via `-x` / `new_session(...)`, or set `WITHOUTBG_API_KEY`. Images are sent to withoutBG's servers; max upload size is 20 MB.
 
 ## Environment Variables
