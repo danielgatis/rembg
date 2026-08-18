@@ -12,7 +12,7 @@ COPY . .
 RUN poetry config virtualenvs.create false && \
     poetry install --extras "cpu cli" --without dev
 
-RUN rembg d u2net
+RUN rembg d bria-rmbg
 
 EXPOSE 7000
 ENTRYPOINT ["rembg"]
