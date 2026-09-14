@@ -86,6 +86,10 @@ from .withoutbg import WithoutBgSession
 
 sessions[WithoutBgSession.name()] = WithoutBgSession
 
+from .atlascloud import AtlasCloudSession
+
+sessions[AtlasCloudSession.name()] = AtlasCloudSession
+
 sessions_names = list(sessions.keys())
 sessions_class = list(sessions.values())
 
