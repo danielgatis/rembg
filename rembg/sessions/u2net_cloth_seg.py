@@ -53,6 +53,21 @@ palette3 = [
     255,
 ]
 
+palette4 = [
+    0,
+    0,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+]
+
 
 class Unet2ClothSession(BaseSession):
     def predict(self, img: PILImage, *args, **kwargs) -> List[PILImage]:
@@ -108,12 +123,20 @@ class Unet2ClothSession(BaseSession):
             mask3 = mask3.convert("RGB").convert("L")
             masks.append(mask3)
 
+        def full_attire():
+            mask4 = mask.copy()
+            mask4.putpalette(palette4)
+            mask4 = mask4.convert("RGB").convert("L")
+            masks.append(mask4)
+
         if cloth_category == "upper":
             upper_cloth()
         elif cloth_category == "lower":
             lower_cloth()
         elif cloth_category == "full":
             full_cloth()
+        elif cloth_category == "attire":
+            full_attire()
         else:
             upper_cloth()
             lower_cloth()
