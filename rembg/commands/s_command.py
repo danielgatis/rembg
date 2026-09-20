@@ -1,5 +1,6 @@
 import ipaddress
 import json
+import os
 import socket
 import webbrowser
 from typing import List, Optional, Tuple, Union, cast
@@ -7,7 +8,6 @@ from urllib.parse import urljoin, urlparse
 
 import aiohttp
 import click
-import gradio as gr
 import uvicorn
 from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Query
@@ -19,6 +19,30 @@ from ..bg import remove
 from ..session_factory import new_session
 from ..sessions import sessions_names
 from ..sessions.base import BaseSession
+
+_PROXY_ENV_VARS = (
+    "ALL_PROXY",
+    "all_proxy",
+    "HTTP_PROXY",
+    "http_proxy",
+    "HTTPS_PROXY",
+    "https_proxy",
+)
+
+
+def _fix_bare_socks_proxy_scheme() -> None:
+    """Rewrite a bare `socks://` proxy env var to `socks5://`.
+
+    httpx (pulled in by gradio) only accepts `socks5`/`socks5h` proxy
+    schemes and raises `ValueError: Unknown scheme for proxy URL` on
+    `socks://`, which crashes `import gradio` before the server even
+    starts. Many proxy tools (e.g. Clash) export `socks://` by default,
+    so normalize it instead of letting the import blow up.
+    """
+    for name in _PROXY_ENV_VARS:
+        value = os.environ.get(name)
+        if value and value.startswith("socks://"):
+            os.environ[name] = "socks5://" + value[len("socks://") :]
 
 
 def _unwrap_ipv6(
@@ -433,6 +457,9 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
         return await asyncify(im_without_bg)(file, commons)  # type: ignore
 
     def gr_app(app):
+        _fix_bare_socks_proxy_scheme()
+        import gradio as gr
+
         def inference(input_image, model, *args):
             a, af, ab, ae, om, ppm, dc, vm, cmd_args = args
 
