@@ -186,6 +186,15 @@ export WITHOUTBG_API_KEY=sk_...
 rembg i -m withoutbg path/to/input.png path/to/output.png
 ```
 
+**Use the Atlas Cloud API (hosted Midjourney background removal):**
+
+```shell
+export ATLASCLOUD_API_KEY=apikey-...
+rembg i -m atlascloud path/to/input.png path/to/output.png
+```
+
+The job is asynchronous and can take over a minute per image. Pick another [Atlas Cloud](https://www.atlascloud.ai) model with `ATLASCLOUD_MODEL` or `-x '{"model": "midjourney/v8.1/remove-background"}'`.
+
 Or pass the key via extras:
 
 ```shell
@@ -336,6 +345,20 @@ from rembg import remove, new_session
 
 session = new_session("withoutbg", api_key="sk_...")
 # or set WITHOUTBG_API_KEY and omit api_key=
+
+with open('input.png', 'rb') as i:
+    with open('output.png', 'wb') as o:
+        output = remove(i.read(), session=session)
+        o.write(output)
+```
+
+**Atlas Cloud API:**
+
+```python
+from rembg import remove, new_session
+
+session = new_session("atlascloud", api_key="apikey-...")
+# or set ATLASCLOUD_API_KEY and omit api_key=
 
 with open('input.png', 'rb') as i:
     with open('output.png', 'wb') as o:
@@ -506,6 +529,7 @@ Local ONNX models are automatically downloaded on first use and saved under `~/.
 - birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
 - bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): **The default.** A state-of-the-art background removal model by BRIA AI. At ~1.02 GB it is the largest local model here and runs at 1024x1024, so it is slower than u2net; pass `-m u2net` for a smaller, faster model with blockier edges. Note that RMBG-2.0 is released under a [BRIA license](https://huggingface.co/briaai/RMBG-2.0) that requires a paid agreement for commercial use. Model weights carry their own licenses, independent of rembg's MIT license — check the linked source before using any model commercially.
 - withoutbg ([API](https://withoutbg.com/?ref=rembg), [sample results](https://withoutbg.com/pro-model/results?ref=rembg)): Cloud API backend. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). Pass `api_key` via `-x` / `new_session(...)`, or set `WITHOUTBG_API_KEY`. Images are sent to withoutBG's servers; max upload size is 20 MB.
+- atlascloud ([API](https://www.atlascloud.ai)): Cloud API backend running `midjourney/v8.2/remove-background` by default. Pass `api_key` via `-x` / `new_session(...)`, or set `ATLASCLOUD_API_KEY`; change the model with `model` or `ATLASCLOUD_MODEL`. Requests are asynchronous and can take over a minute. Images are sent to Atlas Cloud's servers; max upload size is 20 MB.
 
 ## Environment Variables
 
@@ -517,6 +541,8 @@ Local ONNX models are automatically downloaded on first use and saved under `~/.
 | `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
 | `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
 | `WITHOUTBG_API_KEY` | API key for the `withoutbg` cloud session. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). |
+| `ATLASCLOUD_API_KEY` | API key for the `atlascloud` cloud session. |
+| `ATLASCLOUD_MODEL` | Atlas Cloud model used by the `atlascloud` session. Defaults to `midjourney/v8.2/remove-background`. |
 
 ### Where models are stored
 
