@@ -14,7 +14,7 @@ from .base import BaseSession
 API_BASE = "https://api.atlascloud.ai"
 GENERATE_URL = f"{API_BASE}/api/v1/model/generateImage"
 PREDICTION_URL = f"{API_BASE}/api/v1/model/prediction"
-DEFAULT_MODEL = "youchuan/v8.2/remove-background"
+DEFAULT_MODEL = "midjourney/v8.2/remove-background"
 DEFAULT_TIMEOUT = 60
 POLL_INTERVAL = 2
 POLL_TIMEOUT = 180

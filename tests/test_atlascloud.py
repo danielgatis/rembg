@@ -182,3 +182,13 @@ def test_session_registered():
     assert sessions["atlascloud"] is AtlasCloudSession
     # Remote backends must not appear as a download that does nothing.
     assert "atlascloud" not in sessions_names_downloadable
+
+
+def test_default_model_is_the_served_remove_background_model(monkeypatch):
+    """The default must be a model id Atlas Cloud serves; a stale id fails every request."""
+    from rembg.sessions import atlascloud
+
+    assert atlascloud.DEFAULT_MODEL == "midjourney/v8.2/remove-background"
+    monkeypatch.delenv("ATLASCLOUD_MODEL", raising=False)
+    session = atlascloud.AtlasCloudSession("atlascloud", None, api_key="synthetic-key")
+    assert session.model == "midjourney/v8.2/remove-background"
