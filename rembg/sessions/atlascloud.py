@@ -3,7 +3,7 @@ import io
 import json
 import os
 import time
-from typing import List
+from typing import List, Optional
 from urllib import error, request
 
 from PIL import Image
@@ -61,8 +61,8 @@ class AtlasCloudSession(BaseSession):
                 "Keys are created at https://www.atlascloud.ai"
             )
         self.api_key: str = api_key
-        self.model: str = kwargs.get("model") or os.getenv(
-            "ATLASCLOUD_MODEL", DEFAULT_MODEL
+        self.model: str = (
+            kwargs.get("model") or os.getenv("ATLASCLOUD_MODEL") or DEFAULT_MODEL
         )
         self.timeout = kwargs.get("timeout", DEFAULT_TIMEOUT)
         self.poll_timeout = kwargs.get("poll_timeout", POLL_TIMEOUT)
@@ -73,7 +73,7 @@ class AtlasCloudSession(BaseSession):
             "User-Agent": USER_AGENT,
         }
 
-    def _request_json(self, url: str, data: bytes = None) -> dict:
+    def _request_json(self, url: str, data: Optional[bytes] = None) -> dict:
         headers = self._headers()
         if data is not None:
             headers["Content-Type"] = "application/json"
@@ -143,7 +143,7 @@ class AtlasCloudSession(BaseSession):
         outputs = self._poll(request_id)
         cutout_bytes = self._fetch(outputs[0])
 
-        cutout = Image.open(io.BytesIO(cutout_bytes))
+        cutout: PILImage = Image.open(io.BytesIO(cutout_bytes))
         if "A" not in cutout.getbands():
             cutout = cutout.convert("RGBA")
         mask = cutout.getchannel("A")
