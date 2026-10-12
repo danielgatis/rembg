@@ -90,6 +90,28 @@ def test_predict_returns_mask_matching_input_size(monkeypatch):
     assert b'name="file"' in req.data
 
 
+def test_predict_accepts_cmyk_input(monkeypatch):
+    # CMYK JPEGs are common, but PNG cannot store CMYK, so the upload
+    # must convert the image instead of crashing in img.save().
+    monkeypatch.setenv("WITHOUTBG_API_KEY", "sk_test")
+    session = WithoutBgSession("withoutbg", None)
+
+    img = Image.new("CMYK", (40, 30), (0, 255, 255, 0))
+
+    mock_resp = MagicMock()
+    mock_resp.read.return_value = _png_bytes("L", size=(40, 30), color=200)
+    mock_resp.__enter__.return_value = mock_resp
+    mock_resp.__exit__.return_value = False
+
+    with patch(
+        "rembg.sessions.withoutbg.request.urlopen", return_value=mock_resp
+    ) as mock_urlopen:
+        masks = session.predict(img)
+
+    assert masks[0].size == img.size
+    assert b"\x89PNG" in mock_urlopen.call_args[0][0].data
+
+
 def test_predict_http_error_raises(monkeypatch):
     monkeypatch.setenv("WITHOUTBG_API_KEY", "sk_test")
     session = WithoutBgSession("withoutbg", None)
