@@ -72,6 +72,10 @@ class WithoutBgSession(BaseSession):
             ValueError: If the PNG-encoded image exceeds the 20 MB upload limit.
             RuntimeError: If the API returns a non-200 response.
         """
+        # PNG cannot store every PIL mode (e.g. CMYK JPEGs), so normalize first.
+        if img.mode not in ("RGB", "RGBA"):
+            img = img.convert("RGBA" if img.has_transparency_data else "RGB")
+
         buf = io.BytesIO()
         img.save(buf, format="PNG")
         image_bytes = buf.getvalue()

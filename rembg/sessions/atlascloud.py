@@ -113,6 +113,10 @@ class AtlasCloudSession(BaseSession):
             RuntimeError: If the API errors, the prediction fails, or it does
                 not finish within the polling timeout.
         """
+        # PNG cannot store every PIL mode (e.g. CMYK JPEGs), so normalize first.
+        if img.mode not in ("RGB", "RGBA"):
+            img = img.convert("RGBA" if img.has_transparency_data else "RGB")
+
         buf = io.BytesIO()
         img.save(buf, format="PNG")
         image_bytes = buf.getvalue()
