@@ -179,7 +179,7 @@ rembg i -m u2net_custom -x '{"model_path": "~/.u2net/u2net.onnx"}' path/to/input
 
 **Use the withoutBG cloud API:**
 
-[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). [Sample results](https://withoutbg.com/pro-model/results?ref=rembg).
+[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg&utm_medium=readme&utm_content=cli). [Sample results](https://withoutbg.com/pro-model-api/results?ref=rembg&utm_medium=readme&utm_content=cli).
 
 ```shell
 export WITHOUTBG_API_KEY=sk_...
@@ -338,7 +338,7 @@ for file in Path('path/to/folder').glob('*.png'):
 
 **withoutBG cloud API:**
 
-[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). [Sample results](https://withoutbg.com/pro-model/results?ref=rembg).
+[Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg&utm_medium=readme&utm_content=python). [Sample results](https://withoutbg.com/pro-model-api/results?ref=rembg&utm_medium=readme&utm_content=python).
 
 ```python
 from rembg import remove, new_session
@@ -512,23 +512,25 @@ Local ONNX models are automatically downloaded on first use and saved under `~/.
 
 ### Available Models
 
-- u2net ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for general use cases.
-- u2netp ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A lightweight version of u2net model.
+Sample results and benchmark scores for each model are hosted by [withoutBG](https://withoutbg.com/?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=disclosure), which supports rembg: signups through these links help fund the project.
+
+- u2net ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx), [source](https://github.com/xuebinqin/U-2-Net), [sample results](https://withoutbg.com/models/u2net?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=u2net)): A pre-trained model for general use cases.
+- u2netp ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx), [source](https://github.com/xuebinqin/U-2-Net), [sample results](https://withoutbg.com/models/u2netp?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=u2netp)): A lightweight version of u2net model.
 - u2net_human_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_human_seg.onnx), [source](https://github.com/xuebinqin/U-2-Net)): A pre-trained model for human segmentation.
-- u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
-- silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295)): Same as u2net but the size is reduced to 43Mb.
-- isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/DIS)): A new pre-trained model for general use cases.
+- u2net_cloth_seg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net_cloth_seg.onnx), [source](https://github.com/levindabhi/cloth-segmentation), [details](https://withoutbg.com/models/u2net_cloth_seg?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=u2net_cloth_seg)): A pre-trained model for Cloths Parsing from human portrait. Here clothes are parsed into 3 category: Upper body, Lower body and Full body.
+- silueta ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/silueta.onnx), [source](https://github.com/xuebinqin/U-2-Net/issues/295), [sample results](https://withoutbg.com/models/silueta?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=silueta)): Same as u2net but the size is reduced to 43Mb.
+- isnet-general-use ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx), [source](https://github.com/xuebinqin/DIS), [sample results](https://withoutbg.com/models/isnet-general-use?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=isnet-general-use)): A new pre-trained model for general use cases.
 - isnet-anime ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-anime.onnx), [source](https://github.com/SkyTNT/anime-segmentation)): A high-accuracy segmentation for anime character.
-- sam ([download encoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx), [download decoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx), [source](https://github.com/facebookresearch/segment-anything)): A pre-trained model for any use cases.
-- birefnet-general ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for general use cases.
-- birefnet-general-lite ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A light pre-trained model for general use cases.
-- birefnet-portrait ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-portrait-epoch_150.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for human portraits.
-- birefnet-dis ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-DIS-epoch_590.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for dichotomous image segmentation (DIS).
-- birefnet-hrsod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-HRSOD_DHU-epoch_115.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for high-resolution salient object detection (HRSOD).
+- sam ([download encoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-encoder-quant.onnx), [download decoder](https://github.com/danielgatis/rembg/releases/download/v0.0.0/vit_b-decoder-quant.onnx), [source](https://github.com/facebookresearch/segment-anything), [details](https://withoutbg.com/models/sam?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=sam)): A pre-trained model for any use cases.
+- birefnet-general ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-epoch_244.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-general?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-general)): A pre-trained model for general use cases.
+- birefnet-general-lite ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-general-lite?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-general-lite)): A light pre-trained model for general use cases.
+- birefnet-portrait ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-portrait-epoch_150.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-portrait?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-portrait)): A pre-trained model for human portraits.
+- birefnet-dis ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-DIS-epoch_590.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-dis?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-dis)): A pre-trained model for dichotomous image segmentation (DIS).
+- birefnet-hrsod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-HRSOD_DHU-epoch_115.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-hrsod?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-hrsod)): A pre-trained model for high-resolution salient object detection (HRSOD).
 - birefnet-cod ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-COD-epoch_125.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model for concealed object detection (COD).
-- birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet)): A pre-trained model with massive dataset.
-- bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0)): **The default.** A state-of-the-art background removal model by BRIA AI. At ~1.02 GB it is the largest local model here and runs at 1024x1024, so it is slower than u2net; pass `-m u2net` for a smaller, faster model with blockier edges. Note that RMBG-2.0 is released under a [BRIA license](https://huggingface.co/briaai/RMBG-2.0) that requires a paid agreement for commercial use. Model weights carry their own licenses, independent of rembg's MIT license — check the linked source before using any model commercially.
-- withoutbg ([API](https://withoutbg.com/?ref=rembg), [sample results](https://withoutbg.com/pro-model/results?ref=rembg)): Cloud API backend. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). Pass `api_key` via `-x` / `new_session(...)`, or set `WITHOUTBG_API_KEY`. Images are sent to withoutBG's servers; max upload size is 20 MB.
+- birefnet-massive ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet-massive-TR_DIS5K_TR_TEs-epoch_420.onnx), [source](https://github.com/ZhengPeng7/BiRefNet), [sample results](https://withoutbg.com/models/birefnet-massive?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=birefnet-massive)): A pre-trained model with massive dataset.
+- bria-rmbg ([download](https://github.com/danielgatis/rembg/releases/download/v0.0.0/bria-rmbg-2.0.onnx), [source](https://huggingface.co/briaai/RMBG-2.0), [sample results](https://withoutbg.com/models/bria-rmbg?ref=rembg&utm_medium=readme&utm_campaign=models&utm_content=bria-rmbg)): **The default.** A state-of-the-art background removal model by BRIA AI. At ~1.02 GB it is the largest local model here and runs at 1024x1024, so it is slower than u2net; pass `-m u2net` for a smaller, faster model with blockier edges. Note that RMBG-2.0 is released under a [BRIA license](https://huggingface.co/briaai/RMBG-2.0) that requires a paid agreement for commercial use. Model weights carry their own licenses, independent of rembg's MIT license — check the linked source before using any model commercially.
+- withoutbg ([API](https://withoutbg.com/?ref=rembg&utm_medium=readme&utm_content=models), [sample results](https://withoutbg.com/pro-model-api/results?ref=rembg&utm_medium=readme&utm_content=models)): Cloud API backend. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg&utm_medium=readme&utm_content=models). Pass `api_key` via `-x` / `new_session(...)`, or set `WITHOUTBG_API_KEY`. Images are sent to withoutBG's servers; max upload size is 20 MB.
 - atlascloud ([API](https://www.atlascloud.ai)): Cloud API backend running `midjourney/v8.2/remove-background` by default. Pass `api_key` via `-x` / `new_session(...)`, or set `ATLASCLOUD_API_KEY`; change the model with `model` or `ATLASCLOUD_MODEL`. Requests are asynchronous and can take over a minute. Images are sent to Atlas Cloud's servers; max upload size is 20 MB.
 
 ## Environment Variables
@@ -540,7 +542,7 @@ Local ONNX models are automatically downloaded on first use and saved under `~/.
 | `U2NET_HOME` | Deprecated. Still honored, and still takes precedence over `REMBG_HOME` when set, so existing setups keep working. Prefer `REMBG_HOME`. |
 | `MODEL_CHECKSUM_DISABLED` | When set (e.g. `MODEL_CHECKSUM_DISABLED=1`), disables hash verification for downloaded models. This is useful if you want to use your own custom/converted model files without rembg re-downloading the originals. |
 | `OMP_NUM_THREADS` | Sets the number of threads used by ONNX Runtime for inference. |
-| `WITHOUTBG_API_KEY` | API key for the `withoutbg` cloud session. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg). |
+| `WITHOUTBG_API_KEY` | API key for the `withoutbg` cloud session. [Get 50 free credits with signup](https://withoutbg.com/signup?ref=rembg&utm_medium=readme&utm_content=env). |
 | `ATLASCLOUD_API_KEY` | API key for the `atlascloud` cloud session. |
 | `ATLASCLOUD_MODEL` | Atlas Cloud model used by the `atlascloud` session. Defaults to `midjourney/v8.2/remove-background`. |
 
