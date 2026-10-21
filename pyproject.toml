@@ -28,7 +28,7 @@ packages = [{include = "rembg"}]
 python = "^3.11"
 jsonschema = "^4.25.1"
 numpy = "^2.3.0"
-pillow = "^12.1.0"
+pillow = ">=12.1.0,<14.0.0"
 pooch = "^1.8.2"
 pymatting = "^1.1.14"
 scikit-image = "^0.26.0"
