@@ -266,8 +266,16 @@ def p_command(
                         f"processed: {each_input.absolute()} -> {each_output.absolute()}"
                     )
 
-            if delete_input:
-                each_input.unlink()
+                if delete_input:
+                    each_input.unlink()
+            elif delete_input:
+                # The output was written by an earlier run or by another input
+                # with the same name (in another subfolder, or with another
+                # extension). This input was not processed, so keep it.
+                print(
+                    f"skipped: {each_input.absolute()} -> {each_output.absolute()} "
+                    "already exists, input kept"
+                )
 
         except Exception as e:
             print(e)
@@ -290,9 +298,14 @@ def p_command(
         class EventHandler(FileSystemEventHandler):
             def on_any_event(self, event: FileSystemEvent) -> None:
                 src_path = cast(str, event.src_path)
+                # On Linux, process() opening the file is reported as "opened"
+                # and "closed_no_write" events. Reacting to those would check
+                # the same file again and again.
                 if (
                     not (
-                        event.is_directory or event.event_type in ["deleted", "closed"]
+                        event.is_directory
+                        or event.event_type
+                        in ["deleted", "closed", "closed_no_write", "opened"]
                     )
                     and pathlib.Path(src_path).exists()
                 ):
