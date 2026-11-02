@@ -280,12 +280,6 @@ class SamSession(BaseSession):
         encoder_output = self.encoder.run(None, encoder_inputs)
         image_embedding = encoder_output[0]
 
-        embedding = {
-            "image_embedding": image_embedding,
-            "original_size": original_size,
-            "transform_matrix": transform_matrix,
-        }
-
         ## decoder
 
         input_points, input_labels = get_input_points(prompt)
