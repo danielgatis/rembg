@@ -99,7 +99,9 @@ class Unet2ClothSession(BaseSession):
         pred = np.squeeze(pred, 0)
 
         mask = Image.fromarray(pred.astype("uint8"), mode="L")
-        mask = mask.resize(img.size, Image.Resampling.LANCZOS)
+        # The mask holds class labels, so it must not be interpolated: LANCZOS
+        # turns a boundary between classes 1 and 3 into a line of class 2.
+        mask = mask.resize(img.size, Image.Resampling.NEAREST)
 
         masks = []
 
