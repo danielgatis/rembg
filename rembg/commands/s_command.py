@@ -15,7 +15,7 @@ import uvicorn
 from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import Response
+from starlette.responses import PlainTextResponse, Response
 
 from .. import __version__
 from ..bg import remove
@@ -162,6 +162,75 @@ def _parse_bgcolor(raw: Optional[str]) -> Optional[Tuple[int, int, int, int]]:
     return (r, g, b, alpha[0] if alpha else 255)
 
 
+# Largest image accepted, whether uploaded or fetched from a URL.
+_MAX_IMAGE_BYTES = 50 * 1024 * 1024
+# Room for the multipart boundaries and the form fields around the file.
+_MAX_FORM_OVERHEAD_BYTES = 1024 * 1024
+
+
+class _BodyTooLarge(Exception):
+    pass
+
+
+class _LimitUploadSize:
+    """Reject POST bodies to `path` larger than `max_bytes` with a 413.
+
+    The multipart parser reads the whole body before the endpoint runs, so the
+    limit has to be enforced while the body streams in. Content-Length is
+    checked up front, and the received bytes are counted for chunked bodies
+    that do not declare one.
+    """
+
+    def __init__(self, app, path: str, max_bytes: int):
+        self.app = app
+        self.path = path
+        self.max_bytes = max_bytes
+
+    async def __call__(self, scope, receive, send):
+        if (
+            scope["type"] != "http"
+            or scope["method"] != "POST"
+            or scope["path"] != self.path
+        ):
+            await self.app(scope, receive, send)
+            return
+
+        too_large = PlainTextResponse("Image exceeds maximum size.", status_code=413)
+
+        content_length = dict(scope["headers"]).get(b"content-length", b"")
+        if content_length.isdigit() and int(content_length) > self.max_bytes:
+            await too_large(scope, receive, send)
+            return
+
+        received = 0
+        exceeded = False
+
+        async def limited_receive():
+            nonlocal received, exceeded
+            message = await receive()
+            if message["type"] == "http.request":
+                received += len(message.get("body", b""))
+                if received > self.max_bytes:
+                    exceeded = True
+                    raise _BodyTooLarge()
+            return message
+
+        # FastAPI turns any error raised while parsing the form into a 400, so
+        # the exception never reaches this middleware. Drop whatever response
+        # the app produces once the limit is hit and answer 413 instead.
+        async def guarded_send(message):
+            if not exceeded:
+                await send(message)
+
+        try:
+            await self.app(scope, limited_receive, guarded_send)
+        except _BodyTooLarge:
+            pass
+
+        if exceeded:
+            await too_large(scope, receive, send)
+
+
 class _SessionCache:
     """A bounded LRU of sessions.
 
@@ -302,6 +371,12 @@ def s_command(
         },
         openapi_tags=tags_metadata,
         docs_url="/api",
+    )
+
+    app.add_middleware(
+        _LimitUploadSize,
+        path="/api/remove",
+        max_bytes=_MAX_IMAGE_BYTES + _MAX_FORM_OVERHEAD_BYTES,
     )
 
     app.add_middleware(
@@ -516,7 +591,7 @@ def s_command(
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
 
-        max_bytes = 50 * 1024 * 1024
+        max_bytes = _MAX_IMAGE_BYTES
 
         # Pin every connection to an already-validated IP so aiohttp cannot
         # re-resolve the hostname to a private address (DNS rebinding).

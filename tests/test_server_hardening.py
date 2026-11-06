@@ -128,3 +128,44 @@ def test_erode_size_is_bounded(png, built):
 
     assert remove("255").status_code == 200
     assert remove("100000").status_code == 422
+
+
+@pytest.fixture
+def small_upload_limit():
+    with mock.patch.object(s_command, "_MAX_IMAGE_BYTES", 1024), mock.patch.object(
+        s_command, "_MAX_FORM_OVERHEAD_BYTES", 0
+    ):
+        yield 1024
+
+
+def test_upload_within_limit_is_accepted(png, built, small_upload_limit):
+    assert post(make_client(), png).status_code == 200
+
+
+def test_oversized_upload_is_rejected(built, small_upload_limit):
+    big = b"\0" * (small_upload_limit * 2)
+    r = make_client().post("/api/remove", data={"model": "u2net"}, files={"file": big})
+    assert r.status_code == 413
+    assert built == []
+
+
+def test_oversized_chunked_upload_is_rejected(built, small_upload_limit):
+    """A body without Content-Length is counted as it streams in."""
+
+    def chunks():
+        yield (
+            b"--x\r\n"
+            b'Content-Disposition: form-data; name="file"; filename="a.png"\r\n'
+            b"Content-Type: image/png\r\n\r\n"
+        )
+        for _ in range(4):
+            yield b"\0" * small_upload_limit
+        yield b"\r\n--x--\r\n"
+
+    r = make_client().post(
+        "/api/remove",
+        content=chunks(),
+        headers={"Content-Type": "multipart/form-data; boundary=x"},
+    )
+    assert r.status_code == 413
+    assert built == []
