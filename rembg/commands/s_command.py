@@ -1,9 +1,12 @@
 import ipaddress
 import json
 import os
+import re
 import socket
+import threading
 import webbrowser
-from typing import List, Optional, Tuple, Union, cast
+from collections import OrderedDict
+from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import urljoin, urlparse
 
 import aiohttp
@@ -12,12 +15,12 @@ import uvicorn
 from asyncer import asyncify
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import Response
+from starlette.responses import PlainTextResponse, Response
 
 from .. import __version__
 from ..bg import remove
 from ..session_factory import new_session
-from ..sessions import sessions_names
+from ..sessions import sessions_names, sessions_names_no_credentials
 from ..sessions.base import BaseSession
 
 _PROXY_ENV_VARS = (
@@ -91,6 +94,177 @@ def _is_blocked_ip(ip: Union[ipaddress.IPv4Address, ipaddress.IPv6Address]) -> b
     return blocked(ip) or blocked(_unwrap_ipv6(ip))
 
 
+# Extras a remote caller may pass. Anything else (`providers`, `sess_opts`,
+# `session`, ...) reaches internals the caller has no business choosing.
+# Session extras pick which session is built, so they are part of its cache key;
+# predict extras only steer a single call and must not build a new session.
+_SESSION_EXTRAS = frozenset(
+    {
+        "model_path",
+        "sam_model",
+        "sam_quant",
+        "api_key",
+        "model",
+        "timeout",
+        "poll_timeout",
+    }
+)
+_PREDICT_EXTRAS = frozenset(
+    {"sam_prompt", "cc", "cloth_category", "vitmatte_model", "putalpha"}
+)
+
+
+def _parse_extras(raw: Optional[str]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Split the caller's JSON extras into (session kwargs, predict kwargs).
+
+    Raises ValueError on malformed JSON or on a key outside the allowlist.
+    """
+    if not raw:
+        return {}, {}
+
+    try:
+        extras = json.loads(raw)
+    except json.JSONDecodeError:
+        raise ValueError("extras must be valid JSON.")
+
+    if not isinstance(extras, dict):
+        raise ValueError("extras must be a JSON object.")
+
+    unknown = set(extras) - _SESSION_EXTRAS - _PREDICT_EXTRAS
+    if unknown:
+        raise ValueError(
+            f"Unsupported extras: {', '.join(sorted(unknown))}. "
+            f"Allowed: {', '.join(sorted(_SESSION_EXTRAS | _PREDICT_EXTRAS))}."
+        )
+
+    session_kwargs = {k: v for k, v in extras.items() if k in _SESSION_EXTRAS}
+    predict_kwargs = {k: v for k, v in extras.items() if k in _PREDICT_EXTRAS}
+    return session_kwargs, predict_kwargs
+
+
+def _parse_bgcolor(raw: Optional[str]) -> Optional[Tuple[int, int, int, int]]:
+    """Parse `r,g,b` or `r,g,b,a` into RGBA, raising ValueError on anything else.
+
+    A missing alpha means opaque, as Pillow does for a 3-tuple RGBA color.
+    """
+    if not raw:
+        return None
+
+    try:
+        color = tuple(int(part) for part in raw.split(","))
+    except ValueError:
+        raise ValueError("bgc must be comma separated integers, e.g. 255,255,255,255.")
+
+    if len(color) not in (3, 4) or not all(0 <= c <= 255 for c in color):
+        raise ValueError("bgc must have 3 or 4 values between 0 and 255.")
+
+    r, g, b, *alpha = color
+    return (r, g, b, alpha[0] if alpha else 255)
+
+
+# Largest image accepted, whether uploaded or fetched from a URL.
+_MAX_IMAGE_BYTES = 50 * 1024 * 1024
+# Room for the multipart boundaries and the form fields around the file.
+_MAX_FORM_OVERHEAD_BYTES = 1024 * 1024
+
+
+class _BodyTooLarge(Exception):
+    pass
+
+
+class _LimitUploadSize:
+    """Reject POST bodies to `path` larger than `max_bytes` with a 413.
+
+    The multipart parser reads the whole body before the endpoint runs, so the
+    limit has to be enforced while the body streams in. Content-Length is
+    checked up front, and the received bytes are counted for chunked bodies
+    that do not declare one.
+    """
+
+    def __init__(self, app, path: str, max_bytes: int):
+        self.app = app
+        self.path = path
+        self.max_bytes = max_bytes
+
+    async def __call__(self, scope, receive, send):
+        if (
+            scope["type"] != "http"
+            or scope["method"] != "POST"
+            or scope["path"] != self.path
+        ):
+            await self.app(scope, receive, send)
+            return
+
+        too_large = PlainTextResponse("Image exceeds maximum size.", status_code=413)
+
+        content_length = dict(scope["headers"]).get(b"content-length", b"")
+        if content_length.isdigit() and int(content_length) > self.max_bytes:
+            await too_large(scope, receive, send)
+            return
+
+        received = 0
+        exceeded = False
+
+        async def limited_receive():
+            nonlocal received, exceeded
+            message = await receive()
+            if message["type"] == "http.request":
+                received += len(message.get("body", b""))
+                if received > self.max_bytes:
+                    exceeded = True
+                    raise _BodyTooLarge()
+            return message
+
+        # FastAPI turns any error raised while parsing the form into a 400, so
+        # the exception never reaches this middleware. Drop whatever response
+        # the app produces once the limit is hit and answer 413 instead.
+        async def guarded_send(message):
+            if not exceeded:
+                await send(message)
+
+        try:
+            await self.app(scope, limited_receive, guarded_send)
+        except _BodyTooLarge:
+            pass
+
+        if exceeded:
+            await too_large(scope, receive, send)
+
+
+class _SessionCache:
+    """A bounded LRU of sessions.
+
+    Every distinct set of session extras builds a new model in memory, so an
+    unbounded cache lets any caller exhaust RAM by varying them.
+    """
+
+    def __init__(self, max_size: int):
+        self.max_size = max(1, max_size)
+        self._sessions: "OrderedDict[tuple, BaseSession]" = OrderedDict()
+        self._lock = threading.Lock()
+
+    def get(self, model: str, session_kwargs: Dict[str, Any]) -> BaseSession:
+        key = (model, json.dumps(session_kwargs, sort_keys=True, default=str))
+
+        with self._lock:
+            session = self._sessions.get(key)
+            if session is not None:
+                self._sessions.move_to_end(key)
+                return session
+
+        # Built outside the lock: loading a model can take seconds and must not
+        # stall requests for sessions that are already cached.
+        session = new_session(model, **session_kwargs)
+
+        with self._lock:
+            self._sessions[key] = session
+            self._sessions.move_to_end(key)
+            while len(self._sessions) > self.max_size:
+                self._sessions.popitem(last=False)
+
+        return session
+
+
 @click.command(  # type: ignore
     name="s",
     help="for a http server",
@@ -134,14 +308,44 @@ def _is_blocked_ip(ip: Union[ipaddress.IPv4Address, ipaddress.IPv6Address]) -> b
     show_default=True,
     help="disable the Gradio UI (reduces idle CPU usage)",
 )
-def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -> None:
+@click.option(
+    "--allow-remote-models",
+    is_flag=True,
+    default=False,
+    show_default=True,
+    help="also serve cloud models (e.g. atlascloud, withoutbg); requests without "
+    "their own api_key are billed to this server's API key environment variables",
+)
+@click.option(
+    "--max-sessions",
+    default=8,
+    type=click.IntRange(min=1),
+    show_default=True,
+    help="maximum number of models kept loaded in memory",
+)
+def s_command(
+    port: int,
+    host: str,
+    log_level: str,
+    threads: int,
+    no_ui: bool,
+    allow_remote_models: bool,
+    max_sessions: int,
+) -> None:
     """
     Command-line interface for running the FastAPI web server.
 
     This function starts the FastAPI web server with the specified port and log level.
     If the number of worker threads is specified, it sets the thread limiter accordingly.
     """
-    sessions: dict[tuple, BaseSession] = {}
+    sessions = _SessionCache(max_sessions)
+
+    # Cloud models fall back to the API key in this server's environment, so
+    # serving them by default would let anyone reaching the port spend it.
+    model_names = (
+        sessions_names if allow_remote_models else sessions_names_no_credentials
+    )
+    model_regex = r"^(" + "|".join(re.escape(n) for n in model_names) + r")$"
     tags_metadata = [
         {
             "name": "Background Removal",
@@ -170,6 +374,12 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
     )
 
     app.add_middleware(
+        _LimitUploadSize,
+        path="/api/remove",
+        max_bytes=_MAX_IMAGE_BYTES + _MAX_FORM_OVERHEAD_BYTES,
+    )
+
+    app.add_middleware(
         CORSMiddleware,
         allow_credentials=False,
         allow_origins=["*"],
@@ -182,7 +392,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             self,
             model: str = Query(
                 description="Model to use when processing image",
-                regex=r"(" + "|".join(sessions_names) + ")",
+                pattern=model_regex,
                 default="bria-rmbg",
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
@@ -199,7 +409,10 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 description="Alpha Matting (Background Threshold)",
             ),
             ae: int = Query(
-                default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
+                default=10,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Erode Structure Size)",
             ),
             om: bool = Query(default=False, description="Only Mask"),
             ppm: bool = Query(default=False, description="Post Process Mask"),
@@ -220,18 +433,17 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             self.dc = dc
             self.vm = vm
             self.extras = extras
-            self.bgc = (
-                cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
-                if bgc
-                else None
-            )
+            try:
+                self.bgc = _parse_bgcolor(bgc)
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=str(e))
 
     class CommonQueryPostParams:
         def __init__(
             self,
             model: str = Form(
                 description="Model to use when processing image",
-                regex=r"(" + "|".join(sessions_names) + ")",
+                pattern=model_regex,
                 default="bria-rmbg",
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
@@ -248,7 +460,10 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 description="Alpha Matting (Background Threshold)",
             ),
             ae: int = Form(
-                default=10, ge=0, description="Alpha Matting (Erode Structure Size)"
+                default=10,
+                ge=0,
+                le=255,
+                description="Alpha Matting (Erode Structure Size)",
             ),
             om: bool = Form(default=False, description="Only Mask"),
             ppm: bool = Form(default=False, description="Post Process Mask"),
@@ -269,28 +484,21 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             self.dc = dc
             self.vm = vm
             self.extras = extras
-            self.bgc = (
-                cast(Tuple[int, int, int, int], tuple(map(int, bgc.split(","))))
-                if bgc
-                else None
-            )
+            try:
+                self.bgc = _parse_bgcolor(bgc)
+            except ValueError as e:
+                raise HTTPException(status_code=400, detail=str(e))
 
     def im_without_bg(content: bytes, commons: CommonQueryParams) -> Response:
-        kwargs = {}
+        try:
+            session_kwargs, predict_kwargs = _parse_extras(commons.extras)
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
-        if commons.extras:
-            try:
-                kwargs.update(json.loads(commons.extras))
-            except Exception:
-                pass
-
-        # Extras are part of the key: a session built with one caller's api_key
-        # or model_path must not be handed to a request that passed another.
-        cache_key = (commons.model, json.dumps(kwargs, sort_keys=True, default=str))
-        session = sessions.get(cache_key)
-        if session is None:
-            session = new_session(commons.model, **kwargs)
-            sessions[cache_key] = session
+        # Session extras are part of the key: a session built with one caller's
+        # api_key or model_path must not be handed to a request that passed another.
+        session = sessions.get(commons.model, session_kwargs)
+        kwargs = {**session_kwargs, **predict_kwargs}
 
         return Response(
             remove(
@@ -383,7 +591,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
 
-        max_bytes = 50 * 1024 * 1024
+        max_bytes = _MAX_IMAGE_BYTES
 
         # Pin every connection to an already-validated IP so aiohttp cannot
         # re-resolve the hostname to a private address (DNS rebinding).
@@ -474,19 +682,18 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
                 "vitmatte": vm,
             }
 
-            extras = {}
-            if cmd_args:
-                extras = json.loads(cmd_args)
-                kwargs.update(extras)
+            # The dropdown is only a hint: Gradio's API accepts any value here.
+            if model not in model_names:
+                raise gr.Error(f"Unsupported model: {model}")
 
-            # Extras are part of the key: a session built with one api_key or
-            # model_path must not be reused for a request that passed another.
-            cache_key = (model, json.dumps(extras, sort_keys=True, default=str))
-            session = sessions.get(cache_key)
-            if session is None:
-                session = new_session(model, **kwargs)
-                sessions[cache_key] = session
-            kwargs["session"] = session
+            try:
+                session_kwargs, predict_kwargs = _parse_extras(cmd_args)
+            except ValueError as e:
+                raise gr.Error(str(e))
+
+            kwargs.update(session_kwargs)
+            kwargs.update(predict_kwargs)
+            kwargs["session"] = sessions.get(model, session_kwargs)
 
             return remove(input_image, **kwargs)
 
@@ -494,9 +701,7 @@ def s_command(port: int, host: str, log_level: str, threads: int, no_ui: bool) -
             inference,
             [
                 gr.components.Image(type="pil", label="Input"),
-                gr.components.Dropdown(
-                    sessions_names, value="bria-rmbg", label="Models"
-                ),
+                gr.components.Dropdown(model_names, value="bria-rmbg", label="Models"),
                 gr.components.Checkbox(value=True, label="Alpha matting"),
                 gr.components.Slider(
                     value=240, minimum=0, maximum=255, label="Foreground threshold"

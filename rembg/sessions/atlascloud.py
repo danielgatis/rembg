@@ -5,6 +5,7 @@ import os
 import time
 from typing import List, Optional
 from urllib import error, request
+from urllib.parse import urlparse
 
 from PIL import Image
 from PIL.Image import Image as PILImage
@@ -185,6 +186,11 @@ class AtlasCloudSession(BaseSession):
 
     def _fetch(self, url: str) -> bytes:
         """Download a prediction output."""
+        # The URL comes from the API response, and urllib would also open
+        # file:// and other local schemes, so only accept https.
+        if urlparse(url).scheme != "https":
+            raise RuntimeError(f"atlascloud returned a non-https output URL: {url}")
+
         req = request.Request(url, headers={"User-Agent": USER_AGENT})
         try:
             with request.urlopen(req, timeout=self.timeout) as resp:

@@ -215,11 +215,13 @@ class BaseSession:
         if model_path is None:
             raise ValueError("model_path is required")
 
-        abs_path = os.path.abspath(os.path.expanduser(model_path))
+        # realpath, not abspath: a symlink inside the models directory must not
+        # be able to point the check at a file outside it.
+        abs_path = os.path.realpath(os.path.expanduser(model_path))
 
         allowed = [
-            os.path.abspath(cls.rembg_home(*args, **kwargs)),
-            os.path.abspath(cls.legacy_home(*args, **kwargs)),
+            os.path.realpath(cls.rembg_home(*args, **kwargs)),
+            os.path.realpath(cls.legacy_home(*args, **kwargs)),
         ]
 
         for root in allowed:

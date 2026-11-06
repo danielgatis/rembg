@@ -28,7 +28,8 @@ packages = [{include = "rembg"}]
 python = "^3.11"
 jsonschema = "^4.25.1"
 numpy = "^2.3.0"
-pillow = ">=12.1.0,<14.0.0"
+# 13.x fixes many decoder CVEs, but gradio (the cli extra) still caps pillow <13.
+pillow = ">=12.3.0,<14.0.0"
 pooch = "^1.8.2"
 pymatting = "^1.1.14"
 scikit-image = "^0.26.0"
@@ -49,20 +50,22 @@ onnx = {version = "^1.17.0", optional = true}
 onnxconverter-common = {version = "^1.14.0", optional = true}
 
 # CLI dependencies (optional)
-aiohttp = {version = "^3.13.2", optional = true}
+aiohttp = {version = "^3.14.4", optional = true}
 asyncer = {version = "^0.0.12", optional = true}
 click = {version = "^8.3.1", optional = true}
-fastapi = {version = "^0.128.0", optional = true}
+fastapi = {version = ">=0.128.0,<1.0.0", optional = true}
 filetype = {version = "^1.2.0", optional = true}
-gradio = {version = "^6.2.0", optional = true}
-python-multipart = {version = "^0.0.21", optional = true}
+gradio = {version = "^6.16.0", optional = true}
+python-multipart = {version = ">=0.0.31,<0.1.0", optional = true}
 sniffio = {version = "^1.3.1", optional = true}
+# Not imported directly, but it parses every request; pinned to a fixed release.
+starlette = {version = ">=1.3.1,<2.0.0", optional = true}
 uvicorn = {version = "^0.40.0", optional = true}
 watchdog = {version = "^6.0.0", optional = true}
 
 # Dev dependencies (optional, for pip install .[dev])
 bandit = {version = "^1.9.2", optional = true}
-black = {version = "^26.3.1", optional = true}
+black = {version = "^26.10.1", optional = true}
 flake8 = {version = "^7.3.0", optional = true}
 imagehash = {version = "^4.3.2", optional = true}
 isort = {version = "^7.0.0", optional = true}
@@ -71,7 +74,7 @@ pytest = {version = "^9.0.2", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 bandit = "^1.9.2"
-black = "^26.3.1"
+black = "^26.10.1"
 flake8 = "^7.3.0"
 imagehash = "^4.3.2"
 isort = "^7.0.0"
@@ -83,7 +86,7 @@ cpu = ["onnxruntime"]
 gpu = ["onnxruntime-gpu"]
 rocm = ["onnxruntime-rocm"]
 fp16 = ["onnx", "onnxconverter-common"]
-cli = ["aiohttp", "asyncer", "click", "fastapi", "filetype", "gradio", "python-multipart", "sniffio", "uvicorn", "watchdog"]
+cli = ["aiohttp", "asyncer", "click", "fastapi", "filetype", "gradio", "python-multipart", "sniffio", "starlette", "uvicorn", "watchdog"]
 dev = ["bandit", "black", "flake8", "imagehash", "isort", "mypy", "pytest"]
 
 [tool.poetry.scripts]
