@@ -392,7 +392,7 @@ def s_command(
             self,
             model: str = Query(
                 description="Model to use when processing image",
-                regex=model_regex,
+                pattern=model_regex,
                 default="bria-rmbg",
             ),
             a: bool = Query(default=False, description="Enable Alpha Matting"),
@@ -443,7 +443,7 @@ def s_command(
             self,
             model: str = Form(
                 description="Model to use when processing image",
-                regex=model_regex,
+                pattern=model_regex,
                 default="bria-rmbg",
             ),
             a: bool = Form(default=False, description="Enable Alpha Matting"),
