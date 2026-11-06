@@ -115,3 +115,15 @@ def test_validate_model_path_rejects_sibling_prefix(clean_env, tmp_path):
 def test_validate_model_path_requires_the_argument(clean_env):
     with pytest.raises(ValueError):
         BaseSession.validate_model_path()
+
+
+def test_validate_model_path_rejects_symlink_escape(clean_env, tmp_path):
+    clean_env.setenv("REMBG_HOME", str(tmp_path / "new"))
+    models = tmp_path / "new" / "models"
+    models.mkdir(parents=True)
+    outside = tmp_path / "outside.onnx"
+    outside.write_bytes(b"")
+    (models / "link.onnx").symlink_to(outside)
+
+    with pytest.raises(ValueError):
+        BaseSession.validate_model_path(model_path=str(models / "link.onnx"))

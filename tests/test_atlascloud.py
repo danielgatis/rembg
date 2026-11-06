@@ -192,3 +192,25 @@ def test_default_model_is_the_served_remove_background_model(monkeypatch):
     monkeypatch.delenv("ATLASCLOUD_MODEL", raising=False)
     session = atlascloud.AtlasCloudSession("atlascloud", None, api_key="synthetic-key")
     assert session.model == "midjourney/v8.2/remove-background"
+
+
+@pytest.mark.parametrize(
+    "output_url", ["file:///etc/passwd", "http://cdn/x.png", "ftp://cdn/x.png"]
+)
+def test_predict_refuses_non_https_output_url(monkeypatch, output_url):
+    monkeypatch.setenv("ATLASCLOUD_API_KEY", "apikey_test")
+    monkeypatch.setattr("rembg.sessions.atlascloud.POLL_INTERVAL", 0)
+    session = AtlasCloudSession("atlascloud", None)
+
+    responses = [
+        _json_resp({"data": {"id": "req-1", "status": "processing"}}),
+        _json_resp({"data": {"status": "completed", "outputs": [output_url]}}),
+    ]
+
+    with patch(
+        "rembg.sessions.atlascloud.request.urlopen", side_effect=responses
+    ) as mock_urlopen:
+        with pytest.raises(RuntimeError, match="non-https"):
+            session.predict(Image.new("RGB", (8, 8)))
+
+    assert mock_urlopen.call_count == 2

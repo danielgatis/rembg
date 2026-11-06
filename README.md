@@ -233,6 +233,22 @@ For complete API documentation, visit: `http://localhost:7000/api`
 rembg s --no-ui
 ```
 
+**Serve cloud models (atlascloud, withoutbg):**
+
+They are off by default, because a request without its own `api_key` is billed to the API key set in the server's environment.
+
+```shell
+rembg s --allow-remote-models
+```
+
+**Limit how many models stay loaded in memory (default 8):**
+
+```shell
+rembg s --max-sessions 4
+```
+
+The `extras` parameter only accepts `model_path`, `sam_model`, `sam_quant`, `sam_prompt`, `cc`, `cloth_category`, `vitmatte_model`, `putalpha`, `api_key`, `model`, `timeout` and `poll_timeout`.
+
 **Remove background from an image URL:**
 
 ```shell
