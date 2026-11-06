@@ -152,10 +152,13 @@ def putalpha_cutout(img: PILImage, mask: PILImage) -> PILImage:
         mask (PILImage): The mask to be applied.
 
     Returns:
-        PILImage: The modified image with the alpha cutout applied.
+        PILImage: A copy of the image with the alpha cutout applied.
     """
-    img.putalpha(mask)
-    return img
+    # Work on a copy: remove() calls this once per mask on the same image, and
+    # putalpha() modifies the image in place.
+    cutout = img.copy()
+    cutout.putalpha(mask)
+    return cutout
 
 
 def get_concat_v_multi(imgs: List[PILImage]) -> PILImage:

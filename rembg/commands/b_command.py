@@ -3,7 +3,6 @@ import io
 import json
 import os
 import sys
-from typing import IO
 
 import click
 import PIL

@@ -1,3 +1,4 @@
+import base64
 import io
 import json
 from unittest.mock import MagicMock, patch
@@ -123,6 +124,32 @@ def test_predict_polls_then_returns_mask_matching_input_size(monkeypatch):
     body = json.loads(submit_req.data.decode("utf-8"))
     assert body["model"] == DEFAULT_MODEL
     assert body["image"].startswith("data:image/png;base64,")
+
+
+def test_predict_accepts_cmyk_input(monkeypatch):
+    # CMYK JPEGs are common, but PNG cannot store CMYK, so the upload
+    # must convert the image instead of crashing in img.save().
+    monkeypatch.setenv("ATLASCLOUD_API_KEY", "apikey_test")
+    session = AtlasCloudSession("atlascloud", None)
+
+    img = Image.new("CMYK", (40, 30), (0, 255, 255, 0))
+    cutout_bytes = _png_bytes("RGBA", size=(40, 30), color=(1, 2, 3, 200))
+
+    responses = [
+        _json_resp({"data": {"id": "req-1"}}),
+        _json_resp({"data": {"status": "completed", "outputs": ["https://cdn/x.png"]}}),
+        _bytes_resp(cutout_bytes),
+    ]
+
+    with patch(
+        "rembg.sessions.atlascloud.request.urlopen", side_effect=responses
+    ) as mock_urlopen:
+        masks = session.predict(img)
+
+    assert masks[0].size == img.size
+    body = json.loads(mock_urlopen.call_args_list[0][0][0].data.decode("utf-8"))
+    uploaded = Image.open(io.BytesIO(base64.b64decode(body["image"].split(",", 1)[1])))
+    assert uploaded.mode == "RGB"
 
 
 def test_predict_raises_when_prediction_fails(monkeypatch):
