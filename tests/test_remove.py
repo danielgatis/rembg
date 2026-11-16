@@ -36,6 +36,7 @@ def test_remove():
         "birefnet-hrsod",
         "birefnet-cod",
         "birefnet-massive",
+        "birefnet-dynamic",
     ]:
         for picture in ["anime-girl-1"]:
             image_path = Path(here / "fixtures" / f"{picture}.jpg")
