@@ -38,6 +38,10 @@ from .birefnet_massive import BiRefNetSessionMassive
 
 sessions[BiRefNetSessionMassive.name()] = BiRefNetSessionMassive
 
+from .birefnet_dynamic import BiRefNetSessionDynamic
+
+sessions[BiRefNetSessionDynamic.name()] = BiRefNetSessionDynamic
+
 from .dis_anime import DisSession
 
 sessions[DisSession.name()] = DisSession
