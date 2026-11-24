@@ -28,7 +28,7 @@ class BiRefNetSessionDynamic(BiRefNetSessionGeneral):
             return existing
 
         pooch.retrieve(
-            "https://huggingface.co/onnx-community/BiRefNet_dynamic-1024x1024-ONNX/resolve/6defd3a19cec21042b178108815c9c4508d09867/onnx/model.onnx",
+            "https://github.com/danielgatis/rembg/releases/download/v0.0.0/BiRefNet_dynamic-1024x1024.onnx",
             (
                 None
                 if cls.checksum_disabled(*args, **kwargs)
