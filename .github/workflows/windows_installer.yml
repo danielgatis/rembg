@@ -13,8 +13,8 @@ jobs:
     name: Build the Inno Setup Installer
     runs-on: windows-latest
     steps:
-      - uses: actions/setup-python@v5
-      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v7
+      - uses: actions/checkout@v7
       - shell: pwsh
         run: ./_build-exe.ps1
       - name: Compile CPU Installer
